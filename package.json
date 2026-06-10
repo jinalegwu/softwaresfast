@@ -1,0 +1,23 @@
+{
+  "name": "softwaresfast",
+  "version": "1.0.0",
+  "description": "Professional software development company website - Building software applications for real clients within timeline, budget, and scope",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server",
+    "build": "echo Static site - no build needed"
+  },
+  "keywords": [
+    "software development",
+    "web development",
+    "mobile apps",
+    "cloud solutions",
+    "custom software"
+  ],
+  "author": "Softwaresfast",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jinalegwu/softwaresfast.git"
+  }
+}
