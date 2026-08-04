@@ -205,18 +205,44 @@
                     <span class="project-tag">Angular, ASP.NET, SQL Server</span>
                 </div>
                 <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1576091160550-112173f31c77?w=600&h=600&fit=crop&q=80" alt="Healthcare Management System" class="portfolio-image">
+                    <div class="portfolio-image-wrapper carousel-wrapper" id="healthcareCarousel">
+                        <div class="carousel-container">
+                            <img src="https://images.unsplash.com/photo-1576091160550-112173f31c77?w=600&h=600&fit=crop&q=80" alt="Healthcare Management System" class="portfolio-image carousel-image active" data-index="0">
+                            <img src="https://images.unsplash.com/photo-1579154204601-01d82b27c63f?w=600&h=600&fit=crop&q=80" alt="Medical Team Consultation" class="portfolio-image carousel-image" data-index="1">
+                            <img src="https://images.unsplash.com/photo-1631217314830-92f6f79ecff4?w=600&h=600&fit=crop&q=80" alt="Healthcare Data Analysis" class="portfolio-image carousel-image" data-index="2">
+                        </div>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn prev" onclick="prevSlide('healthcareCarousel')"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn next" onclick="nextSlide('healthcareCarousel')"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="carousel-indicators">
+                            <span class="indicator active" onclick="goToSlide('healthcareCarousel', 0)"></span>
+                            <span class="indicator" onclick="goToSlide('healthcareCarousel', 1)"></span>
+                            <span class="indicator" onclick="goToSlide('healthcareCarousel', 2)"></span>
+                        </div>
                     </div>
                     <h3>Healthcare Management</h3>
                     <p>HIPAA-compliant patient management and appointment scheduling system.</p>
                     <span class="project-tag">Vue.js, Laravel, MySQL</span>
                 </div>
                 <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1522071820081-1b0a3ce65d44?w=600&h=600&fit=crop&q=80" alt="Learning Management System" class="portfolio-image">
+                    <div class="portfolio-image-wrapper carousel-wrapper" id="ecommerceCarousel">
+                        <div class="carousel-container">
+                            <img src="https://images.unsplash.com/photo-1517694712202-14819c9cb6e1?w=600&h=600&fit=crop&q=80" alt="E-Commerce Shop Interface" class="portfolio-image carousel-image active" data-index="0">
+                            <img src="https://images.unsplash.com/photo-1557821552-17105176677c?w=600&h=600&fit=crop&q=80" alt="Online Shopping Experience" class="portfolio-image carousel-image" data-index="1">
+                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=600&fit=crop&q=80" alt="Shopping Cart Checkout" class="portfolio-image carousel-image" data-index="2">
+                        </div>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn prev" onclick="prevSlide('ecommerceCarousel')"><i class="fas fa-chevron-left"></i></button>
+                            <button class="carousel-btn next" onclick="nextSlide('ecommerceCarousel')"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="carousel-indicators">
+                            <span class="indicator active" onclick="goToSlide('ecommerceCarousel', 0)"></span>
+                            <span class="indicator" onclick="goToSlide('ecommerceCarousel', 1)"></span>
+                            <span class="indicator" onclick="goToSlide('ecommerceCarousel', 2)"></span>
+                        </div>
                     </div>
-                    <h3>Learning Management System</h3>
+                    <h3>Advanced E-Commerce System</h3>
                     <p>Online education platform with course management, student progress tracking, and interactive features.</p>
                     <span class="project-tag">Next.js, Node.js, MongoDB</span>
                 </div>
