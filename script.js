@@ -149,4 +149,60 @@ if (heroStats) {
     statsObserver.observe(heroStats);
 }
 
+// Carousel Functions
+function showSlide(carouselId, index) {
+    const carousel = document.getElementById(carouselId);
+    if (!carousel) return;
+    
+    const images = carousel.querySelectorAll('.carousel-image');
+    const indicators = carousel.querySelectorAll('.indicator');
+    
+    // Ensure index is within bounds
+    if (index >= images.length) {
+        index = 0;
+    } else if (index < 0) {
+        index = images.length - 1;
+    }
+    
+    // Remove active class from all images and indicators
+    images.forEach(img => img.classList.remove('active'));
+    indicators.forEach(ind => ind.classList.remove('active'));
+    
+    // Add active class to current image and indicator
+    images[index].classList.add('active');
+    indicators[index].classList.add('active');
+    
+    // Store current index
+    carousel.dataset.currentIndex = index;
+}
+
+function nextSlide(carouselId) {
+    const carousel = document.getElementById(carouselId);
+    if (!carousel) return;
+    
+    const currentIndex = parseInt(carousel.dataset.currentIndex) || 0;
+    showSlide(carouselId, currentIndex + 1);
+}
+
+function prevSlide(carouselId) {
+    const carousel = document.getElementById(carouselId);
+    if (!carousel) return;
+    
+    const currentIndex = parseInt(carousel.dataset.currentIndex) || 0;
+    showSlide(carouselId, currentIndex - 1);
+}
+
+function goToSlide(carouselId, index) {
+    showSlide(carouselId, index);
+}
+
+// Initialize carousels
+document.addEventListener('DOMContentLoaded', () => {
+    const carousels = document.querySelectorAll('.carousel-wrapper');
+    carousels.forEach(carousel => {
+        carousel.dataset.currentIndex = 0;
+        showSlide(carousel.id, 0);
+    });
+});
+
 console.log('Softwaresfast Website - Script loaded successfully');
