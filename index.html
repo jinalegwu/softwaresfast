@@ -6,887 +6,50 @@
     <meta name="description" content="Softwaresfast - Building software applications for real clients within timeline, budget, and scope.">
     <title>Softwaresfast - Professional Software Development</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #fff;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* Navigation */
-        .navbar {
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 1rem 0;
-        }
-
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #007bff;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-menu a:hover {
-            color: #007bff;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background-color: #333;
-            margin: 5px 0;
-            transition: 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 15px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background-color: #fff;
-            color: #667eea;
-        }
-
-        .btn-primary:hover {
-            background-color: #f0f0f0;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background-color: white;
-            color: #667eea;
-        }
-
-        .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 8px;
-        }
-
-        .stat h3 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 80px 15px;
-            background-color: #f8f9fa;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #212529;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .service-card .icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .service-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .service-card p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        /* About Section */
-        .about {
-            padding: 80px 15px;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: #212529;
-        }
-
-        .about-text p {
-            margin-bottom: 1rem;
-            color: #666;
-            line-height: 1.8;
-        }
-
-        .about-list {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .about-list li {
-            padding: 0.5rem 0;
-            color: #555;
-        }
-
-        .about-list strong {
-            color: #007bff;
-        }
-
-        .placeholder-image {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        /* Process Section */
-        .process {
-            padding: 80px 15px;
-            background-color: #f8f9fa;
-        }
-
-        .process-timeline {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 1.5rem;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
-        .process-step {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .step-number {
-            width: 50px;
-            height: 50px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0 auto 1rem;
-        }
-
-        .process-step h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .process-step p {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .process-arrow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #007bff;
-            font-size: 1.5rem;
-        }
-
-        /* Portfolio Section */
-        .portfolio {
-            padding: 80px 15px;
-        }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .portfolio-item {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .portfolio-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .portfolio-image-wrapper {
-            width: 100%;
-            height: 250px;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-
-        .portfolio-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .portfolio-item h3 {
-            padding: 1.5rem 1.5rem 0.5rem;
-            font-size: 1.2rem;
-            color: #212529;
-        }
-
-        .portfolio-item p {
-            padding: 0 1.5rem;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .project-tag {
-            display: inline-block;
-            background-color: #f8f9fa;
-            color: #007bff;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin: 1rem 1.5rem 1.5rem;
-        }
-
-        /* Guarantees Section */
-        .guarantees {
-            padding: 80px 15px;
-            background-color: #f8f9fa;
-        }
-
-        .guarantees-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .guarantee-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .guarantee-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .guarantee-icon {
-            font-size: 2.5rem;
-            color: #007bff;
-            margin-bottom: 1rem;
-        }
-
-        .guarantee-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .guarantee-card p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 80px 15px;
-            background-color: white;
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .info-item {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .info-item .icon {
-            font-size: 1.8rem;
-            color: #007bff;
-            min-width: 30px;
-        }
-
-        .info-item h4 {
-            margin-bottom: 0.5rem;
-            color: #212529;
-        }
-
-        .info-item p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .contact-form input,
-        .contact-form select,
-        .contact-form textarea {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .contact-form input:focus,
-        .contact-form select:focus,
-        .contact-form textarea:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: #212529;
-            color: white;
-            padding: 3rem 15px 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
-            margin-bottom: 1rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section a:hover {
-            color: white;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            width: 40px;
-            height: 40px;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .social-links a:hover {
-            background-color: #007bff;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1rem;
-            text-align: center;
-            color: #999;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 60px;
-                flex-direction: column;
-                background-color: white;
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                padding: 2rem 0;
-                gap: 0;
-                z-index: 999;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                border-bottom: 1px solid #ddd;
-            }
-
-            .nav-menu a {
-                display: block;
-                padding: 1rem;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .tagline {
-                font-size: 1rem;
-            }
-
-            .hero-stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .process-timeline {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .process-arrow {
-                display: none;
-            }
-
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .guarantees-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-
-            .contact-content {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            .hero {
-                padding: 40px 15px;
-            }
-
-            .hero h1 {
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .tagline {
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
-            }
-
-            .hero-stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-                margin-top: 2rem;
-            }
-
-            .stat {
-                padding: 1rem;
-            }
-
-            .stat h3 {
-                font-size: 1.8rem;
-            }
-
-            .stat p {
-                font-size: 0.8rem;
-            }
-
-            .services {
-                padding: 50px 15px;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .service-card {
-                padding: 1.5rem;
-            }
-
-            .service-card .icon {
-                font-size: 2rem;
-            }
-
-            .service-card h3 {
-                font-size: 1.1rem;
-            }
-
-            .service-card p {
-                font-size: 0.85rem;
-            }
-
-            .about {
-                padding: 50px 15px;
-            }
-
-            .about-text h2 {
-                font-size: 1.5rem;
-            }
-
-            .about-text p {
-                font-size: 0.9rem;
-            }
-
-            .placeholder-image {
-                height: 200px;
-            }
-
-            .process {
-                padding: 50px 15px;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-                margin-bottom: 2rem;
-            }
-
-            .process-step {
-                padding: 1.5rem;
-            }
-
-            .step-number {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-
-            .process-step h3 {
-                font-size: 1rem;
-            }
-
-            .process-step p {
-                font-size: 0.8rem;
-            }
-
-            .portfolio {
-                padding: 50px 15px;
-            }
-
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .portfolio-image-wrapper {
-                height: 200px;
-            }
-
-            .portfolio-item h3 {
-                font-size: 1rem;
-                padding: 1rem 1rem 0.5rem;
-            }
-
-            .portfolio-item p {
-                font-size: 0.8rem;
-                padding: 0 1rem;
-            }
-
-            .project-tag {
-                font-size: 0.75rem;
-                margin: 0.5rem 1rem 1rem;
-            }
-
-            .guarantees {
-                padding: 50px 15px;
-            }
-
-            .guarantees-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .guarantee-card {
-                padding: 1.5rem;
-            }
-
-            .guarantee-icon {
-                font-size: 2rem;
-            }
-
-            .guarantee-card h3 {
-                font-size: 1rem;
-            }
-
-            .guarantee-card p {
-                font-size: 0.8rem;
-            }
-
-            .contact {
-                padding: 50px 15px;
-            }
-
-            .contact-info {
-                gap: 1.5rem;
-            }
-
-            .info-item {
-                gap: 1rem;
-            }
-
-            .info-item .icon {
-                font-size: 1.5rem;
-            }
-
-            .info-item h4 {
-                font-size: 1rem;
-            }
-
-            .info-item p {
-                font-size: 0.85rem;
-            }
-
-            .contact-form input,
-            .contact-form select,
-            .contact-form textarea {
-                padding: 10px;
-                font-size: 16px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .footer-section h4 {
-                font-size: 1rem;
-            }
-
-            .footer-section p {
-                font-size: 0.85rem;
-            }
-
-            .social-links {
-                gap: 0.5rem;
-            }
-
-            .social-links a {
-                width: 35px;
-                height: 35px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 320px) {
-            .hero h1 {
-                font-size: 1.3rem;
-            }
-
-            .stat h3 {
-                font-size: 1.5rem;
-            }
-
-            .hero-stats {
-                grid-template-columns: 1fr;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .navbar { background-color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top:0; z-index:1000; padding:1rem 0; }
+        .navbar .container { display:flex; justify-content:space-between; align-items:center; }
+        .logo { font-size:1.5rem; font-weight:bold; color:#007bff; letter-spacing:0.5px; }
+        .nav-menu { display:flex; list-style:none; gap:2rem; }
+        .nav-menu a { text-decoration:none; color:#333; font-weight:500; transition:color 0.3s; }
+        .nav-menu a:hover { color:#007bff; }
+        .hamburger { display:none; flex-direction:column; cursor:pointer; background:none; border:none; padding:5px; }
+        .hamburger span { width:25px; height:3px; background-color:#333; margin:5px 0; transition:0.3s; }
+        .hero { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:60px 15px; text-align:center; }
+        .hero h1 { font-size:2.5rem; margin-bottom:1rem; line-height:1.2; }
+        .tagline { font-size:1.1rem; margin-bottom:2rem; opacity:0.95; }
+        .cta-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:3rem; }
+        .btn { padding:12px 30px; border:none; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; transition:all 0.3s; display:inline-block; font-weight:600; }
+        .btn-primary{ background-color:#fff; color:#667eea; }
+        .btn-primary:hover{ background-color:#f0f0f0; transform:translateY(-2px); }
+        .btn-secondary{ background:transparent; color:white; border:2px solid white; }
+        .btn-secondary:hover{ background:white; color:#667eea; }
+        .hero-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:3rem; }
+        .stat{ background:rgba(255,255,255,0.1); padding:2rem; border-radius:8px; }
+        .stat h3{ font-size:2.5rem; margin-bottom:0.5rem; }
+        .services{ padding:80px 15px; background-color:#f8f9fa; }
+        .section-title{ text-align:center; font-size:2.5rem; margin-bottom:3rem; color:#212529; }
+        .services-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .service-card{ background:white; padding:2rem; border-radius:8px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        .about{ padding:80px 15px; }
+        .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+        .process{ padding:80px 15px; background-color:#f8f9fa; }
+        .process-timeline{ display:grid; grid-template-columns:repeat(6,1fr); gap:1.5rem; align-items:center; margin-bottom:3rem; }
+        .portfolio{ padding:80px 15px; }
+        .portfolio-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .portfolio-item{ background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; }
+        .portfolio-item:hover{ transform:translateY(-10px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+        .portfolio-image-wrapper{ width:100%; height:250px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; }
+        .portfolio-image{ width:100%; height:100%; object-fit:cover; display:block; }
+        .project-tag{ display:inline-block; background-color:#f8f9fa; color:#007bff; padding:0.4rem 0.8rem; border-radius:20px; font-size:0.8rem; margin:1rem 1.5rem 1.5rem; }
+        .guarantees{ padding:80px 15px; background-color:#f8f9fa; }
+        .contact{ padding:80px 15px; background-color:white; }
+        .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
+        .footer{ background-color:#212529; color:white; padding:3rem 15px 1rem; }
+        @media (max-width:768px){ .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; } .nav-menu.active{ left:0; } .portfolio-grid{ grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
@@ -902,7 +65,7 @@
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <button class="hamburger">
+            <button class="hamburger" aria-label="Toggle navigation">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -922,22 +85,10 @@
         </div>
         <div class="container">
             <div class="hero-stats">
-                <div class="stat">
-                    <h3>100%</h3>
-                    <p>On-Time Delivery</p>
-                </div>
-                <div class="stat">
-                    <h3>57+</h3>
-                    <p>Projects Completed</p>
-                </div>
-                <div class="stat">
-                    <h3>53+</h3>
-                    <p>Happy Clients</p>
-                </div>
-                <div class="stat">
-                    <h3>9+</h3>
-                    <p>Years Experience</p>
-                </div>
+                <div class="stat"><h3>100%</h3><p>On-Time Delivery</p></div>
+                <div class="stat"><h3>57+</h3><p>Projects Completed</p></div>
+                <div class="stat"><h3>53+</h3><p>Happy Clients</p></div>
+                <div class="stat"><h3>9+</h3><p>Years Experience</p></div>
             </div>
         </div>
     </section>
@@ -947,36 +98,12 @@
         <div class="container">
             <h2 class="section-title">Our Services</h2>
             <div class="services-grid">
-                <div class="service-card">
-                    <div class="icon">💻</div>
-                    <h3>Web Development</h3>
-                    <p>Custom web applications built with modern technologies and best practices for optimal performance.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">📱</div>
-                    <h3>Mobile Apps</h3>
-                    <p>Native and cross-platform mobile applications designed for iOS and Android platforms.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">☁️</div>
-                    <h3>Cloud Solutions</h3>
-                    <p>Scalable cloud infrastructure and deployment services for enterprise-level applications.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">🗄️</div>
-                    <h3>Backend Development</h3>
-                    <p>Robust APIs and server-side solutions with secure database design and management.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">🎨</div>
-                    <h3>UI/UX Design</h3>
-                    <p>Beautiful and intuitive user interfaces designed with user experience at the core.</p>
-                </div>
-                <div class="service-card">
-                    <div class="icon">✓</div>
-                    <h3>Quality Assurance</h3>
-                    <p>Comprehensive testing and QA processes ensuring bug-free, reliable software delivery.</p>
-                </div>
+                <div class="service-card"><div class="icon">💻</div><h3>Web Development</h3><p>Custom web applications built with modern technologies and best practices for optimal performance.</p></div>
+                <div class="service-card"><div class="icon">📱</div><h3>Mobile Apps</h3><p>Native and cross-platform mobile applications designed for iOS and Android platforms.</p></div>
+                <div class="service-card"><div class="icon">☁️</div><h3>Cloud Solutions</h3><p>Scalable cloud infrastructure and deployment services for enterprise-level applications.</p></div>
+                <div class="service-card"><div class="icon">🗄️</div><h3>Backend Development</h3><p>Robust APIs and server-side solutions with secure database design and management.</p></div>
+                <div class="service-card"><div class="icon">🎨</div><h3>UI/UX Design</h3><p>Beautiful and intuitive user interfaces designed with user experience at the core.</p></div>
+                <div class="service-card"><div class="icon">✓</div><h3>Quality Assurance</h3><p>Comprehensive testing and QA processes ensuring bug-free, reliable software delivery.</p></div>
             </div>
         </div>
     </section>
@@ -996,9 +123,7 @@
                         <li><strong>Technical Excellence:</strong> Latest technologies and best practices</li>
                     </ul>
                 </div>
-                <div class="about-image">
-                    <div class="placeholder-image">💻</div>
-                </div>
+                <div class="about-image"><div class="placeholder-image">💻</div></div>
             </div>
         </div>
     </section>
@@ -1006,44 +131,14 @@
     <!-- Process Section -->
     <section id="process" class="process">
         <div class="container">
-            <h2 class="section-title">Our Development Process</h2>
+            <h2 class="section-title">Our Process</h2>
             <div class="process-timeline">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3>Discovery & Planning</h3>
-                    <p>We understand your requirements, goals, and constraints. Clear project scope, timeline, and budget are defined upfront.</p>
-                </div>
-                <div class="process-arrow">→</div>
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3>Design & Architecture</h3>
-                    <p>Creating detailed design mockups and system architecture that aligns with your business objectives.</p>
-                </div>
-                <div class="process-arrow">→</div>
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3>Development</h3>
-                    <p>Expert developers build your application using proven technologies and coding standards.</p>
-                </div>
-            </div>
-            <div class="process-timeline">
-                <div class="process-step">
-                    <div class="step-number">4</div>
-                    <h3>Testing & QA</h3>
-                    <p>Comprehensive testing ensures quality, performance, and security before deployment.</p>
-                </div>
-                <div class="process-arrow">→</div>
-                <div class="process-step">
-                    <div class="step-number">5</div>
-                    <h3>Deployment</h3>
-                    <p>Smooth deployment to production with minimal downtime and comprehensive monitoring.</p>
-                </div>
-                <div class="process-arrow">→</div>
-                <div class="process-step">
-                    <div class="step-number">6</div>
-                    <h3>Support & Maintenance</h3>
-                    <p>Ongoing support, updates, and maintenance to ensure your application runs smoothly.</p>
-                </div>
+                <div class="process-step"><div class="step-number">1</div><h3>Discovery</h3><p>We gather requirements and align on goals.</p></div>
+                <div class="process-step"><div class="step-number">2</div><h3>Design</h3><p>User-centered designs and prototypes.</p></div>
+                <div class="process-step"><div class="step-number">3</div><h3>Development</h3><p>Iterative development with regular demos.</p></div>
+                <div class="process-step"><div class="step-number">4</div><h3>Testing</h3><p>Comprehensive QA and user acceptance testing.</p></div>
+                <div class="process-step"><div class="step-number">5</div><h3>Deploy</h3><p>Production rollout and monitoring.</p></div>
+                <div class="process-step"><div class="step-number">6</div><h3>Support</h3><p>Ongoing maintenance and improvements.</p></div>
             </div>
         </div>
     </section>
@@ -1051,27 +146,51 @@
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio">
         <div class="container">
-            <h2 class="section-title">Our Recent Projects</h2>
+            <h2 class="section-title">Our Portfolio</h2>
             <div class="portfolio-grid">
+                <!-- Portfolio Item 1 -->
                 <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">📊</div>
-                    <h3>Business Analytics Tool</h3>
-                    <p>Real-time data visualization and reporting platform for enterprise decision-making.</p>
-                    <span class="project-tag">Vue.js, Python, PostgreSQL</span>
+                    <div class="portfolio-image-wrapper">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=5b7b3f3d6b2e6c6e1f1f8ef2b5a8d3f2" alt="E-commerce platform screenshot">
+                    </div>
+                    <h3>E-commerce Platform</h3>
+                    <p>An enterprise-grade online store with inventory, payments, and analytics.</p>
+                    <span class="project-tag">Web App</span>
                 </div>
+
+                <!-- Portfolio Item 2 -->
                 <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">📋</div>
-                    <h3>Project Management System</h3>
-                    <p>Collaborative tool for team project tracking with real-time notifications and reporting.</p>
-                    <span class="project-tag">Angular, ASP.NET, SQL Server</span>
+                    <div class="portfolio-image-wrapper">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1526378728600-70b0d9d0b7d8?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3a1b2c4d5e6f7a8b9c0d1e2f3a4b5c6d" alt="Mobile banking app screenshot">
+                    </div>
+                    <h3>Mobile Banking App</h3>
+                    <p>Secure mobile banking with multi-factor authentication and seamless transfers.</p>
+                    <span class="project-tag">Mobile</span>
                 </div>
+
+                <!-- Portfolio Item 3 (Hospital Management System) -->
                 <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">🛒</div>
-                    <h3>E-Commerce System</h3>
-                    <p>Advanced online store with payment processing, customer management, and analytics.</p>
-                    <span class="project-tag">Next.js, Node.js, MongoDB</span>
+                    <div class="portfolio-image-wrapper">
+                        <!-- Hospital Management image -->
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1587502536263-3b8f6f6a8c9a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8a9b7c6d5e4f3a2b1c0d9e8f7a6b5c4d" alt="Hospital Management System dashboard">
+                    </div>
+                    <h3>Hospital Management System</h3>
+                    <p>Comprehensive HMS: patient records, appointments, billing, inventory, and reporting. Built for hospitals and clinics to improve efficiency and patient care.</p>
+                    <span class="project-tag">Healthcare • Web App</span>
                 </div>
+
+                <!-- Portfolio Item 4 -->
+                <div class="portfolio-item">
+                    <div class="portfolio-image-wrapper">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1517249361621-f11084f8b5d6?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8" alt="Analytics dashboard screenshot">
+                    </div>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Real-time dashboards and visualizations for business intelligence and KPIs.</p>
+                    <span class="project-tag">Data • Dashboard</span>
+                </div>
+
             </div>
+            <p style="margin-top:1.25rem; color:#666;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
         </div>
     </section>
 
@@ -1080,26 +199,10 @@
         <div class="container">
             <h2 class="section-title">Our Guarantees</h2>
             <div class="guarantees-grid">
-                <div class="guarantee-card">
-                    <div class="guarantee-icon">📅</div>
-                    <h3>On-Time Delivery</h3>
-                    <p>We meet agreed deadlines with precision. Your project timeline is our commitment.</p>
-                </div>
-                <div class="guarantee-card">
-                    <div class="guarantee-icon">💰</div>
-                    <h3>Budget Adherence</h3>
-                    <p>No hidden costs or surprises. We deliver quality software within your budget constraints.</p>
-                </div>
-                <div class="guarantee-card">
-                    <div class="guarantee-icon">✓</div>
-                    <h3>Scope Management</h3>
-                    <p>Clear requirements and scope definition prevent scope creep and ensure focused delivery.</p>
-                </div>
-                <div class="guarantee-card">
-                    <div class="guarantee-icon">🏆</div>
-                    <h3>Quality Assurance</h3>
-                    <p>Thorough testing and QA processes ensure bug-free, production-ready software.</p>
-                </div>
+                <div class="guarantee-card"><div class="guarantee-icon">🕒</div><h3>On-Time Delivery</h3><p>We deliver on agreed timelines.</p></div>
+                <div class="guarantee-card"><div class="guarantee-icon">🔒</div><h3>Secure</h3><p>Security and privacy by design.</p></div>
+                <div class="guarantee-card"><div class="guarantee-icon">⚙️</div><h3>Maintainable</h3><p>Clean code and thorough documentation.</p></div>
+                <div class="guarantee-card"><div class="guarantee-icon">🤝</div><h3>Support</h3><p>Long-term support and improvements.</p></div>
             </div>
         </div>
     </section>
@@ -1107,53 +210,24 @@
     <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
+            <h2 class="section-title">Contact Us</h2>
             <div class="contact-content">
                 <div class="contact-info">
-                    <div class="info-item">
-                        <div class="icon">📍</div>
-                        <div>
-                            <h4>Location</h4>
-                            <p>USA: Tech Hub, Innovation Center<br>Digital City, DC 10001<br>NIGERIA: Plot 570 First gate, APO, Abuja</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="icon">📞</div>
-                        <div>
-                            <h4>Phone</h4>
-                            <p>+2347015531551</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="icon">✉️</div>
-                        <div>
-                            <h4>Email</h4>
-                            <p>info@softwaresfast.com</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <div class="icon">🕐</div>
-                        <div>
-                            <h4>Business Hours</h4>
-                            <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
-                        </div>
-                    </div>
+                    <div class="info-item"><div class="icon">📍</div><div><h4>Location</h4><p>Remote / Global</p></div></div>
+                    <div class="info-item"><div class="icon">✉️</div><div><h4>Email</h4><p>hello@softwaresfast.com</p></div></div>
+                    <div class="info-item"><div class="icon">📞</div><div><h4>Phone</h4><p>+1 (555) 123-4567</p></div></div>
                 </div>
-                <form class="contact-form" id="contactForm">
-                    <input type="text" placeholder="Your Name" required>
-                    <input type="email" placeholder="Your Email" required>
-                    <input type="text" placeholder="Company Name" required>
-                    <select required>
-                        <option value="">Select Service Interest</option>
+                <form class="contact-form" action="#" method="POST">
+                    <input type="text" name="name" placeholder="Your name" required>
+                    <input type="email" name="email" placeholder="Your email" required>
+                    <select name="service">
                         <option value="web">Web Development</option>
                         <option value="mobile">Mobile Apps</option>
                         <option value="cloud">Cloud Solutions</option>
-                        <option value="backend">Backend Development</option>
-                        <option value="design">UI/UX Design</option>
-                        <option value="qa">Quality Assurance</option>
+                        <option value="hms">Hospital Management System</option>
                     </select>
-                    <textarea placeholder="Tell us about your project..." rows="5" required></textarea>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
+                    <textarea name="message" rows="5" placeholder="Describe your project"></textarea>
+                    <button class="btn btn-primary" type="submit">Send Message</button>
                 </form>
             </div>
         </div>
@@ -1163,92 +237,22 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Softwaresfast</h4>
-                    <p>Professional software development for real clients. Delivering excellence on time, within budget, and to scope.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#portfolio">Portfolio</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Services</h4>
-                    <ul>
-                        <li><a href="#services">Web Development</a></li>
-                        <li><a href="#services">Mobile Apps</a></li>
-                        <li><a href="#services">Cloud Solutions</a></li>
-                        <li><a href="#services">UI/UX Design</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Follow Us</h4>
-                    <div class="social-links">
-                        <a href="#" title="Facebook">f</a>
-                        <a href="#" title="Twitter">𝕏</a>
-                        <a href="#" title="LinkedIn">in</a>
-                        <a href="#" title="GitHub">⚙</a>
-                    </div>
-                </div>
+                <div class="footer-section"><h4>Services</h4><ul><li><a href="#services">Web Development</a></li><li><a href="#services">Mobile Apps</a></li><li><a href="#services">Cloud Solutions</a></li></ul></div>
+                <div class="footer-section"><h4>Company</h4><ul><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></div>
+                <div class="footer-section"><h4>Projects</h4><ul><li><a href="#portfolio">Portfolio</a></li></ul></div>
+                <div class="footer-section"><h4>Follow</h4><div class="social-links"><a href="#">in</a><a href="#">tw</a><a href="#">fb</a></div></div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Softwaresfast. All rights reserved.</p>
-            </div>
+            <div class="footer-bottom">&copy; 2026 Softwaresfast. All rights reserved.</div>
         </div>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
+        // Simple hamburger toggle for mobile
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');
-
-        if (hamburger) {
-            hamburger.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
-        }
-
-        // Close mobile menu when a link is clicked
-        const navLinks = document.querySelectorAll('.nav-menu a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-            });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('.navbar')) {
-                navMenu.classList.remove('active');
-            }
-        });
-
-        // Form Submission
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm) {
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Thank you for reaching out! We will contact you soon.');
-                this.reset();
-            });
-        }
-
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+        hamburger && hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
         });
     </script>
 </body>
