@@ -35,7 +35,7 @@
         .service-card{ background:white; padding:2rem; border-radius:8px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
         .about{ padding:80px 15px; }
         .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
-        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:2rem; color:white; }
         .process{ padding:80px 15px; background-color:#f8f9fa; }
         .process-timeline{ display:grid; grid-template-columns:repeat(6,1fr); gap:1.5rem; align-items:center; margin-bottom:3rem; }
         .portfolio{ padding:80px 15px; }
@@ -49,7 +49,7 @@
         .contact{ padding:80px 15px; background-color:white; }
         .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
         .footer{ background-color:#212529; color:white; padding:3rem 15px 1rem; }
-        @media (max-width:768px){ .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; } .nav-menu.active{ left:0; } .portfolio-grid{ grid-template-columns:1fr; } }
+        @media (max-width:768px){ .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; } .nav-menu.active{ left:0; } .hamburger{ display:flex; } .hero-stats{ grid-template-columns:repeat(2,1fr); } .services-grid, .portfolio-grid { grid-template-columns:1fr; } .about-content, .contact-content{ grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
@@ -151,7 +151,7 @@
                 <!-- Portfolio Item 1 -->
                 <div class="portfolio-item">
                     <div class="portfolio-image-wrapper">
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=5b7b3f3d6b2e6c6e1f1f8ef2b5a8d3f2" alt="E-commerce platform screenshot">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80" alt="E-commerce platform screenshot">
                     </div>
                     <h3>E-commerce Platform</h3>
                     <p>An enterprise-grade online store with inventory, payments, and analytics.</p>
@@ -161,7 +161,7 @@
                 <!-- Portfolio Item 2 -->
                 <div class="portfolio-item">
                     <div class="portfolio-image-wrapper">
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1526378728600-70b0d9d0b7d8?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3a1b2c4d5e6f7a8b9c0d1e2f3a4b5c6d" alt="Mobile banking app screenshot">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1526378728600-70b0d9d0b7d8?auto=format&fit=crop&w=1200&q=80" alt="Mobile banking app screenshot">
                     </div>
                     <h3>Mobile Banking App</h3>
                     <p>Secure mobile banking with multi-factor authentication and seamless transfers.</p>
@@ -172,7 +172,7 @@
                 <div class="portfolio-item">
                     <div class="portfolio-image-wrapper">
                         <!-- Hospital Management image -->
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1587502536263-3b8f6f6a8c9a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8a9b7c6d5e4f3a2b1c0d9e8f7a6b5c4d" alt="Hospital Management System dashboard">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1587502536263-3b8f6f6a8c9a?auto=format&fit=crop&w=1200&q=80" alt="Hospital management system screenshot">
                     </div>
                     <h3>Hospital Management System</h3>
                     <p>Comprehensive HMS: patient records, appointments, billing, inventory, and reporting. Built for hospitals and clinics to improve efficiency and patient care.</p>
@@ -182,7 +182,7 @@
                 <!-- Portfolio Item 4 -->
                 <div class="portfolio-item">
                     <div class="portfolio-image-wrapper">
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1517249361621-f11084f8b5d6?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8" alt="Analytics dashboard screenshot">
+                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1517249361621-f11084f8b5d6?auto=format&fit=crop&w=1200&q=80" alt="Analytics dashboard screenshot">
                     </div>
                     <h3>Analytics Dashboard</h3>
                     <p>Real-time dashboards and visualizations for business intelligence and KPIs.</p>
