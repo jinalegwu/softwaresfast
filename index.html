@@ -35,7 +35,7 @@
         .service-card{ background:white; padding:2rem; border-radius:8px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
         .about{ padding:80px 15px; }
         .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
-        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:100px; }
+        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:4rem; }
         .process{ padding:80px 15px; background-color:#f8f9fa; }
         .process-timeline{ display:grid; grid-template-columns:repeat(6,1fr); gap:1.5rem; align-items:center; margin-bottom:3rem; }
         .portfolio{ padding:80px 15px; }
@@ -49,7 +49,7 @@
         .contact{ padding:80px 15px; background-color:white; }
         .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
         .footer{ background-color:#212529; color:white; padding:3rem 15px 1rem; }
-        @media (max-width:768px){ .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; } .nav-menu.active{ left:0; } .hamburger{ display:flex; } .hamburger.active span:nth-child(1){ transform:rotate(-45deg) translate(-5px,6px); } .hamburger.active span:nth-child(2){ opacity:0; } .hamburger.active span:nth-child(3){ transform:rotate(45deg) translate(-5px,-6px); } .hero h1{ font-size:1.8rem; } .services-grid, .portfolio-grid, .hero-stats{ grid-template-columns:1fr; } .hero-stats{ grid-template-columns:repeat(2,1fr); } .about-content{ grid-template-columns:1fr; gap:2rem; } .process-timeline{ grid-template-columns:repeat(3,1fr); } .contact-content{ grid-template-columns:1fr; } }
+        @media (max-width:768px){ .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; } .nav-menu.active{ left:0; } .hamburger{ display:flex; } .hamburger.active span:nth-child(1){ transform:rotate(45deg) translate(10px, 10px); } .hamburger.active span:nth-child(2){ opacity:0; } .hamburger.active span:nth-child(3){ transform:rotate(-45deg) translate(7px, -7px); } .services-grid, .portfolio-grid, .hero-stats, .process-timeline, .about-content { grid-template-columns:1fr; } .contact-content{ grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
@@ -204,7 +204,7 @@
                 <div class="contact-info">
                     <div class="info-item"><div class="icon">📍</div><div><h4>Location</h4><p>Remote / Global</p></div></div>
                     <div class="info-item"><div class="icon">✉️</div><div><h4>Email</h4><p>hello@softwaresfast.com</p></div></div>
-                    <div class="info-item"><div class="icon">📞</div><div><h4>Phone</h4><p>+1 (555) 123-4567</p></div></div>
+                    <div class="info-item"><div class="icon">📞</div><div><h4>Phone</h4><p>07015531551</p></div></div>
                 </div>
                 <form class="contact-form" action="#" method="POST">
                     <input type="text" name="name" placeholder="Your name" required>
