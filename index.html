@@ -217,10 +217,10 @@
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio">
         <div class="container">
-            <h2 class="section-title">Our Portfolio</h2>
+            <h2 id="portfolio-heading" class="section-title">Our Portfolio</h2>
 
             <div class="portfolio-slider-group">
-                <div class="portfolio-slider" role="region" aria-label="Portfolio projects slider">
+                <div class="portfolio-slider" role="region" aria-labelledby="portfolio-heading">
                     <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
 
                     <div class="portfolio-track">
@@ -384,18 +384,24 @@
             if (autoSlideTimer) clearInterval(autoSlideTimer);
         }
 
+        function handleManualNavigation(callback) {
+            callback();
+            stopAutoSlide();
+            resumeAutoSlideIfAllowed();
+        }
+
         if (track && slides.length) {
             nextBtn && nextBtn.addEventListener('click', () => {
-                nextSlide();
+                handleManualNavigation(nextSlide);
             });
 
             prevBtn && prevBtn.addEventListener('click', () => {
-                prevSlide();
+                handleManualNavigation(prevSlide);
             });
 
             dots.forEach((dot, index) => {
                 dot.addEventListener('change', () => {
-                    updateSlider(index);
+                    handleManualNavigation(() => updateSlider(index));
                 });
             });
 
