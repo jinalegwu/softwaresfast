@@ -89,6 +89,17 @@
             transition:all 0.2s ease;
         }
         .dot.active{ background:#667eea; transform:scale(1.15); }
+        .sr-only{
+            position:absolute;
+            width:1px;
+            height:1px;
+            padding:0;
+            margin:-1px;
+            overflow:hidden;
+            clip:rect(0,0,0,0);
+            white-space:nowrap;
+            border:0;
+        }
 
         .guarantees{ padding:80px 15px; background-color:#f8f9fa; }
         .contact{ padding:80px 15px; background-color:white; }
@@ -255,9 +266,9 @@
                 </div>
 
                 <div class="slider-dots" role="tablist" aria-label="Portfolio slider navigation">
-                    <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-label="Go to E-commerce Platform slide" aria-selected="true" tabindex="0"></button>
-                    <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-label="Go to Mobile Banking App slide" aria-selected="false" tabindex="-1"></button>
-                    <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-label="Go to Healthcare Management System slide" aria-selected="false" tabindex="-1"></button>
+                    <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-label="Go to E-commerce Platform slide" aria-selected="true" tabindex="0"><span class="sr-only">E-commerce Platform</span></button>
+                    <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-label="Go to Mobile Banking App slide" aria-selected="false" tabindex="-1"><span class="sr-only">Mobile Banking App</span></button>
+                    <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-label="Go to Healthcare Management System slide" aria-selected="false" tabindex="-1"><span class="sr-only">Healthcare Management System</span></button>
                 </div>
             </div>
 
@@ -338,6 +349,8 @@
 
         let currentSlide = 0;
         let autoSlideTimer;
+        let isPointerOverSlider = false;
+        let isFocusWithinSlider = false;
         const slideInterval = 4000;
 
         function updateSlider(index) {
@@ -347,7 +360,6 @@
             slides.forEach((slide, i) => {
                 const isActive = i === currentSlide;
                 slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-                slide.hidden = !isActive;
             });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
@@ -371,6 +383,12 @@
             autoSlideTimer = setInterval(nextSlide, slideInterval);
         }
 
+        function resumeAutoSlideIfAllowed() {
+            if (!isPointerOverSlider && !isFocusWithinSlider) {
+                startAutoSlide();
+            }
+        }
+
         function stopAutoSlide() {
             if (autoSlideTimer) clearInterval(autoSlideTimer);
         }
@@ -392,12 +410,22 @@
             });
         });
 
-        slider && slider.addEventListener('mouseenter', stopAutoSlide);
-        slider && slider.addEventListener('mouseleave', startAutoSlide);
-        sliderGroup && sliderGroup.addEventListener('focusin', stopAutoSlide);
+        slider && slider.addEventListener('mouseenter', () => {
+            isPointerOverSlider = true;
+            stopAutoSlide();
+        });
+        slider && slider.addEventListener('mouseleave', () => {
+            isPointerOverSlider = false;
+            resumeAutoSlideIfAllowed();
+        });
+        sliderGroup && sliderGroup.addEventListener('focusin', () => {
+            isFocusWithinSlider = true;
+            stopAutoSlide();
+        });
         sliderGroup && sliderGroup.addEventListener('focusout', (event) => {
             if (sliderGroup.contains(event.relatedTarget)) return;
-            startAutoSlide();
+            isFocusWithinSlider = false;
+            resumeAutoSlideIfAllowed();
         });
         function handleSliderKeyboard(event) {
             const shouldFocusDot = event.currentTarget.classList.contains('dot');
@@ -429,7 +457,7 @@
             if (document.hidden) {
                 stopAutoSlide();
             } else {
-                startAutoSlide();
+                resumeAutoSlideIfAllowed();
             }
         });
         const handleReducedMotionChange = () => {
