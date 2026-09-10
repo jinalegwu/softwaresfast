@@ -78,7 +78,9 @@
         .slider-btn.prev{ left:12px; }
         .slider-btn.next{ right:12px; }
 
-        .slider-dots{ display:flex; justify-content:center; gap:0.5rem; margin-top:1rem; }
+        .slider-dots-group{ border:0; padding:0; margin-top:1rem; min-inline-size:0; }
+        .slider-dots{ display:flex; justify-content:center; gap:0.5rem; }
+        .slider-help-title{ text-align:center; color:#555; font-size:0.9rem; margin:0 auto 0.5rem; }
         .slider-help{ text-align:center; color:#555; font-size:0.85rem; margin-top:0.75rem; }
         .dot-input{
             appearance:none;
@@ -256,11 +258,14 @@
                     <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
                 </div>
 
-                <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation" aria-describedby="portfolio-slider-help">
-                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked>
-                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App">
-                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System">
-                </div>
+                <fieldset class="slider-dots-group" aria-describedby="portfolio-slider-help">
+                    <legend class="slider-help-title">Portfolio slide navigation</legend>
+                    <div class="slider-dots">
+                        <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked>
+                        <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App">
+                        <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System">
+                    </div>
+                </fieldset>
                 <p id="portfolio-slider-help" class="slider-help">Use the slide selectors to view each project.</p>
             </div>
 
