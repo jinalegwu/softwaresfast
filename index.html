@@ -350,6 +350,7 @@
             slides.forEach((slide, i) => {
                 const isActive = i === currentSlide;
                 slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+                slide.inert = !isActive;
             });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
@@ -416,8 +417,6 @@
             resumeAutoSlideIfAllowed();
         });
         function handleSliderKeyboard(event) {
-            const shouldFocusDot = event.currentTarget.classList.contains('dot-input');
-            if (shouldFocusDot && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) return;
             if (event.key === 'ArrowRight') {
                 event.preventDefault();
                 nextSlide();
@@ -435,11 +434,8 @@
                 updateSlider(slides.length - 1);
                 resumeAutoSlideIfAllowed();
             }
-            if (shouldFocusDot && ['Home', 'End'].includes(event.key)) {
-                dots[currentSlide] && dots[currentSlide].focus();
-            }
         }
-        [prevBtn, nextBtn, ...dots].forEach((control) => {
+        [prevBtn, nextBtn].forEach((control) => {
             control && control.addEventListener('keydown', handleSliderKeyboard);
         });
         document.addEventListener('visibilitychange', () => {
