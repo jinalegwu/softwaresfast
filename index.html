@@ -426,10 +426,13 @@
                 isFocusWithinSlider = true;
                 stopAutoSlide();
             });
-            sliderGroup && sliderGroup.addEventListener('focusout', (event) => {
-                if (sliderGroup.contains(event.relatedTarget)) return;
-                isFocusWithinSlider = false;
-                resumeAutoSlideIfAllowed();
+            sliderGroup && sliderGroup.addEventListener('focusout', () => {
+                requestAnimationFrame(() => {
+                    isFocusWithinSlider = sliderGroup.contains(document.activeElement);
+                    if (!isFocusWithinSlider) {
+                        resumeAutoSlideIfAllowed();
+                    }
+                });
             });
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
