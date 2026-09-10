@@ -79,6 +79,7 @@
         .slider-btn.next{ right:12px; }
 
         .slider-dots{ display:flex; justify-content:center; gap:0.5rem; margin-top:1rem; }
+        .slider-help{ text-align:center; color:#555; font-size:0.85rem; margin-top:0.75rem; }
         .dot-input{
             appearance:none;
             width:10px;
@@ -255,11 +256,12 @@
                     <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
                 </div>
 
-                <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation">
+                <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation" aria-describedby="portfolio-slider-help">
                     <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked>
                     <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App">
                     <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System">
                 </div>
+                <p id="portfolio-slider-help" class="slider-help">Use the slide selectors to view each project.</p>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
