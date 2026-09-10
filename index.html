@@ -342,7 +342,7 @@
         const prevBtn = document.querySelector('.slider-btn.prev');
         const nextBtn = document.querySelector('.slider-btn.next');
         const slider = document.querySelector('.portfolio-slider');
-        const sliderGroup = document.querySelector('.portfolio-slider-group');
+        const sliderDotsGroup = document.querySelector('.slider-dots-group');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         let currentSlide = 0;
@@ -422,18 +422,19 @@
                 isPointerOverSlider = false;
                 resumeAutoSlideIfAllowed();
             });
-            sliderGroup && sliderGroup.addEventListener('focusin', () => {
+            const sliderFocusTargets = [slider, sliderDotsGroup].filter(Boolean);
+            sliderFocusTargets.forEach((target) => target.addEventListener('focusin', () => {
                 isFocusWithinSlider = true;
                 stopAutoSlide();
-            });
-            sliderGroup && sliderGroup.addEventListener('focusout', () => {
+            }));
+            sliderFocusTargets.forEach((target) => target.addEventListener('focusout', () => {
                 requestAnimationFrame(() => {
-                    isFocusWithinSlider = sliderGroup.contains(document.activeElement);
+                    isFocusWithinSlider = sliderFocusTargets.some((focusTarget) => focusTarget.contains(document.activeElement));
                     if (!isFocusWithinSlider) {
                         resumeAutoSlideIfAllowed();
                     }
                 });
-            });
+            }));
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
                     stopAutoSlide();
