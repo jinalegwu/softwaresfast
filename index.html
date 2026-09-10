@@ -39,17 +39,71 @@
         .process{ padding:80px 15px; background-color:#f8f9fa; }
         .process-timeline{ display:grid; grid-template-columns:repeat(6,1fr); gap:1.5rem; align-items:center; margin-bottom:3rem; }
         .portfolio{ padding:80px 15px; }
-        .portfolio-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
-        .portfolio-item{ background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; }
-        .portfolio-item:hover{ transform:translateY(-10px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-        .portfolio-image-wrapper{ width:100%; height:250px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; }
+
+        /* Portfolio Slider */
+        .portfolio-slider{ position:relative; max-width:900px; margin:0 auto; overflow:hidden; border-radius:12px; }
+        .portfolio-track{ display:flex; transition:transform 0.5s ease-in-out; }
+        .portfolio-item{ min-width:100%; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; }
+        .portfolio-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
+        .portfolio-image-wrapper{ width:100%; height:350px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; }
         .portfolio-image{ width:100%; height:100%; object-fit:cover; display:block; }
-        .project-tag{ display:inline-block; background-color:#f8f9fa; color:#007bff; padding:0.4rem 0.8rem; border-radius:20px; font-size:0.8rem; margin:1rem 1.5rem 1.5rem; }
+        .portfolio-item h3{ padding:1rem 1.25rem 0.5rem; }
+        .portfolio-item p{ padding:0 1.25rem 0.75rem; color:#555; }
+        .project-tag{ display:inline-block; background-color:#f8f9fa; color:#007bff; padding:0.4rem 0.8rem; border-radius:20px; font-size:0.8rem; margin:0 1.25rem 1.25rem; }
+
+        .slider-btn{
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            width:44px;
+            height:44px;
+            border:none;
+            border-radius:50%;
+            background:rgba(0,0,0,0.55);
+            color:#fff;
+            font-size:1.4rem;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            z-index:5;
+            transition:background 0.2s ease;
+        }
+        .slider-btn:hover{ background:rgba(0,0,0,0.75); }
+        .slider-btn.prev{ left:12px; }
+        .slider-btn.next{ right:12px; }
+
+        .slider-dots{ display:flex; justify-content:center; gap:0.5rem; margin-top:1rem; }
+        .dot{
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            border:none;
+            background:#cbd5e1;
+            cursor:pointer;
+            transition:all 0.2s ease;
+        }
+        .dot.active{ background:#667eea; transform:scale(1.15); }
+
         .guarantees{ padding:80px 15px; background-color:#f8f9fa; }
         .contact{ padding:80px 15px; background-color:white; }
         .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
         .footer{ background-color:#212529; color:white; padding:3rem 15px 1rem; }
-        @media (max-width:768px){ .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; } .nav-menu.active{ left:0; } .hamburger{ display:flex; } .hamburger.active span:nth-child(1){ transform:rotate(45deg) translate(10px, 10px); } .hamburger.active span:nth-child(2){ opacity:0; } .hamburger.active span:nth-child(3){ transform:rotate(-45deg) translate(7px, -7px); } .services-grid, .portfolio-grid, .hero-stats, .process-timeline, .about-content { grid-template-columns:1fr; } .contact-content{ grid-template-columns:1fr; } }
+
+        @media (max-width:768px){
+            .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:white; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; }
+            .nav-menu.active{ left:0; }
+            .nav-menu li{ margin:1rem 0; }
+            .hamburger{ display:flex; }
+            .hero h1{ font-size:2rem; }
+            .hero-stats{ grid-template-columns:repeat(2,1fr); }
+            .services-grid{ grid-template-columns:1fr; }
+            .about-content{ grid-template-columns:1fr; }
+            .process-timeline{ grid-template-columns:repeat(2,1fr); }
+            .contact-content{ grid-template-columns:1fr; }
+            .portfolio-image-wrapper{ height:240px; }
+            .slider-btn{ width:38px; height:38px; }
+        }
     </style>
 </head>
 <body>
@@ -147,39 +201,52 @@
     <section id="portfolio" class="portfolio">
         <div class="container">
             <h2 class="section-title">Our Portfolio</h2>
-            <div class="portfolio-grid">
-                <!-- Portfolio Item 1 -->
-                <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1460925895917-adf4e565db18?auto=format&fit=crop&w=1200&q=80" alt="E-commerce platform dashboard">
+
+            <div class="portfolio-slider" aria-label="Portfolio projects slider">
+                <button class="slider-btn prev" aria-label="Previous project">❮</button>
+
+                <div class="portfolio-track">
+                    <!-- Portfolio Item 1 -->
+                    <div class="portfolio-item">
+                        <div class="portfolio-image-wrapper">
+                            <img class="portfolio-image" src="https://images.unsplash.com/photo-1460925895917-adf4e565db18?auto=format&fit=crop&w=1200&q=80" alt="E-commerce platform dashboard">
+                        </div>
+                        <h3>E-commerce Platform</h3>
+                        <p>An enterprise-grade online store with inventory, payments, and analytics built with React and Node.js.</p>
+                        <span class="project-tag">Web App</span>
                     </div>
-                    <h3>E-commerce Platform</h3>
-                    <p>An enterprise-grade online store with inventory, payments, and analytics built with React and Node.js.</p>
-                    <span class="project-tag">Web App</span>
+
+                    <!-- Portfolio Item 2 -->
+                    <div class="portfolio-item">
+                        <div class="portfolio-image-wrapper">
+                            <img class="portfolio-image" src="https://images.unsplash.com/photo-1512941691920-4e406062b481?auto=format&fit=crop&w=1200&q=80" alt="Mobile app interface">
+                        </div>
+                        <h3>Mobile Banking App</h3>
+                        <p>Secure mobile banking with multi-factor authentication and seamless transfers for iOS and Android.</p>
+                        <span class="project-tag">Mobile</span>
+                    </div>
+
+                    <!-- Portfolio Item 3 -->
+                    <div class="portfolio-item">
+                        <div class="portfolio-image-wrapper">
+                            <img class="portfolio-image" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="SaaS platform dashboard">
+                        </div>
+                        <h3>Healthcare Management System</h3>
+                        <p>Comprehensive HMS with patient records, appointments, billing, and reporting for clinics and hospitals.</p>
+                        <span class="project-tag">Healthcare • Web App</span>
+                    </div>
                 </div>
 
-                <!-- Portfolio Item 2 -->
-                <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1512941691920-4e406062b481?auto=format&fit=crop&w=1200&q=80" alt="Mobile app interface">
-                    </div>
-                    <h3>Mobile Banking App</h3>
-                    <p>Secure mobile banking with multi-factor authentication and seamless transfers for iOS and Android.</p>
-                    <span class="project-tag">Mobile</span>
-                </div>
-
-                <!-- Portfolio Item 3 -->
-                <div class="portfolio-item">
-                    <div class="portfolio-image-wrapper">
-                        <img class="portfolio-image" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="SaaS platform dashboard">
-                    </div>
-                    <h3>Healthcare Management System</h3>
-                    <p>Comprehensive HMS with patient records, appointments, billing, and reporting for clinics and hospitals.</p>
-                    <span class="project-tag">Healthcare • Web App</span>
-                </div>
-
+                <button class="slider-btn next" aria-label="Next project">❯</button>
             </div>
-            <p style="margin-top:1.25rem; color:#666;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
+
+            <div class="slider-dots" aria-label="Portfolio slider navigation">
+                <button class="dot active" data-slide="0" aria-label="Go to slide 1"></button>
+                <button class="dot" data-slide="1" aria-label="Go to slide 2"></button>
+                <button class="dot" data-slide="2" aria-label="Go to slide 3"></button>
+            </div>
+
+            <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
         </div>
     </section>
 
@@ -243,6 +310,65 @@
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
+
+        // Portfolio slider: auto-slide + manual arrows + dots
+        const track = document.querySelector('.portfolio-track');
+        const slides = document.querySelectorAll('.portfolio-item');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.querySelector('.slider-btn.prev');
+        const nextBtn = document.querySelector('.slider-btn.next');
+
+        let currentSlide = 0;
+        let autoSlideTimer;
+        const slideInterval = 4000;
+
+        function updateSlider(index) {
+            if (!track || !slides.length) return;
+            currentSlide = (index + slides.length) % slides.length;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+        }
+
+        function nextSlide() {
+            updateSlider(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            updateSlider(currentSlide - 1);
+        }
+
+        function startAutoSlide() {
+            stopAutoSlide();
+            autoSlideTimer = setInterval(nextSlide, slideInterval);
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideTimer) clearInterval(autoSlideTimer);
+        }
+
+        nextBtn && nextBtn.addEventListener('click', () => {
+            nextSlide();
+            startAutoSlide();
+        });
+
+        prevBtn && prevBtn.addEventListener('click', () => {
+            prevSlide();
+            startAutoSlide();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                updateSlider(index);
+                startAutoSlide();
+            });
+        });
+
+        const slider = document.querySelector('.portfolio-slider');
+        slider && slider.addEventListener('mouseenter', stopAutoSlide);
+        slider && slider.addEventListener('mouseleave', startAutoSlide);
+
+        updateSlider(0);
+        startAutoSlide();
     </script>
 </body>
 </html>
