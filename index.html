@@ -254,9 +254,9 @@
             </div>
 
             <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation">
-                <button class="dot active" role="radio" type="button" data-slide="0" aria-label="Go to E-commerce Platform slide"></button>
-                <button class="dot" role="radio" type="button" data-slide="1" aria-label="Go to Mobile Banking App slide"></button>
-                <button class="dot" role="radio" type="button" data-slide="2" aria-label="Go to Healthcare Management System slide"></button>
+                <button class="dot active" role="radio" type="button" data-slide="0" aria-label="Go to E-commerce Platform slide" aria-checked="true" tabindex="0"></button>
+                <button class="dot" role="radio" type="button" data-slide="1" aria-label="Go to Mobile Banking App slide" aria-checked="false" tabindex="-1"></button>
+                <button class="dot" role="radio" type="button" data-slide="2" aria-label="Go to Healthcare Management System slide" aria-checked="false" tabindex="-1"></button>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
@@ -392,6 +392,7 @@
             startAutoSlide();
         });
         function handleSliderKeyboard(event) {
+            const shouldFocusDot = event.currentTarget.classList.contains('dot');
             if (event.key === 'ArrowRight') {
                 event.preventDefault();
                 nextSlide();
@@ -408,6 +409,9 @@
                 event.preventDefault();
                 updateSlider(slides.length - 1);
                 startAutoSlide();
+            }
+            if (shouldFocusDot && ['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) {
+                dots[currentSlide] && dots[currentSlide].focus();
             }
         }
         [prevBtn, nextBtn, ...dots].forEach((control) => {
