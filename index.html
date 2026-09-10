@@ -347,10 +347,6 @@
             if (!track || !slides.length) return;
             currentSlide = (index + slides.length) % slides.length;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            slides.forEach((slide, i) => {
-                const isActive = i === currentSlide;
-                slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-            });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
                 dot.checked = isActive;
@@ -423,14 +419,6 @@
             } else if (event.key === 'ArrowLeft') {
                 event.preventDefault();
                 prevSlide();
-                resumeAutoSlideIfAllowed();
-            } else if (event.key === 'Home') {
-                event.preventDefault();
-                updateSlider(0);
-                resumeAutoSlideIfAllowed();
-            } else if (event.key === 'End') {
-                event.preventDefault();
-                updateSlider(slides.length - 1);
                 resumeAutoSlideIfAllowed();
             }
         }
