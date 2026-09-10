@@ -267,9 +267,9 @@
                 </div>
 
                 <div class="slider-dots" role="tablist" aria-label="Portfolio slider navigation">
-                    <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-label="Go to E-commerce Platform slide" aria-selected="true" tabindex="0"><span class="sr-only">E-commerce Platform</span></button>
-                    <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-label="Go to Mobile Banking App slide" aria-selected="false" tabindex="-1"><span class="sr-only">Mobile Banking App</span></button>
-                    <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-label="Go to Healthcare Management System slide" aria-selected="false" tabindex="-1"><span class="sr-only">Healthcare Management System</span></button>
+                    <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-selected="true" tabindex="0"><span class="sr-only">E-commerce Platform</span></button>
+                    <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-selected="false" tabindex="-1"><span class="sr-only">Mobile Banking App</span></button>
+                    <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-selected="false" tabindex="-1"><span class="sr-only">Healthcare Management System</span></button>
                 </div>
             </div>
 
@@ -466,7 +466,7 @@
             if (reducedMotion.matches) {
                 stopAutoSlide();
             } else {
-                startAutoSlide();
+                resumeAutoSlideIfAllowed();
             }
         };
         if (typeof reducedMotion.addEventListener === 'function') {
