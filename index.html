@@ -256,9 +256,9 @@
                 </div>
 
                 <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation">
-                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="E-commerce Platform" checked>
-                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Mobile Banking App">
-                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Healthcare Management System">
+                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked>
+                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App">
+                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System">
                 </div>
             </div>
 
@@ -411,20 +411,6 @@
                 if (sliderGroup.contains(event.relatedTarget)) return;
                 isFocusWithinSlider = false;
                 resumeAutoSlideIfAllowed();
-            });
-            function handleSliderKeyboard(event) {
-                if (event.key === 'ArrowRight') {
-                    event.preventDefault();
-                    nextSlide();
-                    resumeAutoSlideIfAllowed();
-                } else if (event.key === 'ArrowLeft') {
-                    event.preventDefault();
-                    prevSlide();
-                    resumeAutoSlideIfAllowed();
-                }
-            }
-            [prevBtn, nextBtn].forEach((control) => {
-                control && control.addEventListener('keydown', handleSliderKeyboard);
             });
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
