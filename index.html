@@ -220,7 +220,7 @@
             <h2 class="section-title">Our Portfolio</h2>
 
             <div class="portfolio-slider-group">
-                <div class="portfolio-slider" role="region" aria-label="Portfolio projects slider" aria-roledescription="carousel">
+                <div class="portfolio-slider" role="region" aria-label="Portfolio projects slider">
                     <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
 
                     <div class="portfolio-track">
@@ -387,18 +387,15 @@
         if (track && slides.length) {
             nextBtn && nextBtn.addEventListener('click', () => {
                 nextSlide();
-                resumeAutoSlideIfAllowed();
             });
 
             prevBtn && prevBtn.addEventListener('click', () => {
                 prevSlide();
-                resumeAutoSlideIfAllowed();
             });
 
             dots.forEach((dot, index) => {
                 dot.addEventListener('change', () => {
                     updateSlider(index);
-                    resumeAutoSlideIfAllowed();
                 });
             });
 
