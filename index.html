@@ -70,11 +70,21 @@
             transition:background 0.2s ease;
         }
         .slider-btn:hover{ background:rgba(0,0,0,0.75); }
+        .slider-btn:focus-visible,
+        .dot-input:focus-visible{
+            outline:3px solid #1d4ed8;
+            outline-offset:2px;
+        }
         .slider-btn.prev{ left:12px; }
         .slider-btn.next{ right:12px; }
 
-        .slider-dots{ display:flex; justify-content:center; gap:0.5rem; margin-top:1rem; }
-        .dot{
+        .slider-dots-group{ border:0; padding:0; margin-top:1rem; min-inline-size:0; }
+        .slider-dots{ display:flex; justify-content:center; gap:0.5rem; }
+        .dot-label{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; cursor:pointer; }
+        .slider-help-title{ text-align:center; color:#555; font-size:0.9rem; margin:0 auto 0.5rem; }
+        .slider-help{ text-align:center; color:#555; font-size:0.85rem; margin-top:0.75rem; }
+        .dot-input{
+            appearance:none;
             width:10px;
             height:10px;
             border-radius:50%;
@@ -83,7 +93,7 @@
             cursor:pointer;
             transition:all 0.2s ease;
         }
-        .dot.active{ background:#667eea; transform:scale(1.15); }
+        .dot-input:checked{ background:#667eea; transform:scale(1.15); }
 
         .guarantees{ padding:80px 15px; background-color:#f8f9fa; }
         .contact{ padding:80px 15px; background-color:white; }
@@ -103,6 +113,14 @@
             .contact-content{ grid-template-columns:1fr; }
             .portfolio-image-wrapper{ height:240px; }
             .slider-btn{ width:38px; height:38px; }
+        }
+
+        @media (prefers-reduced-motion: reduce){
+            .portfolio-track,
+            .portfolio-item,
+            .dot-input{
+                transition:none;
+            }
         }
     </style>
 </head>
@@ -200,12 +218,13 @@
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio">
         <div class="container">
-            <h2 class="section-title">Our Portfolio</h2>
+            <h2 id="portfolio-heading" class="section-title">Our Portfolio</h2>
 
-            <div class="portfolio-slider" aria-label="Portfolio projects slider">
-                <button class="slider-btn prev" aria-label="Previous project">❮</button>
+            <div class="portfolio-slider-group">
+                <div class="portfolio-slider" role="region" aria-labelledby="portfolio-heading">
+                    <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
 
-                <div class="portfolio-track">
+                    <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
@@ -235,15 +254,20 @@
                         <p>Comprehensive HMS with patient records, appointments, billing, and reporting for clinics and hospitals.</p>
                         <span class="project-tag">Healthcare • Web App</span>
                     </div>
+                    </div>
+
+                    <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
                 </div>
 
-                <button class="slider-btn next" aria-label="Next project">❯</button>
-            </div>
-
-            <div class="slider-dots" aria-label="Portfolio slider navigation">
-                <button class="dot active" data-slide="0" aria-label="Go to slide 1"></button>
-                <button class="dot" data-slide="1" aria-label="Go to slide 2"></button>
-                <button class="dot" data-slide="2" aria-label="Go to slide 3"></button>
+                <fieldset class="slider-dots-group" aria-describedby="portfolio-slider-help">
+                    <legend class="slider-help-title">Portfolio slide navigation</legend>
+                    <div class="slider-dots">
+                        <label class="dot-label"><input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked></label>
+                        <label class="dot-label"><input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App"></label>
+                        <label class="dot-label"><input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System"></label>
+                    </div>
+                </fieldset>
+                <p id="portfolio-slider-help" class="slider-help">Use the slide selectors to view each project.</p>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
@@ -314,19 +338,27 @@
         // Portfolio slider: auto-slide + manual arrows + dots
         const track = document.querySelector('.portfolio-track');
         const slides = document.querySelectorAll('.portfolio-item');
-        const dots = document.querySelectorAll('.dot');
+        const dots = document.querySelectorAll('.dot-input');
         const prevBtn = document.querySelector('.slider-btn.prev');
         const nextBtn = document.querySelector('.slider-btn.next');
+        const slider = document.querySelector('.portfolio-slider');
+        const sliderDotsGroup = document.querySelector('.slider-dots-group');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         let currentSlide = 0;
         let autoSlideTimer;
+        let isPointerOverSlider = false;
+        let isFocusWithinSlider = false;
         const slideInterval = 4000;
 
         function updateSlider(index) {
             if (!track || !slides.length) return;
             currentSlide = (index + slides.length) % slides.length;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+            dots.forEach((dot, i) => {
+                const isActive = i === currentSlide;
+                dot.checked = isActive;
+            });
         }
 
         function nextSlide() {
@@ -338,37 +370,94 @@
         }
 
         function startAutoSlide() {
+            if (reducedMotion.matches || slides.length < 2) return;
             stopAutoSlide();
             autoSlideTimer = setInterval(nextSlide, slideInterval);
+        }
+
+        function resumeAutoSlideIfAllowed() {
+            if (!document.hidden && !isPointerOverSlider && !isFocusWithinSlider) {
+                startAutoSlide();
+            }
         }
 
         function stopAutoSlide() {
             if (autoSlideTimer) clearInterval(autoSlideTimer);
         }
 
-        nextBtn && nextBtn.addEventListener('click', () => {
-            nextSlide();
-            startAutoSlide();
-        });
+        function handleManualNavigation(callback) {
+            callback();
+            stopAutoSlide();
+            resumeAutoSlideIfAllowed();
+        }
 
-        prevBtn && prevBtn.addEventListener('click', () => {
-            prevSlide();
-            startAutoSlide();
-        });
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                updateSlider(index);
-                startAutoSlide();
+        if (track && slides.length) {
+            nextBtn && nextBtn.addEventListener('click', () => {
+                handleManualNavigation(nextSlide);
             });
-        });
 
-        const slider = document.querySelector('.portfolio-slider');
-        slider && slider.addEventListener('mouseenter', stopAutoSlide);
-        slider && slider.addEventListener('mouseleave', startAutoSlide);
+            prevBtn && prevBtn.addEventListener('click', () => {
+                handleManualNavigation(prevSlide);
+            });
 
-        updateSlider(0);
-        startAutoSlide();
+            dots.forEach((dot, index) => {
+                dot.addEventListener('change', () => {
+                    handleManualNavigation(() => updateSlider(index));
+                });
+            });
+
+            slider && slider.addEventListener('mouseenter', () => {
+                isPointerOverSlider = true;
+                stopAutoSlide();
+            });
+            slider && slider.addEventListener('mouseleave', () => {
+                isPointerOverSlider = false;
+                resumeAutoSlideIfAllowed();
+            });
+            slider && slider.addEventListener('pointerenter', () => {
+                isPointerOverSlider = true;
+                stopAutoSlide();
+            });
+            slider && slider.addEventListener('pointerleave', () => {
+                isPointerOverSlider = false;
+                resumeAutoSlideIfAllowed();
+            });
+            const sliderFocusTargets = [slider, sliderDotsGroup].filter(Boolean);
+            sliderFocusTargets.forEach((target) => target.addEventListener('focusin', () => {
+                isFocusWithinSlider = true;
+                stopAutoSlide();
+            }));
+            sliderFocusTargets.forEach((target) => target.addEventListener('focusout', () => {
+                requestAnimationFrame(() => {
+                    isFocusWithinSlider = sliderFocusTargets.some((focusTarget) => focusTarget.contains(document.activeElement));
+                    if (!isFocusWithinSlider) {
+                        resumeAutoSlideIfAllowed();
+                    }
+                });
+            }));
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoSlide();
+                } else {
+                    resumeAutoSlideIfAllowed();
+                }
+            });
+            const handleReducedMotionChange = () => {
+                if (reducedMotion.matches) {
+                    stopAutoSlide();
+                } else {
+                    resumeAutoSlideIfAllowed();
+                }
+            };
+            if (typeof reducedMotion.addEventListener === 'function') {
+                reducedMotion.addEventListener('change', handleReducedMotionChange);
+            } else if (typeof reducedMotion.addListener === 'function') {
+                reducedMotion.addListener(handleReducedMotionChange);
+            }
+
+            updateSlider(0);
+            startAutoSlide();
+        }
     </script>
 </body>
 </html>
