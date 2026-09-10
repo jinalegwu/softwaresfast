@@ -215,7 +215,7 @@
         <div class="container">
             <h2 class="section-title">Our Portfolio</h2>
 
-            <div class="portfolio-slider" aria-label="Portfolio projects slider" aria-roledescription="carousel">
+            <div class="portfolio-slider" role="region" aria-label="Portfolio projects slider" aria-roledescription="carousel">
                 <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
 
                 <div class="portfolio-track">
@@ -253,10 +253,10 @@
                 <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
             </div>
 
-            <div class="slider-dots" aria-label="Portfolio slider navigation">
-                <button class="dot active" type="button" data-slide="0" aria-label="Go to E-commerce Platform slide"></button>
-                <button class="dot" type="button" data-slide="1" aria-label="Go to Mobile Banking App slide"></button>
-                <button class="dot" type="button" data-slide="2" aria-label="Go to Healthcare Management System slide"></button>
+            <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation">
+                <button class="dot active" role="radio" type="button" data-slide="0" aria-label="Go to E-commerce Platform slide"></button>
+                <button class="dot" role="radio" type="button" data-slide="1" aria-label="Go to Mobile Banking App slide"></button>
+                <button class="dot" role="radio" type="button" data-slide="2" aria-label="Go to Healthcare Management System slide"></button>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
@@ -344,7 +344,8 @@
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
                 dot.classList.toggle('active', isActive);
-                dot.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                dot.setAttribute('aria-checked', isActive ? 'true' : 'false');
+                dot.tabIndex = isActive ? 0 : -1;
             });
         }
 
@@ -390,7 +391,7 @@
             if (slider.contains(event.relatedTarget)) return;
             startAutoSlide();
         });
-        slider && slider.addEventListener('keydown', (event) => {
+        function handleSliderKeyboard(event) {
             if (event.key === 'ArrowRight') {
                 event.preventDefault();
                 nextSlide();
@@ -408,6 +409,9 @@
                 updateSlider(slides.length - 1);
                 startAutoSlide();
             }
+        }
+        [prevBtn, nextBtn, ...dots].forEach((control) => {
+            control && control.addEventListener('keydown', handleSliderKeyboard);
         });
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
