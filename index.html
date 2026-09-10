@@ -86,8 +86,122 @@
         .dot.active{ background:#667eea; transform:scale(1.15); }
 
         .guarantees{ padding:80px 15px; background-color:#f8f9fa; }
-        .contact{ padding:80px 15px; background-color:white; }
+        .contact{ padding:80px 15px; background-color:#f8f9fa; }
         .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
+        
+        /* Professional Form Styling */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        .info-item .icon {
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+        .info-item h4 {
+            font-size: 1.1rem;
+            color: #212529;
+            margin-bottom: 0.3rem;
+        }
+        .info-item p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-form input,
+        .contact-form select,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #333;
+            background-color: #fafbfc;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form select:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            background-color: #fff;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .contact-form input::placeholder {
+            color: #999;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .contact-form select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+            background-size: 1.3rem;
+            padding-right: 2.5rem;
+        }
+
+        .contact-form .form-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.95rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-form .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .contact-form .form-submit:active {
+            transform: translateY(0);
+        }
+
         .footer{ background-color:#212529; color:white; padding:3rem 15px 1rem; }
 
         @media (max-width:768px){
@@ -103,6 +217,7 @@
             .contact-content{ grid-template-columns:1fr; }
             .portfolio-image-wrapper{ height:240px; }
             .slider-btn{ width:38px; height:38px; }
+            .contact-form { padding: 2rem; }
         }
     </style>
 </head>
@@ -274,16 +389,31 @@
                     <div class="info-item"><div class="icon">📞</div><div><h4>Phone</h4><p>07015531551</p></div></div>
                 </div>
                 <form class="contact-form" action="#" method="POST">
-                    <input type="text" name="name" placeholder="Your name" required>
-                    <input type="email" name="email" placeholder="Your email" required>
-                    <select name="service">
-                        <option value="web">Web Development</option>
-                        <option value="mobile">Mobile Apps</option>
-                        <option value="cloud">Cloud Solutions</option>
-                        <option value="pm">Project Management</option>
-                    </select>
-                    <textarea name="message" rows="5" placeholder="Describe your project"></textarea>
-                    <button class="btn btn-primary" type="submit">Send Message</button>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Service Interested In</label>
+                        <select id="service" name="service" required>
+                            <option value="">-- Select a service --</option>
+                            <option value="web">Web Development</option>
+                            <option value="mobile">Mobile Apps</option>
+                            <option value="cloud">Cloud Solutions</option>
+                            <option value="pm">Project Management</option>
+                            <option value="design">UI/UX Design</option>
+                            <option value="qa">Quality Assurance</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Project Description</label>
+                        <textarea id="message" name="message" placeholder="Tell us about your project, timeline, and budget..."></textarea>
+                    </div>
+                    <button class="form-submit" type="submit">Send Inquiry</button>
                 </form>
             </div>
         </div>
@@ -330,7 +460,7 @@
         }
 
         function nextSlide() {
-            updateSlider(currentSlide + 1);
+            updateSlide(currentSlide + 1);
         }
 
         function prevSlide() {
