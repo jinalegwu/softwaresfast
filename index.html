@@ -220,7 +220,7 @@
 
                 <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" id="portfolio-slide-1" role="tabpanel" aria-labelledby="portfolio-tab-1">
                         <div class="portfolio-image-wrapper">
                             <img class="portfolio-image" src="https://images.unsplash.com/photo-1460925895917-adf4e565db18?auto=format&fit=crop&w=1200&q=80" alt="E-commerce platform dashboard">
                         </div>
@@ -230,7 +230,7 @@
                     </div>
 
                     <!-- Portfolio Item 2 -->
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" id="portfolio-slide-2" role="tabpanel" aria-labelledby="portfolio-tab-2">
                         <div class="portfolio-image-wrapper">
                             <img class="portfolio-image" src="https://images.unsplash.com/photo-1512941691920-4e406062b481?auto=format&fit=crop&w=1200&q=80" alt="Mobile app interface">
                         </div>
@@ -240,7 +240,7 @@
                     </div>
 
                     <!-- Portfolio Item 3 -->
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" id="portfolio-slide-3" role="tabpanel" aria-labelledby="portfolio-tab-3">
                         <div class="portfolio-image-wrapper">
                             <img class="portfolio-image" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="SaaS platform dashboard">
                         </div>
@@ -253,10 +253,10 @@
                 <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
             </div>
 
-            <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation">
-                <button class="dot active" role="radio" type="button" data-slide="0" aria-label="Go to E-commerce Platform slide" aria-checked="true" tabindex="0"></button>
-                <button class="dot" role="radio" type="button" data-slide="1" aria-label="Go to Mobile Banking App slide" aria-checked="false" tabindex="-1"></button>
-                <button class="dot" role="radio" type="button" data-slide="2" aria-label="Go to Healthcare Management System slide" aria-checked="false" tabindex="-1"></button>
+            <div class="slider-dots" role="tablist" aria-label="Portfolio slider navigation">
+                <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-label="Go to E-commerce Platform slide" aria-selected="true" tabindex="0"></button>
+                <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-label="Go to Mobile Banking App slide" aria-selected="false" tabindex="-1"></button>
+                <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-label="Go to Healthcare Management System slide" aria-selected="false" tabindex="-1"></button>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
@@ -341,10 +341,13 @@
             if (!track || !slides.length) return;
             currentSlide = (index + slides.length) % slides.length;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            slides.forEach((slide, i) => {
+                slide.setAttribute('aria-hidden', i === currentSlide ? 'false' : 'true');
+            });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
                 dot.classList.toggle('active', isActive);
-                dot.setAttribute('aria-checked', isActive ? 'true' : 'false');
+                dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
                 dot.tabIndex = isActive ? 0 : -1;
             });
         }
