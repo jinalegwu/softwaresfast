@@ -215,10 +215,11 @@
         <div class="container">
             <h2 class="section-title">Our Portfolio</h2>
 
-            <div class="portfolio-slider" role="region" aria-label="Portfolio projects slider" aria-roledescription="carousel">
-                <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
+            <div class="portfolio-slider-group">
+                <div class="portfolio-slider" role="region" aria-label="Portfolio projects slider" aria-roledescription="carousel">
+                    <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
 
-                <div class="portfolio-track">
+                    <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
                     <div class="portfolio-item" id="portfolio-slide-1" role="tabpanel" aria-labelledby="portfolio-tab-1">
                         <div class="portfolio-image-wrapper">
@@ -248,15 +249,16 @@
                         <p>Comprehensive HMS with patient records, appointments, billing, and reporting for clinics and hospitals.</p>
                         <span class="project-tag">Healthcare • Web App</span>
                     </div>
+                    </div>
+
+                    <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
                 </div>
 
-                <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
-            </div>
-
-            <div class="slider-dots" role="tablist" aria-label="Portfolio slider navigation">
-                <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-label="Go to E-commerce Platform slide" aria-selected="true" tabindex="0"></button>
-                <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-label="Go to Mobile Banking App slide" aria-selected="false" tabindex="-1"></button>
-                <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-label="Go to Healthcare Management System slide" aria-selected="false" tabindex="-1"></button>
+                <div class="slider-dots" role="tablist" aria-label="Portfolio slider navigation">
+                    <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-label="Go to E-commerce Platform slide" aria-selected="true" tabindex="0"></button>
+                    <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-label="Go to Mobile Banking App slide" aria-selected="false" tabindex="-1"></button>
+                    <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-label="Go to Healthcare Management System slide" aria-selected="false" tabindex="-1"></button>
+                </div>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
@@ -331,6 +333,7 @@
         const prevBtn = document.querySelector('.slider-btn.prev');
         const nextBtn = document.querySelector('.slider-btn.next');
         const slider = document.querySelector('.portfolio-slider');
+        const sliderGroup = document.querySelector('.portfolio-slider-group');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         let currentSlide = 0;
@@ -342,7 +345,9 @@
             currentSlide = (index + slides.length) % slides.length;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
             slides.forEach((slide, i) => {
-                slide.setAttribute('aria-hidden', i === currentSlide ? 'false' : 'true');
+                const isActive = i === currentSlide;
+                slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+                slide.hidden = !isActive;
             });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
@@ -389,9 +394,9 @@
 
         slider && slider.addEventListener('mouseenter', stopAutoSlide);
         slider && slider.addEventListener('mouseleave', startAutoSlide);
-        slider && slider.addEventListener('focusin', stopAutoSlide);
-        slider && slider.addEventListener('focusout', (event) => {
-            if (slider.contains(event.relatedTarget)) return;
+        sliderGroup && sliderGroup.addEventListener('focusin', stopAutoSlide);
+        sliderGroup && sliderGroup.addEventListener('focusout', (event) => {
+            if (sliderGroup.contains(event.relatedTarget)) return;
             startAutoSlide();
         });
         function handleSliderKeyboard(event) {
