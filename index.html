@@ -344,7 +344,7 @@
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
                 dot.classList.toggle('active', isActive);
-                dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+                dot.setAttribute('aria-pressed', isActive ? 'true' : 'false');
             });
         }
 
@@ -386,7 +386,10 @@
         slider && slider.addEventListener('mouseenter', stopAutoSlide);
         slider && slider.addEventListener('mouseleave', startAutoSlide);
         slider && slider.addEventListener('focusin', stopAutoSlide);
-        slider && slider.addEventListener('focusout', startAutoSlide);
+        slider && slider.addEventListener('focusout', (event) => {
+            if (slider.contains(event.relatedTarget)) return;
+            startAutoSlide();
+        });
         slider && slider.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowRight') {
                 event.preventDefault();
