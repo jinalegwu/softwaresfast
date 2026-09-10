@@ -45,10 +45,7 @@
         .portfolio-track{ display:flex; transition:transform 0.5s ease-in-out; }
         .portfolio-item{ min-width:100%; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; }
         .portfolio-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-        .portfolio-image-wrapper{ width:100%; height:350px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; font-size:3rem; font-weight:bold; color:white; }
-        .portfolio-image-wrapper.ecommerce { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); }
-        .portfolio-image-wrapper.mobile { background:linear-gradient(135deg,#764ba2 0%,#f5576c 100%); }
-        .portfolio-image-wrapper.healthcare { background:linear-gradient(135deg,#f5576c 0%,#ff6b6b 100%); }
+        .portfolio-image-wrapper{ width:100%; height:350px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; }
         .portfolio-image{ width:100%; height:100%; object-fit:cover; display:block; }
         .portfolio-item h3{ padding:1rem 1.25rem 0.5rem; }
         .portfolio-item p{ padding:0 1.25rem 0.75rem; color:#555; }
@@ -211,8 +208,8 @@
                 <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
                     <div class="portfolio-item">
-                        <div class="portfolio-image-wrapper ecommerce">
-                            🛒 E-Commerce
+                        <div class="portfolio-image-wrapper">
+                            <img class="portfolio-image" src="https://picsum.photos/1200/350?random=1" alt="E-commerce platform dashboard" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221200%22 height=%22350%22%3E%3Crect fill=%22%23667eea%22 width=%221200%22 height=%22350%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3E🛒 E-Commerce Platform%3C/text%3E%3C/svg%3E'">
                         </div>
                         <h3>E-commerce Platform</h3>
                         <p>An enterprise-grade online store with inventory, payments, and analytics built with React and Node.js.</p>
@@ -221,8 +218,8 @@
 
                     <!-- Portfolio Item 2 -->
                     <div class="portfolio-item">
-                        <div class="portfolio-image-wrapper mobile">
-                            📱 Banking
+                        <div class="portfolio-image-wrapper">
+                            <img class="portfolio-image" src="https://picsum.photos/1200/350?random=2" alt="Mobile app interface" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221200%22 height=%22350%22%3E%3Crect fill=%22%23764ba2%22 width=%221200%22 height=%22350%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3E📱 Mobile Banking App%3C/text%3E%3C/svg%3E'">
                         </div>
                         <h3>Mobile Banking App</h3>
                         <p>Secure mobile banking with multi-factor authentication and seamless transfers for iOS and Android.</p>
@@ -231,8 +228,8 @@
 
                     <!-- Portfolio Item 3 -->
                     <div class="portfolio-item">
-                        <div class="portfolio-image-wrapper healthcare">
-                            🏥 Healthcare
+                        <div class="portfolio-image-wrapper">
+                            <img class="portfolio-image" src="https://picsum.photos/1200/350?random=3" alt="SaaS platform dashboard" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221200%22 height=%22350%22%3E%3Crect fill=%22%23f5576c%22 width=%221200%22 height=%22350%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2248%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3E🏥 Healthcare Management%3C/text%3E%3C/svg%3E'">
                         </div>
                         <h3>Healthcare Management System</h3>
                         <p>Comprehensive HMS with patient records, appointments, billing, and reporting for clinics and hospitals.</p>
