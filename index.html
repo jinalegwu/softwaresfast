@@ -416,13 +416,18 @@
                 startAutoSlide();
             }
         });
-        reducedMotion.addEventListener('change', () => {
+        const handleReducedMotionChange = () => {
             if (reducedMotion.matches) {
                 stopAutoSlide();
             } else {
                 startAutoSlide();
             }
-        });
+        };
+        if (typeof reducedMotion.addEventListener === 'function') {
+            reducedMotion.addEventListener('change', handleReducedMotionChange);
+        } else if (typeof reducedMotion.addListener === 'function') {
+            reducedMotion.addListener(handleReducedMotionChange);
+        }
 
         updateSlider(0);
         startAutoSlide();
