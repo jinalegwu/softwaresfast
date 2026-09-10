@@ -45,7 +45,10 @@
         .portfolio-track{ display:flex; transition:transform 0.5s ease-in-out; }
         .portfolio-item{ min-width:100%; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; }
         .portfolio-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-        .portfolio-image-wrapper{ width:100%; height:350px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; }
+        .portfolio-image-wrapper{ width:100%; height:350px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; font-size:3rem; font-weight:bold; color:white; }
+        .portfolio-image-wrapper.ecommerce { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); }
+        .portfolio-image-wrapper.mobile { background:linear-gradient(135deg,#764ba2 0%,#f5576c 100%); }
+        .portfolio-image-wrapper.healthcare { background:linear-gradient(135deg,#f5576c 0%,#ff6b6b 100%); }
         .portfolio-image{ width:100%; height:100%; object-fit:cover; display:block; }
         .portfolio-item h3{ padding:1rem 1.25rem 0.5rem; }
         .portfolio-item p{ padding:0 1.25rem 0.75rem; color:#555; }
@@ -208,8 +211,8 @@
                 <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
                     <div class="portfolio-item">
-                        <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://via.placeholder.com/1200x350/667eea/ffffff?text=E-commerce+Platform" alt="E-commerce platform dashboard">
+                        <div class="portfolio-image-wrapper ecommerce">
+                            🛒 E-Commerce
                         </div>
                         <h3>E-commerce Platform</h3>
                         <p>An enterprise-grade online store with inventory, payments, and analytics built with React and Node.js.</p>
@@ -218,8 +221,8 @@
 
                     <!-- Portfolio Item 2 -->
                     <div class="portfolio-item">
-                        <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://via.placeholder.com/1200x350/764ba2/ffffff?text=Mobile+Banking+App" alt="Mobile app interface">
+                        <div class="portfolio-image-wrapper mobile">
+                            📱 Banking
                         </div>
                         <h3>Mobile Banking App</h3>
                         <p>Secure mobile banking with multi-factor authentication and seamless transfers for iOS and Android.</p>
@@ -228,8 +231,8 @@
 
                     <!-- Portfolio Item 3 -->
                     <div class="portfolio-item">
-                        <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://via.placeholder.com/1200x350/f5576c/ffffff?text=Healthcare+Management" alt="SaaS platform dashboard">
+                        <div class="portfolio-image-wrapper healthcare">
+                            🏥 Healthcare
                         </div>
                         <h3>Healthcare Management System</h3>
                         <p>Comprehensive HMS with patient records, appointments, billing, and reporting for clinics and hospitals.</p>
