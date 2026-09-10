@@ -70,6 +70,11 @@
             transition:background 0.2s ease;
         }
         .slider-btn:hover{ background:rgba(0,0,0,0.75); }
+        .slider-btn:focus-visible,
+        .dot:focus-visible{
+            outline:3px solid #1d4ed8;
+            outline-offset:2px;
+        }
         .slider-btn.prev{ left:12px; }
         .slider-btn.next{ right:12px; }
 
@@ -103,6 +108,14 @@
             .contact-content{ grid-template-columns:1fr; }
             .portfolio-image-wrapper{ height:240px; }
             .slider-btn{ width:38px; height:38px; }
+        }
+
+        @media (prefers-reduced-motion: reduce){
+            .portfolio-track,
+            .portfolio-item,
+            .dot{
+                transition:none;
+            }
         }
     </style>
 </head>
@@ -202,8 +215,8 @@
         <div class="container">
             <h2 class="section-title">Our Portfolio</h2>
 
-            <div class="portfolio-slider" aria-label="Portfolio projects slider">
-                <button class="slider-btn prev" aria-label="Previous project">❮</button>
+            <div class="portfolio-slider" aria-label="Portfolio projects slider" aria-roledescription="carousel" tabindex="0">
+                <button class="slider-btn prev" type="button" aria-label="Previous project">❮</button>
 
                 <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
@@ -237,13 +250,13 @@
                     </div>
                 </div>
 
-                <button class="slider-btn next" aria-label="Next project">❯</button>
+                <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
             </div>
 
             <div class="slider-dots" aria-label="Portfolio slider navigation">
-                <button class="dot active" data-slide="0" aria-label="Go to slide 1"></button>
-                <button class="dot" data-slide="1" aria-label="Go to slide 2"></button>
-                <button class="dot" data-slide="2" aria-label="Go to slide 3"></button>
+                <button class="dot active" type="button" data-slide="0" aria-label="Go to E-commerce Platform slide"></button>
+                <button class="dot" type="button" data-slide="1" aria-label="Go to Mobile Banking App slide"></button>
+                <button class="dot" type="button" data-slide="2" aria-label="Go to Healthcare Management System slide"></button>
             </div>
 
             <p style="margin-top:1.25rem; color:#666; text-align:center;">Want your project featured here? <a href="#contact">Get in touch</a>.</p>
@@ -317,6 +330,8 @@
         const dots = document.querySelectorAll('.dot');
         const prevBtn = document.querySelector('.slider-btn.prev');
         const nextBtn = document.querySelector('.slider-btn.next');
+        const slider = document.querySelector('.portfolio-slider');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         let currentSlide = 0;
         let autoSlideTimer;
@@ -326,7 +341,11 @@
             if (!track || !slides.length) return;
             currentSlide = (index + slides.length) % slides.length;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+            dots.forEach((dot, i) => {
+                const isActive = i === currentSlide;
+                dot.classList.toggle('active', isActive);
+                dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+            });
         }
 
         function nextSlide() {
@@ -338,6 +357,7 @@
         }
 
         function startAutoSlide() {
+            if (reducedMotion.matches || slides.length < 2) return;
             stopAutoSlide();
             autoSlideTimer = setInterval(nextSlide, slideInterval);
         }
@@ -363,9 +383,43 @@
             });
         });
 
-        const slider = document.querySelector('.portfolio-slider');
         slider && slider.addEventListener('mouseenter', stopAutoSlide);
         slider && slider.addEventListener('mouseleave', startAutoSlide);
+        slider && slider.addEventListener('focusin', stopAutoSlide);
+        slider && slider.addEventListener('focusout', startAutoSlide);
+        slider && slider.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                nextSlide();
+                startAutoSlide();
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevSlide();
+                startAutoSlide();
+            } else if (event.key === 'Home') {
+                event.preventDefault();
+                updateSlider(0);
+                startAutoSlide();
+            } else if (event.key === 'End') {
+                event.preventDefault();
+                updateSlider(slides.length - 1);
+                startAutoSlide();
+            }
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoSlide();
+            } else {
+                startAutoSlide();
+            }
+        });
+        reducedMotion.addEventListener('change', () => {
+            if (reducedMotion.matches) {
+                stopAutoSlide();
+            } else {
+                startAutoSlide();
+            }
+        });
 
         updateSlider(0);
         startAutoSlide();
