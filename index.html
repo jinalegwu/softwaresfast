@@ -80,6 +80,7 @@
 
         .slider-dots-group{ border:0; padding:0; margin-top:1rem; min-inline-size:0; }
         .slider-dots{ display:flex; justify-content:center; gap:0.5rem; }
+        .dot-label{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; cursor:pointer; }
         .slider-help-title{ text-align:center; color:#555; font-size:0.9rem; margin:0 auto 0.5rem; }
         .slider-help{ text-align:center; color:#555; font-size:0.85rem; margin-top:0.75rem; }
         .dot-input{
@@ -261,9 +262,9 @@
                 <fieldset class="slider-dots-group" aria-describedby="portfolio-slider-help">
                     <legend class="slider-help-title">Portfolio slide navigation</legend>
                     <div class="slider-dots">
-                        <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked>
-                        <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App">
-                        <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System">
+                        <label class="dot-label"><input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="Go to slide 1: E-commerce Platform" checked></label>
+                        <label class="dot-label"><input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Go to slide 2: Mobile Banking App"></label>
+                        <label class="dot-label"><input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Go to slide 3: Healthcare Management System"></label>
                     </div>
                 </fieldset>
                 <p id="portfolio-slider-help" class="slider-help">Use the slide selectors to view each project.</p>
@@ -410,6 +411,14 @@
                 stopAutoSlide();
             });
             slider && slider.addEventListener('mouseleave', () => {
+                isPointerOverSlider = false;
+                resumeAutoSlideIfAllowed();
+            });
+            slider && slider.addEventListener('pointerenter', () => {
+                isPointerOverSlider = true;
+                stopAutoSlide();
+            });
+            slider && slider.addEventListener('pointerleave', () => {
                 isPointerOverSlider = false;
                 resumeAutoSlideIfAllowed();
             });
