@@ -350,7 +350,6 @@
             slides.forEach((slide, i) => {
                 const isActive = i === currentSlide;
                 slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-                slide.inert = !isActive;
             });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
