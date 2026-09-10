@@ -71,7 +71,7 @@
         }
         .slider-btn:hover{ background:rgba(0,0,0,0.75); }
         .slider-btn:focus-visible,
-        .dot:focus-visible{
+        .dot-input:focus-visible{
             outline:3px solid #1d4ed8;
             outline-offset:2px;
         }
@@ -79,7 +79,8 @@
         .slider-btn.next{ right:12px; }
 
         .slider-dots{ display:flex; justify-content:center; gap:0.5rem; margin-top:1rem; }
-        .dot{
+        .dot-input{
+            appearance:none;
             width:10px;
             height:10px;
             border-radius:50%;
@@ -88,18 +89,7 @@
             cursor:pointer;
             transition:all 0.2s ease;
         }
-        .dot.active{ background:#667eea; transform:scale(1.15); }
-        .sr-only{
-            position:absolute;
-            width:1px;
-            height:1px;
-            padding:0;
-            margin:-1px;
-            overflow:hidden;
-            clip:rect(0,0,0,0);
-            white-space:nowrap;
-            border:0;
-        }
+        .dot-input:checked{ background:#667eea; transform:scale(1.15); }
 
         .guarantees{ padding:80px 15px; background-color:#f8f9fa; }
         .contact{ padding:80px 15px; background-color:white; }
@@ -124,7 +114,7 @@
         @media (prefers-reduced-motion: reduce){
             .portfolio-track,
             .portfolio-item,
-            .dot{
+            .dot-input{
                 transition:none;
             }
         }
@@ -232,7 +222,7 @@
 
                     <div class="portfolio-track">
                     <!-- Portfolio Item 1 -->
-                    <div class="portfolio-item" id="portfolio-slide-1" role="tabpanel" aria-labelledby="portfolio-tab-1">
+                    <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
                             <img class="portfolio-image" src="https://images.unsplash.com/photo-1460925895917-adf4e565db18?auto=format&fit=crop&w=1200&q=80" alt="E-commerce platform dashboard">
                         </div>
@@ -242,7 +232,7 @@
                     </div>
 
                     <!-- Portfolio Item 2 -->
-                    <div class="portfolio-item" id="portfolio-slide-2" role="tabpanel" aria-labelledby="portfolio-tab-2">
+                    <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
                             <img class="portfolio-image" src="https://images.unsplash.com/photo-1512941691920-4e406062b481?auto=format&fit=crop&w=1200&q=80" alt="Mobile app interface">
                         </div>
@@ -252,7 +242,7 @@
                     </div>
 
                     <!-- Portfolio Item 3 -->
-                    <div class="portfolio-item" id="portfolio-slide-3" role="tabpanel" aria-labelledby="portfolio-tab-3">
+                    <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
                             <img class="portfolio-image" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="SaaS platform dashboard">
                         </div>
@@ -265,10 +255,10 @@
                     <button class="slider-btn next" type="button" aria-label="Next project">❯</button>
                 </div>
 
-                <div class="slider-dots" role="tablist" aria-label="Portfolio slider navigation">
-                    <button class="dot active" id="portfolio-tab-1" role="tab" type="button" data-slide="0" aria-controls="portfolio-slide-1" aria-selected="true" tabindex="0"><span class="sr-only">E-commerce Platform</span></button>
-                    <button class="dot" id="portfolio-tab-2" role="tab" type="button" data-slide="1" aria-controls="portfolio-slide-2" aria-selected="false" tabindex="-1"><span class="sr-only">Mobile Banking App</span></button>
-                    <button class="dot" id="portfolio-tab-3" role="tab" type="button" data-slide="2" aria-controls="portfolio-slide-3" aria-selected="false" tabindex="-1"><span class="sr-only">Healthcare Management System</span></button>
+                <div class="slider-dots" role="radiogroup" aria-label="Portfolio slider navigation">
+                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="0" aria-label="E-commerce Platform" checked>
+                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="1" aria-label="Mobile Banking App">
+                    <input class="dot-input" type="radio" name="portfolio-slide" data-slide="2" aria-label="Healthcare Management System">
                 </div>
             </div>
 
@@ -340,7 +330,7 @@
         // Portfolio slider: auto-slide + manual arrows + dots
         const track = document.querySelector('.portfolio-track');
         const slides = document.querySelectorAll('.portfolio-item');
-        const dots = document.querySelectorAll('.dot');
+        const dots = document.querySelectorAll('.dot-input');
         const prevBtn = document.querySelector('.slider-btn.prev');
         const nextBtn = document.querySelector('.slider-btn.next');
         const slider = document.querySelector('.portfolio-slider');
@@ -363,9 +353,7 @@
             });
             dots.forEach((dot, i) => {
                 const isActive = i === currentSlide;
-                dot.classList.toggle('active', isActive);
-                dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
-                dot.tabIndex = isActive ? 0 : -1;
+                dot.checked = isActive;
             });
         }
 
@@ -384,7 +372,7 @@
         }
 
         function resumeAutoSlideIfAllowed() {
-            if (!isPointerOverSlider && !isFocusWithinSlider) {
+            if (!document.hidden && !isPointerOverSlider && !isFocusWithinSlider) {
                 startAutoSlide();
             }
         }
@@ -395,18 +383,18 @@
 
         nextBtn && nextBtn.addEventListener('click', () => {
             nextSlide();
-            startAutoSlide();
+            resumeAutoSlideIfAllowed();
         });
 
         prevBtn && prevBtn.addEventListener('click', () => {
             prevSlide();
-            startAutoSlide();
+            resumeAutoSlideIfAllowed();
         });
 
         dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
+            dot.addEventListener('change', () => {
                 updateSlider(index);
-                startAutoSlide();
+                resumeAutoSlideIfAllowed();
             });
         });
 
@@ -428,7 +416,8 @@
             resumeAutoSlideIfAllowed();
         });
         function handleSliderKeyboard(event) {
-            const shouldFocusDot = event.currentTarget.classList.contains('dot');
+            const shouldFocusDot = event.currentTarget.classList.contains('dot-input');
+            if (shouldFocusDot && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) return;
             if (event.key === 'ArrowRight') {
                 event.preventDefault();
                 nextSlide();
@@ -446,7 +435,7 @@
                 updateSlider(slides.length - 1);
                 resumeAutoSlideIfAllowed();
             }
-            if (shouldFocusDot && ['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) {
+            if (shouldFocusDot && ['Home', 'End'].includes(event.key)) {
                 dots[currentSlide] && dots[currentSlide].focus();
             }
         }
