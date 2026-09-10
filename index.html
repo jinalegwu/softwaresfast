@@ -377,76 +377,78 @@
             if (autoSlideTimer) clearInterval(autoSlideTimer);
         }
 
-        nextBtn && nextBtn.addEventListener('click', () => {
-            nextSlide();
-            resumeAutoSlideIfAllowed();
-        });
-
-        prevBtn && prevBtn.addEventListener('click', () => {
-            prevSlide();
-            resumeAutoSlideIfAllowed();
-        });
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('change', () => {
-                updateSlider(index);
-                resumeAutoSlideIfAllowed();
-            });
-        });
-
-        slider && slider.addEventListener('mouseenter', () => {
-            isPointerOverSlider = true;
-            stopAutoSlide();
-        });
-        slider && slider.addEventListener('mouseleave', () => {
-            isPointerOverSlider = false;
-            resumeAutoSlideIfAllowed();
-        });
-        sliderGroup && sliderGroup.addEventListener('focusin', () => {
-            isFocusWithinSlider = true;
-            stopAutoSlide();
-        });
-        sliderGroup && sliderGroup.addEventListener('focusout', (event) => {
-            if (sliderGroup.contains(event.relatedTarget)) return;
-            isFocusWithinSlider = false;
-            resumeAutoSlideIfAllowed();
-        });
-        function handleSliderKeyboard(event) {
-            if (event.key === 'ArrowRight') {
-                event.preventDefault();
+        if (track && slides.length) {
+            nextBtn && nextBtn.addEventListener('click', () => {
                 nextSlide();
                 resumeAutoSlideIfAllowed();
-            } else if (event.key === 'ArrowLeft') {
-                event.preventDefault();
+            });
+
+            prevBtn && prevBtn.addEventListener('click', () => {
                 prevSlide();
                 resumeAutoSlideIfAllowed();
-            }
-        }
-        [prevBtn, nextBtn].forEach((control) => {
-            control && control.addEventListener('keydown', handleSliderKeyboard);
-        });
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                stopAutoSlide();
-            } else {
-                resumeAutoSlideIfAllowed();
-            }
-        });
-        const handleReducedMotionChange = () => {
-            if (reducedMotion.matches) {
-                stopAutoSlide();
-            } else {
-                resumeAutoSlideIfAllowed();
-            }
-        };
-        if (typeof reducedMotion.addEventListener === 'function') {
-            reducedMotion.addEventListener('change', handleReducedMotionChange);
-        } else if (typeof reducedMotion.addListener === 'function') {
-            reducedMotion.addListener(handleReducedMotionChange);
-        }
+            });
 
-        updateSlider(0);
-        startAutoSlide();
+            dots.forEach((dot, index) => {
+                dot.addEventListener('change', () => {
+                    updateSlider(index);
+                    resumeAutoSlideIfAllowed();
+                });
+            });
+
+            slider && slider.addEventListener('mouseenter', () => {
+                isPointerOverSlider = true;
+                stopAutoSlide();
+            });
+            slider && slider.addEventListener('mouseleave', () => {
+                isPointerOverSlider = false;
+                resumeAutoSlideIfAllowed();
+            });
+            sliderGroup && sliderGroup.addEventListener('focusin', () => {
+                isFocusWithinSlider = true;
+                stopAutoSlide();
+            });
+            sliderGroup && sliderGroup.addEventListener('focusout', (event) => {
+                if (sliderGroup.contains(event.relatedTarget)) return;
+                isFocusWithinSlider = false;
+                resumeAutoSlideIfAllowed();
+            });
+            function handleSliderKeyboard(event) {
+                if (event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    nextSlide();
+                    resumeAutoSlideIfAllowed();
+                } else if (event.key === 'ArrowLeft') {
+                    event.preventDefault();
+                    prevSlide();
+                    resumeAutoSlideIfAllowed();
+                }
+            }
+            [prevBtn, nextBtn].forEach((control) => {
+                control && control.addEventListener('keydown', handleSliderKeyboard);
+            });
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAutoSlide();
+                } else {
+                    resumeAutoSlideIfAllowed();
+                }
+            });
+            const handleReducedMotionChange = () => {
+                if (reducedMotion.matches) {
+                    stopAutoSlide();
+                } else {
+                    resumeAutoSlideIfAllowed();
+                }
+            };
+            if (typeof reducedMotion.addEventListener === 'function') {
+                reducedMotion.addEventListener('change', handleReducedMotionChange);
+            } else if (typeof reducedMotion.addListener === 'function') {
+                reducedMotion.addListener(handleReducedMotionChange);
+            }
+
+            updateSlider(0);
+            startAutoSlide();
+        }
     </script>
 </body>
 </html>
