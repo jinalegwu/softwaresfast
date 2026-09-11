@@ -14,29 +14,11 @@
 
         /* Logo Bouncing Animation */
         @keyframes bounce-seesaw {
-            0% {
-                color: #FFD700;
-                transform: rotateZ(0deg);
-                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            }
-            25% {
-                transform: rotateZ(-3deg);
-                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            }
-            50% {
-                color: #FFC700;
-                transform: rotateZ(0deg);
-                text-shadow: 0 0 15px rgba(255, 199, 0, 0.6);
-            }
-            75% {
-                transform: rotateZ(3deg);
-                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            }
-            100% {
-                color: #FFD700;
-                transform: rotateZ(0deg);
-                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            }
+            0% { color: #FFD700; transform: rotateZ(0deg); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            25% { transform: rotateZ(-3deg); text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            50% { color: #FFC700; transform: rotateZ(0deg); text-shadow: 0 0 15px rgba(255, 199, 0, 0.6); }
+            75% { transform: rotateZ(3deg); text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            100% { color: #FFD700; transform: rotateZ(0deg); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
         }
 
         .logo { 
@@ -54,7 +36,7 @@
         .nav-menu li:last-child { border-top: 2px solid #f0f0f0; padding-top: 1rem; margin-top: 1rem; }
         .hamburger { display:none; flex-direction:column; cursor:pointer; background:none; border:none; padding:5px; }
         .hamburger span { width:25px; height:3px; background-color:#333; margin:5px 0; transition:0.3s; }
-        
+
         /* Institute Toggle Button */
         .institute-toggle {
             padding: 8px 16px;
@@ -86,33 +68,15 @@
 
         /* Glowing Button Animations */
         @keyframes glow-pulse {
-            0% {
-                box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2);
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(102, 126, 234, 0.8), 0 0 30px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.3);
-                transform: translateY(-3px) scale(1.05);
-            }
-            100% {
-                box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2);
-                transform: translateY(0) scale(1);
-            }
+            0% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2); transform: translateY(0) scale(1); }
+            50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.8), 0 0 30px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.3); transform: translateY(-3px) scale(1.05); }
+            100% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2); transform: translateY(0) scale(1); }
         }
 
         @keyframes glow-pulse-secondary {
-            0% {
-                box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2);
-                transform: translateY(0) scale(1);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3);
-                transform: translateY(-3px) scale(1.05);
-            }
-            100% {
-                box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2);
-                transform: translateY(0) scale(1);
-            }
+            0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2); transform: translateY(0) scale(1); }
+            50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3); transform: translateY(-3px) scale(1.05); }
+            100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2); transform: translateY(0) scale(1); }
         }
 
         .btn { 
@@ -128,30 +92,10 @@
             animation: none;
         }
 
-        .btn-primary{
-            background-color:#fff; 
-            color:#667eea;
-            animation: glow-pulse 2.5s ease-in-out infinite;
-        }
-
-        .btn-primary:hover{
-            background-color:#f0f0f0; 
-            transform:translateY(-2px);
-            animation: none;
-        }
-
-        .btn-secondary{
-            background:transparent; 
-            color:white; 
-            border:2px solid white;
-            animation: glow-pulse-secondary 2.5s ease-in-out infinite;
-        }
-
-        .btn-secondary:hover{
-            background:white; 
-            color:#667eea;
-            animation: none;
-        }
+        .btn-primary{ background-color:#fff; color:#667eea; animation: glow-pulse 2.5s ease-in-out infinite; }
+        .btn-primary:hover{ background-color:#f0f0f0; transform:translateY(-2px); animation: none; }
+        .btn-secondary{ background:transparent; color:white; border:2px solid white; animation: glow-pulse-secondary 2.5s ease-in-out infinite; }
+        .btn-secondary:hover{ background:white; color:#667eea; animation: none; }
 
         .hero-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:3rem; }
         .stat{ background:rgba(255,255,255,0.1); padding:2rem; border-radius:8px; }
@@ -162,15 +106,15 @@
         .service-card{ background:white; padding:2rem; border-radius:8px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
         .about{ padding:80px 15px; }
         .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
-        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:4rem; color:white; }
         .process{ padding:80px 15px; background-color:#f8f9fa; }
         .process-timeline{ display:grid; grid-template-columns:repeat(6,1fr); gap:1.5rem; align-items:center; margin-bottom:3rem; }
         .portfolio{ padding:80px 15px; }
 
         /* Portfolio Slider */
         .portfolio-slider{ position:relative; max-width:900px; margin:0 auto; overflow:hidden; border-radius:12px; }
-        .portfolio-track{ display:flex; transition:transform 0.5s ease-in-out; }
-        .portfolio-item{ min-width:100%; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; }
+        .portfolio-track{ display:flex; transition:transform 0.5s ease-in-out; will-change: transform; }
+        .portfolio-item{ min-width:100%; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; flex: 0 0 100%; }
         .portfolio-item:hover{ transform:translateY(-6px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
         .portfolio-image-wrapper{ width:100%; height:350px; position:relative; overflow:hidden; background:#f0f2f8; display:flex; align-items:center; justify-content:center; }
         .portfolio-image{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -219,53 +163,15 @@
 
         .contact{ padding:80px 15px; background-color:#f8f9fa; }
         .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
-        
-        /* Professional Form Styling */
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-        }
-        .info-item .icon {
-            font-size: 2rem;
-            min-width: 50px;
-            text-align: center;
-        }
-        .info-item h4 {
-            font-size: 1.1rem;
-            color: #212529;
-            margin-bottom: 0.3rem;
-        }
-        .info-item p {
-            color: #666;
-            font-size: 1rem;
-        }
+        .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+        .info-item { display: flex; align-items: flex-start; gap: 1.5rem; }
+        .info-item .icon { font-size: 2rem; min-width: 50px; text-align: center; }
+        .info-item h4 { font-size: 1.1rem; color: #212529; margin-bottom: 0.3rem; }
+        .info-item p { color: #666; font-size: 1rem; }
 
-        .contact-form {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border-top: 4px solid #667eea;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #212529;
-            margin-bottom: 0.6rem;
-            font-size: 0.95rem;
-        }
-
+        .contact-form { background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid #667eea; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 600; color: #212529; margin-bottom: 0.6rem; font-size: 0.95rem; }
         .contact-form input,
         .contact-form select,
         .contact-form textarea {
@@ -279,59 +185,23 @@
             background-color: #fafbfc;
             transition: all 0.3s ease;
         }
-
         .contact-form input:focus,
         .contact-form select:focus,
-        .contact-form textarea:focus {
-            outline: none;
-            background-color: #fff;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .contact-form input::placeholder {
-            color: #999;
-        }
-
-        .contact-form textarea {
-            resize: vertical;
-            min-height: 120px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        .contact-form textarea:focus { outline: none; background-color: #fff; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .contact-form input::placeholder { color: #999; }
+        .contact-form textarea { resize: vertical; min-height: 120px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .contact-form select {
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.8rem center;
             background-size: 1.3rem;
             padding-right: 2.5rem;
         }
-
-        .contact-form .form-submit {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.95rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .contact-form .form-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .contact-form .form-submit:active {
-            transform: translateY(0);
-        }
+        .contact-form .form-submit { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.95rem 2rem; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; width: 100%; text-transform: uppercase; letter-spacing: 0.5px; }
+        .contact-form .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); }
+        .contact-form .form-submit:active { transform: translateY(0); }
 
         .footer{ background-color:#212529; color:white; padding:3rem 15px 1rem; }
         .footer-content{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-bottom:2rem; }
@@ -363,7 +233,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="logo">SOFTWARESFAST</div>
@@ -384,7 +253,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
             <h1>Professional Software Development</h1>
@@ -404,7 +272,6 @@
         </div>
     </section>
 
-    <!-- Services Section -->
     <section id="services" class="services">
         <div class="container">
             <h2 class="section-title">Our Services</h2>
@@ -419,7 +286,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
             <div class="about-content">
@@ -439,7 +305,6 @@
         </div>
     </section>
 
-    <!-- Process Section -->
     <section id="process" class="process">
         <div class="container">
             <h2 class="section-title">Our Process</h2>
@@ -454,46 +319,38 @@
         </div>
     </section>
 
-    <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio">
         <div class="container">
             <h2 class="section-title">Our Portfolio</h2>
 
             <div class="portfolio-slider" aria-label="Portfolio projects slider">
                 <button class="slider-btn prev" aria-label="Previous project">❮</button>
-
                 <div class="portfolio-track">
-                    <!-- Portfolio Item 1 - E-commerce -->
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="E-commerce platform">
+                            <img class="portfolio-image" src="https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="E-commerce platform project">
                         </div>
                         <h3>E-commerce Platform</h3>
                         <p>An enterprise-grade online store with inventory management, secure payments, and advanced analytics built with React and Node.js.</p>
                         <span class="project-tag">Web App • E-Commerce</span>
                     </div>
-
-                    <!-- Portfolio Item 2 - Mobile Banking -->
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Mobile banking app">
+                            <img class="portfolio-image" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Mobile banking app project">
                         </div>
                         <h3>Mobile Banking App</h3>
                         <p>Secure mobile banking solution with multi-factor authentication, real-time transactions, and seamless fund transfers for iOS and Android platforms.</p>
                         <span class="project-tag">Mobile App • Finance</span>
                     </div>
-
-                    <!-- Portfolio Item 3 - Project Management -->
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Project management system">
+                            <img class="portfolio-image" src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Project management system project">
                         </div>
                         <h3>Project Management System</h3>
                         <p>Comprehensive project management platform featuring task tracking, team collaboration tools, Gantt charts, real-time reporting and resource allocation.</p>
                         <span class="project-tag">Web App • Dashboard</span>
                     </div>
                 </div>
-
                 <button class="slider-btn next" aria-label="Next project">❯</button>
             </div>
 
@@ -507,7 +364,6 @@
         </div>
     </section>
 
-    <!-- Guarantees Section -->
     <section class="guarantees">
         <div class="container">
             <h2 class="section-title">Our Guarantees</h2>
@@ -520,7 +376,6 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="container">
             <h2 class="section-title">Contact Us</h2>
@@ -561,7 +416,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -575,7 +429,6 @@
     </footer>
 
     <script>
-        // Simple hamburger toggle for mobile
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');
         hamburger && hamburger.addEventListener('click', () => {
@@ -583,7 +436,6 @@
             navMenu.classList.toggle('active');
         });
 
-        // Close menu when a link is clicked
         document.querySelectorAll('.nav-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
@@ -591,15 +443,15 @@
             });
         });
 
-        // Portfolio slider: auto-slide + manual arrows + dots
         const track = document.querySelector('.portfolio-track');
         const slides = document.querySelectorAll('.portfolio-item');
         const dots = document.querySelectorAll('.dot');
         const prevBtn = document.querySelector('.slider-btn.prev');
         const nextBtn = document.querySelector('.slider-btn.next');
+        const slider = document.querySelector('.portfolio-slider');
 
         let currentSlide = 0;
-        let autoSlideTimer;
+        let autoSlideTimer = null;
         const slideInterval = 4000;
 
         function updateSlider(index) {
@@ -610,20 +462,23 @@
         }
 
         function nextSlide() {
-            updateSlide(currentSlide + 1);
+            updateSlider(currentSlide + 1);
         }
 
         function prevSlide() {
             updateSlider(currentSlide - 1);
         }
 
+        function stopAutoSlide() {
+            if (autoSlideTimer) {
+                clearInterval(autoSlideTimer);
+                autoSlideTimer = null;
+            }
+        }
+
         function startAutoSlide() {
             stopAutoSlide();
             autoSlideTimer = setInterval(nextSlide, slideInterval);
-        }
-
-        function stopAutoSlide() {
-            if (autoSlideTimer) clearInterval(autoSlideTimer);
         }
 
         nextBtn && nextBtn.addEventListener('click', () => {
@@ -643,7 +498,6 @@
             });
         });
 
-        const slider = document.querySelector('.portfolio-slider');
         slider && slider.addEventListener('mouseenter', stopAutoSlide);
         slider && slider.addEventListener('mouseleave', startAutoSlide);
 
