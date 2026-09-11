@@ -21,11 +21,76 @@
         .hero h1 { font-size:2.5rem; margin-bottom:1rem; line-height:1.2; }
         .tagline { font-size:1.1rem; margin-bottom:2rem; opacity:0.95; }
         .cta-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:3rem; }
-        .btn { padding:12px 30px; border:none; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; transition:all 0.3s; display:inline-block; font-weight:600; }
-        .btn-primary{ background-color:#fff; color:#667eea; }
-        .btn-primary:hover{ background-color:#f0f0f0; transform:translateY(-2px); }
-        .btn-secondary{ background:transparent; color:white; border:2px solid white; }
-        .btn-secondary:hover{ background:white; color:#667eea; }
+
+        /* Glowing Button Animations */
+        @keyframes glow-pulse {
+            0% {
+                box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2);
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.8), 0 0 30px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.3);
+                transform: translateY(-3px) scale(1.05);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2);
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes glow-pulse-secondary {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2);
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3);
+                transform: translateY(-3px) scale(1.05);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2);
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .btn { 
+            padding:12px 30px; 
+            border:none; 
+            border-radius:8px; 
+            cursor:pointer; 
+            font-size:1rem; 
+            text-decoration:none; 
+            transition:all 0.3s; 
+            display:inline-block; 
+            font-weight:600;
+            animation: none;
+        }
+
+        .btn-primary{
+            background-color:#fff; 
+            color:#667eea;
+            animation: glow-pulse 2.5s ease-in-out infinite;
+        }
+
+        .btn-primary:hover{
+            background-color:#f0f0f0; 
+            transform:translateY(-2px);
+            animation: none;
+        }
+
+        .btn-secondary{
+            background:transparent; 
+            color:white; 
+            border:2px solid white;
+            animation: glow-pulse-secondary 2.5s ease-in-out infinite;
+        }
+
+        .btn-secondary:hover{
+            background:white; 
+            color:#667eea;
+            animation: none;
+        }
+
         .hero-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:3rem; }
         .stat{ background:rgba(255,255,255,0.1); padding:2rem; border-radius:8px; }
         .stat h3{ font-size:2.5rem; margin-bottom:0.5rem; }
