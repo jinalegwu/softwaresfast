@@ -610,7 +610,7 @@
         }
 
         function nextSlide() {
-            updateSlide(currentSlide + 1);
+            updateSlider(currentSlide + 1);
         }
 
         function prevSlide() {
@@ -623,7 +623,10 @@
         }
 
         function stopAutoSlide() {
-            if (autoSlideTimer) clearInterval(autoSlideTimer);
+            if (autoSlideTimer) {
+                clearInterval(autoSlideTimer);
+                autoSlideTimer = null;
+            }
         }
 
         nextBtn && nextBtn.addEventListener('click', () => {
