@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SOFTWARESFAST INSTITUTE - Africa's Best School for Programming and Computer Science Courses">
+    <title>SOFTWARESFAST INSTITUTE - Learn Programming & Computer Science</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        
+        /* Navbar */
+        .navbar { background-color: #1a5c3a; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top:0; z-index:1000; padding:1rem 0; }
+        .navbar .container { display:flex; justify-content:space-between; align-items:center; }
+        .logo { font-size:1.5rem; font-weight:bold; color:#D4AF37; letter-spacing:0.5px; }
+        .nav-menu { display:flex; list-style:none; gap:2rem; }
+        .nav-menu a { text-decoration:none; color:#fff; font-weight:500; transition:color 0.3s; }
+        .nav-menu a:hover { color:#D4AF37; }
+        .hamburger { display:none; flex-direction:column; cursor:pointer; background:none; border:none; padding:5px; }
+        .hamburger span { width:25px; height:3px; background-color:#fff; margin:5px 0; transition:0.3s; }
+
+        /* Hero Section */
+        .hero { background:linear-gradient(135deg,#1a5c3a 0%,#0f3d26 100%); color:white; padding:80px 15px; text-align:center; }
+        .hero h1 { font-size:3rem; margin-bottom:1rem; line-height:1.2; color:#D4AF37; }
+        .hero .subtitle { font-size:1.3rem; margin-bottom:2rem; opacity:0.95; }
+        .tagline { font-size:1.1rem; margin-bottom:2rem; opacity:0.9; }
+        .cta-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:3rem; }
+        .btn { padding:12px 30px; border:none; border-radius:8px; cursor:pointer; font-size:1rem; text-decoration:none; transition:all 0.3s; display:inline-block; font-weight:600; }
+        .btn-primary{ background-color:#D4AF37; color:#0f3d26; }
+        .btn-primary:hover{ background-color:#f0e68c; transform:translateY(-2px); box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3); }
+        .btn-secondary{ background:transparent; color:#D4AF37; border:2px solid #D4AF37; }
+        .btn-secondary:hover{ background:#D4AF37; color:#0f3d26; }
+
+        .hero-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:3rem; }
+        .stat{ background:rgba(212, 175, 55, 0.1); padding:2rem; border-radius:8px; border-left:4px solid #D4AF37; }
+        .stat h3{ font-size:2.5rem; margin-bottom:0.5rem; color:#D4AF37; }
+        .stat p{ color:#fff; }
+
+        /* About Section */
+        .about{ padding:80px 15px; background-color:#f5f5f5; }
+        .about h2{ font-size:2.5rem; color:#1a5c3a; margin-bottom:2rem; text-align:center; }
+        .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; margin-bottom:3rem; }
+        .about-text h3{ color:#D4AF37; font-size:1.5rem; margin-bottom:1rem; }
+        .about-text p{ margin-bottom:1rem; line-height:1.8; color:#333; }
+        .about-list{ list-style:none; }
+        .about-list li{ padding:0.8rem 0; color:#333; font-weight:500; }
+        .about-list li:before{ content:"✓ "; color:#D4AF37; font-weight:bold; margin-right:0.5rem; }
+        .about-image{ width:100%; height:350px; background:linear-gradient(135deg,#1a5c3a 0%,#0f3d26 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:4rem; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+        /* Courses Section */
+        .courses{ padding:80px 15px; background-color:#fff; }
+        .section-title{ text-align:center; font-size:2.5rem; margin-bottom:3rem; color:#1a5c3a; }
+        .courses-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .course-card{ background:#f9f9f9; padding:2.5rem; border-radius:12px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.1); border-top:4px solid #D4AF37; transition:all 0.3s; }
+        .course-card:hover{ transform:translateY(-8px); box-shadow:0 8px 25px rgba(26, 92, 58, 0.2); }
+        .course-icon{ font-size:3rem; margin-bottom:1rem; }
+        .course-card h3{ color:#1a5c3a; margin-bottom:1rem; font-size:1.3rem; }
+        .course-card p{ color:#666; line-height:1.6; }
+        .course-duration{ display:inline-block; background:#D4AF37; color:#0f3d26; padding:0.5rem 1rem; border-radius:20px; font-size:0.9rem; margin-top:1rem; font-weight:600; }
+
+        /* Why Choose Us */
+        .why-choose{ padding:80px 15px; background:linear-gradient(135deg, #1a5c3a 0%, #0f3d26 100%); color:white; }
+        .why-choose .section-title{ color:#D4AF37; }
+        .benefits-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:3rem; }
+        .benefit-item{ display:flex; gap:2rem; }
+        .benefit-icon{ font-size:2.5rem; min-width:60px; text-align:center; }
+        .benefit-item h4{ color:#D4AF37; font-size:1.2rem; margin-bottom:0.5rem; }
+        .benefit-item p{ opacity:0.95; line-height:1.7; }
+
+        /* Instructors Section */
+        .instructors{ padding:80px 15px; background-color:#f5f5f5; }
+        .instructors .section-title{ color:#1a5c3a; }
+        .instructors-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .instructor-card{ background:white; padding:2rem; border-radius:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        .instructor-avatar{ width:120px; height:120px; margin:0 auto 1rem; background:linear-gradient(135deg,#1a5c3a 0%,#0f3d26 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+        .instructor-card h4{ color:#1a5c3a; margin-bottom:0.5rem; font-size:1.2rem; }
+        .instructor-role{ color:#D4AF37; font-weight:600; margin-bottom:0.5rem; }
+        .instructor-card p{ color:#666; font-size:0.95rem; }
+
+        /* Testimonials */
+        .testimonials{ padding:80px 15px; background:linear-gradient(135deg, #1a5c3a 0%, #0f3d26 100%); color:white; }
+        .testimonials .section-title{ color:#D4AF37; }
+        .testimonials-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .testimonial-card{ background:rgba(255,255,255,0.1); padding:2.5rem; border-radius:12px; border-left:4px solid #D4AF37; backdrop-filter: blur(10px); }
+        .stars{ color:#D4AF37; font-size:1.3rem; margin-bottom:1rem; }
+        .testimonial-card p{ margin-bottom:1.5rem; line-height:1.8; }
+        .testimonial-author{ font-weight:600; color:#D4AF37; }
+        .testimonial-role{ font-size:0.9rem; opacity:0.8; }
+
+        /* Pricing Section */
+        .pricing{ padding:80px 15px; background-color:#f5f5f5; }
+        .pricing .section-title{ color:#1a5c3a; }
+        .pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .price-card{ background:white; padding:3rem 2rem; border-radius:12px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.1); transition:all 0.3s; }
+        .price-card:hover{ transform:scale(1.05); }
+        .price-card.featured{ border-top:4px solid #D4AF37; transform:scale(1.05); }
+        .price-card h3{ color:#1a5c3a; margin-bottom:1rem; font-size:1.3rem; }
+        .price{ font-size:2.5rem; color:#D4AF37; font-weight:bold; margin:1rem 0; }
+        .price-duration{ color:#666; font-size:0.95rem; margin-bottom:2rem; }
+        .price-features{ text-align:left; margin-bottom:2rem; }
+        .price-features li{ list-style:none; padding:0.5rem 0; color:#666; }
+        .price-features li:before{ content:"✓ "; color:#D4AF37; font-weight:bold; margin-right:0.5rem; }
+        .price-btn{ width:100%; padding:12px 20px; background:#D4AF37; color:#0f3d26; border:none; border-radius:8px; cursor:pointer; font-weight:600; transition:all 0.3s; }
+        .price-btn:hover{ background:#f0e68c; }
+
+        /* Call to Action */
+        .cta-section{ padding:80px 15px; background:linear-gradient(135deg, #1a5c3a 0%, #0f3d26 100%); color:white; text-align:center; }
+        .cta-section h2{ font-size:2.5rem; margin-bottom:1rem; color:#D4AF37; }
+        .cta-section p{ font-size:1.1rem; margin-bottom:2rem; opacity:0.95; }
+
+        /* Contact Section */
+        .contact{ padding:80px 15px; background-color:#f5f5f5; }
+        .contact-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; }
+        .contact-info{ display:flex; flex-direction:column; gap:2rem; }
+        .info-item{ display:flex; gap:1.5rem; }
+        .info-item .icon{ font-size:2rem; min-width:50px; text-align:center; color:#D4AF37; }
+        .info-item h4{ font-size:1.1rem; color:#1a5c3a; margin-bottom:0.3rem; }
+        .info-item p{ color:#666; font-size:1rem; }
+
+        .contact-form{ background:white; padding:2.5rem; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.08); border-top:4px solid #D4AF37; }
+        .form-group{ margin-bottom:1.5rem; }
+        .form-group label{ display:block; font-weight:600; color:#1a5c3a; margin-bottom:0.6rem; font-size:0.95rem; }
+        .contact-form input, .contact-form textarea{ width:100%; padding:0.9rem 1rem; border:1px solid #ddd; border-radius:8px; font-family:inherit; font-size:1rem; color:#333; transition:all 0.3s; }
+        .contact-form input:focus, .contact-form textarea:focus{ outline:none; border-color:#D4AF37; box-shadow:0 0 0 3px rgba(212, 175, 55, 0.1); }
+        .contact-form textarea{ resize:vertical; min-height:120px; }
+        .form-submit{ width:100%; padding:0.95rem 2rem; background:linear-gradient(135deg, #1a5c3a 0%, #0f3d26 100%); color:#D4AF37; border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:all 0.3s; text-transform:uppercase; letter-spacing:0.5px; }
+        .form-submit:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(26, 92, 58, 0.3); }
+
+        /* Footer */
+        .footer{ background-color:#0f3d26; color:white; padding:3rem 15px 1rem; }
+        .footer-content{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-bottom:2rem; }
+        .footer-section h4{ margin-bottom:1rem; color:#D4AF37; }
+        .footer-section ul{ list-style:none; }
+        .footer-section a{ color:#ccc; text-decoration:none; transition:color 0.3s; }
+        .footer-section a:hover{ color:#D4AF37; }
+        .footer-bottom{ text-align:center; padding-top:2rem; border-top:1px solid #1a5c3a; color:#aaa; }
+
+        /* Responsive */
+        @media (max-width:768px){
+            .nav-menu{ position:fixed; left:-100%; top:60px; flex-direction:column; background:#1a5c3a; width:100%; text-align:center; transition:0.3s; padding:2rem 0; gap:0; z-index:999; }
+            .nav-menu.active{ left:0; }
+            .nav-menu li{ margin:1rem 0; }
+            .hamburger{ display:flex; }
+            .hero h1{ font-size:2rem; }
+            .hero-stats{ grid-template-columns:repeat(2,1fr); }
+            .about-content{ grid-template-columns:1fr; }
+            .courses-grid{ grid-template-columns:1fr; }
+            .benefits-grid{ grid-template-columns:1fr; }
+            .instructors-grid{ grid-template-columns:1fr; }
+            .testimonials-grid{ grid-template-columns:1fr; }
+            .pricing-grid{ grid-template-columns:1fr; }
+            .contact-content{ grid-template-columns:1fr; }
+            .footer-content{ grid-template-columns:repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">SOFTWARESFAST INSTITUTE</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#instructors">Instructors</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>SOFTWARESFAST INSTITUTE</h1>
+            <p class="subtitle">Africa's Best School for Programming & Computer Science</p>
+            <p class="tagline">Empowering the Next Generation of Tech Leaders Across Africa</p>
+            <div class="cta-buttons">
+                <a href="#contact" class="btn btn-primary">Enroll Now</a>
+                <a href="#courses" class="btn btn-secondary">Explore Courses</a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-stats">
+                <div class="stat"><h3>5000+</h3><p>Students Trained</p></div>
+                <div class="stat"><h3>95%</h3><p>Employment Rate</p></div>
+                <div class="stat"><h3>50+</h3><p>Courses Offered</p></div>
+                <div class="stat"><h3>25+</h3><p>African Countries</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About SOFTWARESFAST INSTITUTE</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Excellence in Tech Education</h3>
+                    <p>SOFTWARESFAST INSTITUTE is Africa's leading educational platform dedicated to providing world-class programming and computer science education. We are committed to bridging the gap between African talent and global technology opportunities.</p>
+                    <p>Our mission is to equip Africa's brightest minds with cutting-edge technical skills, practical knowledge, and industry experience needed to thrive in the rapidly evolving technology landscape.</p>
+                    <ul class="about-list">
+                        <li>Industry-Expert Instructors with 10+ years experience</li>
+                        <li>Hands-On Project-Based Learning</li>
+                        <li>Global Certification Programs</li>
+                        <li>Career Placement Assistance</li>
+                        <li>Flexible Learning Models (Online & Offline)</li>
+                        <li>Affordable Education for All Africans</li>
+                    </ul>
+                </div>
+                <div class="about-image">📚</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="courses">
+        <div class="container">
+            <h2 class="section-title">Our Courses</h2>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon">💻</div>
+                    <h3>Web Development</h3>
+                    <p>Master HTML, CSS, JavaScript, React, Node.js and build scalable web applications from scratch.</p>
+                    <span class="course-duration">12 Weeks</span>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">📱</div>
+                    <h3>Mobile App Development</h3>
+                    <p>Learn iOS and Android development, Flutter, and React Native to build cross-platform apps.</p>
+                    <span class="course-duration">14 Weeks</span>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🤖</div>
+                    <h3>AI & Machine Learning</h3>
+                    <p>Explore artificial intelligence, deep learning, and neural networks with hands-on projects.</p>
+                    <span class="course-duration">16 Weeks</span>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🗄️</div>
+                    <h3>Data Science & Analytics</h3>
+                    <p>Learn Python, SQL, data visualization and analytics to make data-driven decisions.</p>
+                    <span class="course-duration">12 Weeks</span>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">☁️</div>
+                    <h3>Cloud Computing</h3>
+                    <p>Master AWS, Azure, and Google Cloud with real-world deployment scenarios.</p>
+                    <span class="course-duration">10 Weeks</span>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🔒</div>
+                    <h3>Cybersecurity</h3>
+                    <p>Learn ethical hacking, network security, and penetration testing to protect digital assets.</p>
+                    <span class="course-duration">14 Weeks</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="why-choose" class="why-choose">
+        <div class="container">
+            <h2 class="section-title">Why Choose SOFTWARESFAST INSTITUTE?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <div>
+                        <h4>Industry-Relevant Curriculum</h4>
+                        <p>Our courses are designed in collaboration with tech industry leaders to ensure students learn exactly what employers need.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">👨‍🏫</div>
+                    <div>
+                        <h4>Expert Instructors</h4>
+                        <p>Learn from experienced professionals who are actively working in top tech companies across the globe.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">💼</div>
+                    <div>
+                        <h4>Career Placement</h4>
+                        <p>We provide job placement assistance and connect graduates with leading companies across Africa and globally.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">🌍</div>
+                    <div>
+                        <h4>Global Recognition</h4>
+                        <p>Our certifications are recognized worldwide, opening doors to international job opportunities.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">💻</div>
+                    <div>
+                        <h4>Hands-On Learning</h4>
+                        <p>70% practical, 30% theory approach ensures students build real-world projects and portfolio.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">🤝</div>
+                    <div>
+                        <h4>Community & Support</h4>
+                        <p>Join a vibrant community of learners, mentors, and industry professionals for lifelong networking.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instructors Section -->
+    <section id="instructors" class="instructors">
+        <div class="container">
+            <h2 class="section-title">Our Expert Instructors</h2>
+            <div class="instructors-grid">
+                <div class="instructor-card">
+                    <div class="instructor-avatar">👨‍💻</div>
+                    <h4>Dr. Adeyemi Okonkwo</h4>
+                    <p class="instructor-role">Lead Instructor - Web Development</p>
+                    <p>Former Senior Engineer at Google, 15+ years experience in full-stack development and tech education.</p>
+                </div>
+
+                <div class="instructor-card">
+                    <div class="instructor-avatar">👩‍💻</div>
+                    <h4>Amara Nwosu</h4>
+                    <p class="instructor-role">AI/ML Specialist</p>
+                    <p>PhD in Computer Science, worked with top tech companies on AI solutions. Passionate about African tech innovation.</p>
+                </div>
+
+                <div class="instructor-card">
+                    <div class="instructor-avatar">👨‍🏫</div>
+                    <h4>Kofi Mensah</h4>
+                    <p class="instructor-role">Mobile Development Expert</p>
+                    <p>10+ years in mobile app development, published 50+ apps. Mentor to 1000+ developers across Africa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Student Success Stories</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"SOFTWARESFAST INSTITUTE transformed my career. I went from freelance work to a senior developer role at a major tech company within 6 months of graduation."</p>
+                    <div class="testimonial-author">Chinyere Okafor</div>
+                    <div class="testimonial-role">Web Developer, Lagos Nigeria</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"The hands-on projects and mentorship I received were invaluable. The instructors genuinely care about student success and go the extra mile."</p>
+                    <div class="testimonial-author">Kwame Asante</div>
+                    <div class="testimonial-role">Mobile App Developer, Accra Ghana</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Best investment I made in my future. Now I'm building AI solutions and earning what I only dreamed of. Highly recommended for every African aspiring tech professional."</p>
+                    <div class="testimonial-author">Amina Hassan</div>
+                    <div class="testimonial-role">Data Scientist, Nairobi Kenya</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Flexible Pricing Plans</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Beginner</h3>
+                    <div class="price">₦25,000</div>
+                    <div class="price-duration">Per Course</div>
+                    <ul class="price-features">
+                        <li>Video Lectures</li>
+                        <li>12-Week Course</li>
+                        <li>Certificate</li>
+                        <li>Community Access</li>
+                    </ul>
+                    <button class="price-btn">Enroll</button>
+                </div>
+
+                <div class="price-card featured">
+                    <h3>Professional</h3>
+                    <div class="price">₦50,000</div>
+                    <div class="price-duration">Per Course</div>
+                    <ul class="price-features">
+                        <li>Live Classes</li>
+                        <li>1-on-1 Mentoring</li>
+                        <li>Global Certificate</li>
+                        <li>Job Portal Access</li>
+                        <li>Project Reviews</li>
+                    </ul>
+                    <button class="price-btn">Enroll</button>
+                </div>
+
+                <div class="price-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <div class="price-duration">Corporate Training</div>
+                    <ul class="price-features">
+                        <li>Team Training</li>
+                        <li>Custom Curriculum</li>
+                        <li>On-Site Support</li>
+                        <li>Certification</li>
+                        <li>Ongoing Support</li>
+                    </ul>
+                    <button class="price-btn">Contact Us</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="cta" class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Tech Career?</h2>
+            <p>Join thousands of African tech professionals who have already succeeded with us</p>
+            <a href="#contact" class="btn btn-primary">Get Started Today</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <div class="icon">📍</div>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Lagos, Nigeria | Accra, Ghana | Nairobi, Kenya | Across Africa</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="icon">📧</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@softwaresfast-institute.com</p>
+                            <p>support@softwaresfast-institute.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="icon">📞</div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+234 701 553 1551 (Nigeria)</p>
+                            <p>+233 xxx xxx xxxx (Ghana)</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="icon">🕐</div>
+                        <div>
+                            <h4>Business Hours</h4>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM WAT</p>
+                            <p>Saturday: 10:00 AM - 3:00 PM WAT</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Course Interested In</label>
+                        <input type="text" id="course" name="course" placeholder="e.g., Web Development">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Courses</h4>
+                    <ul>
+                        <li><a href="#courses">Web Development</a></li>
+                        <li><a href="#courses">Mobile Apps</a></li>
+                        <li><a href="#courses">Data Science</a></li>
+                        <li><a href="#courses">Cybersecurity</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#instructors">Instructors</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#courses">Blog</a></li>
+                        <li><a href="#courses">FAQ</a></li>
+                        <li><a href="#courses">Career Portal</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <ul>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">&copy; 2026 SOFTWARESFAST INSTITUTE. Africa's Leading Tech Education Platform. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        hamburger && hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your inquiry! We will contact you shortly.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
