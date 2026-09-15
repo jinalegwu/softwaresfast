@@ -112,6 +112,30 @@
       font-size: clamp(1rem, 1.8vw, 1.15rem);
     }
 
+    .hero-video {
+      max-width: 920px;
+      margin: 2rem auto 0;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), var(--shadow);
+      background: rgba(6, 46, 34, 0.5);
+    }
+
+    .hero-video video {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .hero-video-caption {
+      padding: 0.85rem 1rem 1rem;
+      color: var(--text-300);
+      font-size: 0.96rem;
+    }
+
     .hero-programs {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -270,6 +294,14 @@
       Softwaresfast Institute is a practical, mentor-led training program focused on shipping products,
       mastering modern engineering workflows, and becoming job-ready with confidence.
     </p>
+
+    <div class="hero-video" aria-label="Students walking on a school street video">
+      <video controls playsinline preload="metadata" poster="https://images.pexels.com/photos/1467987/pexels-photo-1467987.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop">
+        <source src="https://cdn.pixabay.com/video/2023/03/10/154259-807441040_large.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-video-caption">Students walking on a school street from a free online video source.</div>
+    </div>
 
     <div class="hero-programs" aria-label="Institute programs">
       <div class="program-box">
