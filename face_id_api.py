@@ -12,7 +12,42 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Any
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+try:
+    from fastapi import FastAPI, File, HTTPException, UploadFile
+except ImportError:  # pragma: no cover - allows lightweight local validation without backend deps
+    class HTTPException(Exception):
+        def __init__(self, status_code: int, detail: str) -> None:
+            super().__init__(detail)
+            self.status_code = status_code
+            self.detail = detail
+
+    class UploadFile:  # pragma: no cover - fallback type for local tests
+        content_type: str | None = None
+
+        async def read(self) -> bytes:
+            return b""
+
+        async def close(self) -> None:
+            return None
+
+    class FastAPI:  # pragma: no cover - fallback for local imports/tests
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            pass
+
+        def get(self, *args: Any, **kwargs: Any):
+            def decorator(func):
+                return func
+
+            return decorator
+
+        def post(self, *args: Any, **kwargs: Any):
+            def decorator(func):
+                return func
+
+            return decorator
+
+    def File(*args: Any, **kwargs: Any) -> None:  # pragma: no cover - fallback marker
+        return None
 
 try:
     import cv2
@@ -58,16 +93,18 @@ def health() -> dict[str, str]:
 
 @app.post("/api/face-id/enroll")
 async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
-    _validate_snapshot(snapshot.content_type)
-    image_bytes = await snapshot.read()
-    await snapshot.close()
-    _decode_snapshot(image_bytes)
+    try:
+        _validate_snapshot(snapshot.content_type)
+        image_bytes = await snapshot.read()
+        _decode_snapshot(image_bytes)
+    finally:
+        await snapshot.close()
 
     response = EnrollmentResponse(
-        status="starter-ready",
+        status="not-implemented",
         message=(
-            "Snapshot received. Next, process the image with OpenCV and generate a face embedding with "
-            "face_recognition or insightface before saving the template for attendance/access."
+            "Snapshot validation succeeded, but template creation and enrollment storage are not implemented in "
+            "this starter API yet."
         ),
         recommended_stack={
             "api": "FastAPI or Flask",
@@ -75,4 +112,4 @@ async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
             "face_embedding": "face_recognition or insightface",
         },
     )
-    return asdict(response)
+    raise HTTPException(status_code=501, detail=asdict(response))
