@@ -21,7 +21,7 @@
       --shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; color: var(--text-100); background: radial-gradient(circle at 20% 10%, rgba(212, 175, 55, 0.14), transparent 40%), radial-gradient(circle at 80% 90%, rgba(26, 111, 81, 0.1), transparent 50%), linear-gradient(135deg, #062e22 0%, #0b3b2b 100%); min-height: 100vh; }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; color: var(--text-100); background: radial-gradient(circle at 20% 10%, rgba(212, 175, 55, 0.14), transparent 40%), radial-gradient(circle at 80% 0%, rgba(17, 86, 62, 0.55), transparent 35%), linear-gradient(180deg, var(--deep-green-900), var(--deep-green-800)); min-height: 100vh; }
     .container { width: min(1140px, 92%); margin: 0 auto; }
     .nav { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(8px); background: rgba(6, 46, 34, 0.7); border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
     .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 0.95rem 0; }
@@ -29,17 +29,17 @@
     .back-link { color: var(--mint-100); text-decoration: none; border: 1px solid rgba(223, 247, 234, 0.35); padding: 0.5rem 0.9rem; border-radius: 999px; transition: 0.25s ease; font-weight: 600; }
     .back-link:hover { transform: translateY(-1px); border-color: var(--gold-500); color: var(--gold-500); }
     .hero { padding: 4.5rem 0 3rem; text-align: center; }
-    .badge { display: inline-block; color: var(--gold-500); border: 1px solid rgba(212, 175, 55, 0.45); background: rgba(212, 175, 55, 0.12); padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px; }
+    .badge { display: inline-block; color: var(--gold-500); border: 1px solid rgba(212, 175, 55, 0.45); background: rgba(212, 175, 55, 0.12); padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.7px; }
     h1 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.2; margin-bottom: 1rem; }
     .hero p { color: var(--text-300); max-width: 760px; margin: 0 auto 2rem; font-size: clamp(1rem, 1.8vw, 1.15rem); }
     .hero-videos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 1100px; margin: 2rem auto 0; }
     .hero-video { border-radius: 18px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.45); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), var(--shadow); background: rgba(6, 46, 34, 0.5); }
     .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
     .hero-programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 2rem auto 0; max-width: 920px; }
-    .program-box { background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; padding: 1.5rem 1.25rem; box-shadow: var(--shadow); position: relative; }
+    .program-box { background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; padding: 1.5rem 1.25rem; box-shadow: 0 0 18px rgba(212, 175, 55, 0.15), var(--shadow); position: relative; overflow: hidden; }
     .program-box::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top, rgba(246, 220, 131, 0.16), transparent 55%); pointer-events: none; }
-    @keyframes goldGlow { 0%, 100% { text-shadow: 0 0 8px rgba(212, 175, 55, 0.65), 0 0 18px rgba(212, 175, 55, 0.35); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), inset 0 0 18px rgba(255, 215, 0, 0.15); } 50% { text-shadow: 0 0 16px rgba(212, 175, 55, 0.85), 0 0 32px rgba(212, 175, 55, 0.5); box-shadow: 0 0 28px rgba(212, 175, 55, 0.28), inset 0 0 28px rgba(255, 215, 0, 0.25); } }
-    .program-box h3 { position: relative; z-index: 1; color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 3s ease-in-out infinite; }
+    @keyframes goldGlow { 0%, 100% { text-shadow: 0 0 8px rgba(212, 175, 55, 0.65), 0 0 18px rgba(212, 175, 55, 0.35); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), inset 0 0 18px rgba(255, 215, 0, 0.07); } 50% { text-shadow: 0 0 16px rgba(246, 220, 131, 0.95), 0 0 30px rgba(212, 175, 55, 0.55); box-shadow: 0 0 26px rgba(212, 175, 55, 0.32), inset 0 0 22px rgba(255, 215, 0, 0.12); } }
+    .program-box h3 { position: relative; z-index: 1; color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 2.6s ease-in-out infinite; }
     .cta { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
     .btn { border: none; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.82rem 1.2rem; display: inline-block; transition: transform 0.2s ease, box-shadow 0.25s ease; }
     .btn-primary { background: linear-gradient(145deg, var(--gold-500), #f0cf65); color: #203226; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25); }
@@ -58,12 +58,26 @@
     .step { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 12px; padding: 1rem; position: relative; min-height: 160px; }
     .step-number { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-500); color: #22372a; font-weight: 800; margin-bottom: 0.65rem; }
     .step p { color: var(--text-300); font-size: 0.95rem; }
+    .face-id { padding-top: 0; }
+    .face-id-wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; align-items: stretch; }
+    .face-id-panel { background: rgba(255,255,255,0.08); border: 1px solid rgba(212,175,55,0.35); border-radius: 18px; padding: 1.4rem; box-shadow: var(--shadow); }
+    .face-id-panel h3 { margin-bottom: 0.75rem; color: var(--gold-300); }
+    .face-id-panel p { color: var(--text-300); margin-bottom: 0.9rem; }
+    .face-steps { display: grid; gap: 0.7rem; margin: 1rem 0 1.1rem; }
+    .face-step { display: flex; gap: 0.8rem; align-items: flex-start; background: rgba(6,46,34,0.35); border: 1px solid rgba(223,247,234,0.12); border-radius: 12px; padding: 0.85rem; }
+    .face-step strong { color: var(--gold-500); }
+    .capture-card { background: linear-gradient(180deg, rgba(6,46,34,0.95), rgba(17,86,62,0.8)); border: 1px solid rgba(212,175,55,0.45); border-radius: 18px; padding: 1.2rem; box-shadow: 0 0 18px rgba(212,175,55,0.12), var(--shadow); display: flex; flex-direction: column; gap: 0.9rem; }
+    .capture-preview { border-radius: 14px; min-height: 240px; border: 1px dashed rgba(246,220,131,0.55); background: radial-gradient(circle at 50% 35%, rgba(246,220,131,0.14), transparent 30%), rgba(255,255,255,0.04); display: grid; place-items: center; text-align: center; padding: 1rem; }
+    .capture-preview .emoji { font-size: 3rem; margin-bottom: 0.5rem; }
+    .capture-status { background: rgba(0,0,0,0.18); border-radius: 10px; padding: 0.8rem 0.9rem; color: var(--text-300); border: 1px solid rgba(223,247,234,0.14); }
+    .capture-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .small-note { color: var(--text-300); font-size: 0.92rem; }
     .contact { background: rgba(0, 0, 0, 0.16); border-top: 1px solid rgba(212, 175, 55, 0.35); border-bottom: 1px solid rgba(212, 175, 55, 0.35); border-radius: 14px; padding: 1.4rem; text-align: center; }
     .contact p { color: var(--text-300); margin-bottom: 0.9rem; }
     .footer { text-align: center; color: rgba(223, 247, 234, 0.75); font-size: 0.9rem; padding: 2rem 0 2.4rem; }
     .hero-image-wrap { max-width: 1100px; margin: 2rem auto 0; }
-    .hero-image { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 18px; border: 1px solid rgba(212, 175, 55, 0.45); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), var(--shadow); }
-    @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } .path { grid-template-columns: 1fr 1fr; } .stats { grid-template-columns: 1fr 1fr; } .hero-programs, .hero-videos { grid-template-columns: 1fr; } }
+    .hero-image { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 18px; border: 1px solid rgba(212, 175, 55, 0.45); box-shadow: 0 0 18px rgba(212, 175, 55, 0.12), var(--shadow); }
+    @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } .path { grid-template-columns: 1fr 1fr; } .stats { grid-template-columns: 1fr 1fr; } .hero-programs, .hero-videos { grid-template-columns: 1fr; } .face-id-wrap { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { .grid-3, .path, .stats { grid-template-columns: 1fr; } .hero { padding-top: 3.2rem; } .nav-inner { gap: 0.7rem; } .brand { font-size: 0.95rem; } }
   </style>
 </head>
@@ -118,6 +132,37 @@
       <div class="stat"><h3>Career</h3><p>Portfolio Focused</p></div>
     </div>
   </header>
+
+  <section id="face-id" class="section container face-id">
+    <h2>Face ID Enrollment Setup</h2>
+    <div class="face-id-wrap">
+      <div class="face-id-panel">
+        <h3>Single-snapshot enrollment flow</h3>
+        <p>Use one clear camera snapshot to create a face template for attendance, access, or identity verification during onboarding.</p>
+        <div class="face-steps">
+          <div class="face-step"><div class="step-number">1</div><div><strong>Allow camera access.</strong><p>Open the camera on a laptop or phone and position the student facing forward.</p></div></div>
+          <div class="face-step"><div class="step-number">2</div><div><strong>Capture one snapshot.</strong><p>Take a sharp, well-lit photo with the face centered and unobstructed.</p></div></div>
+          <div class="face-step"><div class="step-number">3</div><div><strong>Confirm enrollment.</strong><p>Review the preview and save the face template for the student profile.</p></div></div>
+        </div>
+        <p class="small-note">Recommended backend stack: OpenCV for camera capture, FastAPI for the API, and insightface or face_recognition for embedding generation.</p>
+      </div>
+
+      <div class="capture-card" aria-label="Face ID capture preview">
+        <div class="capture-preview">
+          <div>
+            <div class="emoji">📷</div>
+            <h3>Camera preview</h3>
+            <p>Captured face snapshot will appear here for review before enrollment.</p>
+          </div>
+        </div>
+        <div class="capture-status"><strong>Status:</strong> Waiting for camera permission and first snapshot.</div>
+        <div class="capture-actions">
+          <a class="btn btn-primary" href="#contact">Start Enrollment</a>
+          <a class="btn btn-secondary" href="#programs">View Programs</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="programs" class="section container">
     <h2>Programs You Can Join</h2>
