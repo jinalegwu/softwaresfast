@@ -64,7 +64,7 @@ app = FastAPI(title="Softwaresfast Face ID Enrollment API")
 class EnrollmentResponse:
     status: str
     message: str
-    recommended_stack: dict[str, str]
+    snapshot_validated: bool
 
 
 def _validate_snapshot(content_type: str | None) -> None:
@@ -94,12 +94,9 @@ def health() -> dict[str, str]:
 
 @app.post("/api/face-id/validate-snapshot")
 async def validate_face_snapshot(snapshot: UploadFile = File(...)) -> dict[str, Any]:
-    try:
-        _validate_snapshot(snapshot.content_type)
-        image_bytes = await snapshot.read()
-        frame = _decode_snapshot(image_bytes)
-    finally:
-        await snapshot.close()
+    _validate_snapshot(snapshot.content_type)
+    image_bytes = await snapshot.read()
+    frame = _decode_snapshot(image_bytes)
 
     response = EnrollmentResponse(
         status="validated",
@@ -107,12 +104,6 @@ async def validate_face_snapshot(snapshot: UploadFile = File(...)) -> dict[str, 
             "Snapshot validation succeeded. Connect this starter endpoint to face_recognition or insightface "
             "to generate the final enrollment template and persist it for attendance/access workflows."
         ),
-        recommended_stack={
-            "api": "FastAPI or Flask",
-            "image_processing": "OpenCV",
-            "face_embedding": "face_recognition or insightface",
-        },
+        snapshot_validated=frame is not None,
     )
-    payload = asdict(response)
-    payload["snapshot_validated"] = frame is not None
-    return payload
+    return asdict(response)

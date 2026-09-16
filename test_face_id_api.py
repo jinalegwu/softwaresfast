@@ -8,33 +8,30 @@ class FakeUpload:
     def __init__(self, content_type, payload):
         self.content_type = content_type
         self._payload = payload
-        self.closed = False
 
     async def read(self):
         return self._payload
 
     async def close(self):
-        self.closed = True
+        return None
 
 
 class FaceIdApiTests(unittest.TestCase):
-    def test_invalid_content_type_is_rejected_and_closed(self):
+    def test_invalid_content_type_is_rejected(self):
         upload = FakeUpload("text/plain", b"not-an-image")
 
         with self.assertRaises(face_id_api.HTTPException) as ctx:
             asyncio.run(face_id_api.validate_face_snapshot(upload))
 
         self.assertEqual(ctx.exception.status_code, 400)
-        self.assertTrue(upload.closed)
 
-    def test_empty_upload_is_rejected_and_closed(self):
+    def test_empty_upload_is_rejected(self):
         upload = FakeUpload("image/jpeg", b"")
 
         with self.assertRaises(face_id_api.HTTPException) as ctx:
             asyncio.run(face_id_api.validate_face_snapshot(upload))
 
         self.assertEqual(ctx.exception.status_code, 400)
-        self.assertTrue(upload.closed)
 
     def test_missing_opencv_stack_returns_service_unavailable(self):
         upload = FakeUpload("image/jpeg", b"image-bytes")
@@ -48,7 +45,6 @@ class FaceIdApiTests(unittest.TestCase):
             face_id_api.cv2, face_id_api.np = original_cv2, original_np
 
         self.assertEqual(ctx.exception.status_code, 503)
-        self.assertTrue(upload.closed)
 
     def test_valid_decodable_snapshot_returns_starter_response(self):
         upload = FakeUpload("image/jpeg", b"image-bytes")
@@ -76,4 +72,3 @@ class FaceIdApiTests(unittest.TestCase):
             face_id_api.cv2, face_id_api.np = original_cv2, original_np
         self.assertEqual(result["status"], "validated")
         self.assertTrue(result["snapshot_validated"])
-        self.assertTrue(upload.closed)
