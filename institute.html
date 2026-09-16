@@ -150,7 +150,7 @@
             </li>
           </ol>
           <div class="face-id-actions">
-            <button type="button" id="face-id-trigger" class="btn btn-primary face-id-button" aria-describedby="face-id-help">Start Face ID Setup</button>
+            <button type="button" id="face-id-trigger" class="btn btn-primary face-id-button" aria-describedby="face-id-help face-id-status">Start Face ID Setup</button>
             <span id="face-id-help" class="face-id-help">Tip: use a steady camera, neutral background, and even lighting for the best match quality.</span>
           </div>
           <p id="face-id-status" class="face-id-status" aria-live="polite">Status: waiting for the learner to allow camera access and capture one enrollment snapshot.</p>
@@ -158,7 +158,7 @@
         <aside class="face-id-preview" aria-label="Enrollment snapshot preview">
           <div class="face-id-preview-card">
             <h3>Snapshot Preview</h3>
-            <div id="face-id-preview-placeholder" class="face-id-placeholder" role="img" aria-label="Placeholder for captured Face ID image preview">
+            <div id="face-id-preview-placeholder" class="face-id-placeholder">
               <span id="face-id-preview-text">Captured image preview appears here after camera permission and single-snapshot enrollment.</span>
             </div>
             <p>The approved image is then passed to the enrollment API to detect the face and generate a reusable template.</p>

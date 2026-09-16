@@ -22,7 +22,7 @@ class FaceIdApiTests(unittest.TestCase):
         upload = FakeUpload("text/plain", b"not-an-image")
 
         with self.assertRaises(face_id_api.HTTPException) as ctx:
-            asyncio.run(face_id_api.enroll_face(upload))
+            asyncio.run(face_id_api.validate_face_snapshot(upload))
 
         self.assertEqual(ctx.exception.status_code, 400)
         self.assertTrue(upload.closed)
@@ -31,7 +31,7 @@ class FaceIdApiTests(unittest.TestCase):
         upload = FakeUpload("image/jpeg", b"")
 
         with self.assertRaises(face_id_api.HTTPException) as ctx:
-            asyncio.run(face_id_api.enroll_face(upload))
+            asyncio.run(face_id_api.validate_face_snapshot(upload))
 
         self.assertEqual(ctx.exception.status_code, 400)
         self.assertTrue(upload.closed)
@@ -43,14 +43,14 @@ class FaceIdApiTests(unittest.TestCase):
 
         try:
             with self.assertRaises(face_id_api.HTTPException) as ctx:
-                asyncio.run(face_id_api.enroll_face(upload))
+                asyncio.run(face_id_api.validate_face_snapshot(upload))
         finally:
             face_id_api.cv2, face_id_api.np = original_cv2, original_np
 
         self.assertEqual(ctx.exception.status_code, 503)
         self.assertTrue(upload.closed)
 
-    def test_valid_decodable_snapshot_returns_not_implemented(self):
+    def test_valid_decodable_snapshot_returns_starter_response(self):
         upload = FakeUpload("image/jpeg", b"image-bytes")
         original_cv2, original_np = face_id_api.cv2, face_id_api.np
 
@@ -71,8 +71,9 @@ class FaceIdApiTests(unittest.TestCase):
         face_id_api.cv2, face_id_api.np = FakeCv2(), FakeNumpy()
 
         try:
-            result = asyncio.run(face_id_api.enroll_face(upload))
+            result = asyncio.run(face_id_api.validate_face_snapshot(upload))
         finally:
             face_id_api.cv2, face_id_api.np = original_cv2, original_np
         self.assertEqual(result["status"], "not-implemented")
+        self.assertTrue(result["snapshot_validated"])
         self.assertTrue(upload.closed)

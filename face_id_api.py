@@ -72,7 +72,7 @@ def _validate_snapshot(content_type: str | None) -> None:
         raise HTTPException(status_code=400, detail="Please upload a single image snapshot for enrollment.")
 
 
-def _decode_snapshot(image_bytes: bytes) -> None:
+def _decode_snapshot(image_bytes: bytes) -> Any:
     if not image_bytes:
         raise HTTPException(status_code=400, detail="Please upload a non-empty enrollment snapshot.")
     if cv2 is None or np is None:
@@ -84,6 +84,7 @@ def _decode_snapshot(image_bytes: bytes) -> None:
     frame = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
     if frame is None:
         raise HTTPException(status_code=400, detail="Upload a clear image file that can be decoded for enrollment.")
+    return frame
 
 
 @app.get("/health")
@@ -91,20 +92,20 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/api/face-id/enroll", status_code=501)
-async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
+@app.post("/api/face-id/validate-snapshot")
+async def validate_face_snapshot(snapshot: UploadFile = File(...)) -> dict[str, Any]:
     try:
         _validate_snapshot(snapshot.content_type)
         image_bytes = await snapshot.read()
-        _decode_snapshot(image_bytes)
+        frame = _decode_snapshot(image_bytes)
     finally:
         await snapshot.close()
 
     response = EnrollmentResponse(
         status="not-implemented",
         message=(
-            "Snapshot validation succeeded, but template creation and enrollment storage are not implemented in "
-            "this starter API yet."
+            "Snapshot validation succeeded. Connect this starter endpoint to face_recognition or insightface "
+            "to generate the final enrollment template and persist it for attendance/access workflows."
         ),
         recommended_stack={
             "api": "FastAPI or Flask",
@@ -112,4 +113,6 @@ async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
             "face_embedding": "face_recognition or insightface",
         },
     )
-    return asdict(response)
+    payload = asdict(response)
+    payload["snapshot_validated"] = frame is not None
+    return payload
