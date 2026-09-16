@@ -16,7 +16,7 @@ try:
     from fastapi import FastAPI, File, HTTPException, UploadFile
 except ImportError:  # pragma: no cover - allows lightweight local validation without backend deps
     class HTTPException(Exception):
-        def __init__(self, status_code: int, detail: str) -> None:
+        def __init__(self, status_code: int, detail: Any) -> None:
             super().__init__(detail)
             self.status_code = status_code
             self.detail = detail
@@ -91,7 +91,7 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/api/face-id/enroll")
+@app.post("/api/face-id/enroll", status_code=501)
 async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
     try:
         _validate_snapshot(snapshot.content_type)
@@ -112,4 +112,4 @@ async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
             "face_embedding": "face_recognition or insightface",
         },
     )
-    raise HTTPException(status_code=501, detail=asdict(response))
+    return asdict(response)

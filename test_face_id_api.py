@@ -71,11 +71,8 @@ class FaceIdApiTests(unittest.TestCase):
         face_id_api.cv2, face_id_api.np = FakeCv2(), FakeNumpy()
 
         try:
-            with self.assertRaises(face_id_api.HTTPException) as ctx:
-                asyncio.run(face_id_api.enroll_face(upload))
+            result = asyncio.run(face_id_api.enroll_face(upload))
         finally:
             face_id_api.cv2, face_id_api.np = original_cv2, original_np
-
-        self.assertEqual(ctx.exception.status_code, 501)
-        self.assertEqual(ctx.exception.detail["status"], "not-implemented")
+        self.assertEqual(result["status"], "not-implemented")
         self.assertTrue(upload.closed)
