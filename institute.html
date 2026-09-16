@@ -21,7 +21,7 @@
       --shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; color: var(--text-100); background: radial-gradient(circle at 20% 10%, rgba(212, 175, 55, 0.14), transparent 40%), radial-gradient(circle at 80% 0%, rgba(26, 111, 81, 0.24), transparent 42%), linear-gradient(160deg, var(--deep-green-900), var(--deep-green-800) 50%, #041f17); min-height: 100vh; line-height: 1.6; }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; color: var(--text-100); background: radial-gradient(circle at 20% 10%, rgba(212, 175, 55, 0.14), transparent 40%), radial-gradient(circle at 80% 90%, rgba(11, 59, 43, 0.25), transparent 40%); background-attachment: fixed; min-height: 100vh; }
     .container { width: min(1140px, 92%); margin: 0 auto; }
     .nav { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(8px); background: rgba(6, 46, 34, 0.7); border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
     .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 0.95rem 0; }
@@ -29,17 +29,17 @@
     .back-link { color: var(--mint-100); text-decoration: none; border: 1px solid rgba(223, 247, 234, 0.35); padding: 0.5rem 0.9rem; border-radius: 999px; transition: 0.25s ease; font-weight: 600; }
     .back-link:hover { transform: translateY(-1px); border-color: var(--gold-500); color: var(--gold-500); }
     .hero { padding: 4.5rem 0 3rem; text-align: center; }
-    .badge { display: inline-block; color: var(--gold-500); border: 1px solid rgba(212, 175, 55, 0.45); background: rgba(212, 175, 55, 0.12); padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 1rem; }
+    .badge { display: inline-block; color: var(--gold-500); border: 1px solid rgba(212, 175, 55, 0.45); background: rgba(212, 175, 55, 0.12); padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.85rem; }
     h1 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.2; margin-bottom: 1rem; }
     .hero p { color: var(--text-300); max-width: 760px; margin: 0 auto 2rem; font-size: clamp(1rem, 1.8vw, 1.15rem); }
     .hero-videos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 1100px; margin: 2rem auto 0; }
     .hero-video { border-radius: 18px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.45); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), var(--shadow); background: rgba(6, 46, 34, 0.5); }
     .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
     .hero-programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 2rem auto 0; max-width: 920px; }
-    .program-box { background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; padding: 1.5rem 1.25rem; box-shadow: 0 0 20px rgba(212, 175, 55, 0.12), var(--shadow); position: relative; overflow: hidden; }
+    .program-box { background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; padding: 1.5rem 1.25rem; box-shadow: var(--shadow); position: relative; }
     .program-box::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top, rgba(246, 220, 131, 0.16), transparent 55%); pointer-events: none; }
-    @keyframes goldGlow { 0%, 100% { text-shadow: 0 0 8px rgba(212, 175, 55, 0.65), 0 0 18px rgba(212, 175, 55, 0.35); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), inset 0 0 18px rgba(255, 215, 0, 0.04); } 50% { text-shadow: 0 0 13px rgba(246, 220, 131, 0.92), 0 0 26px rgba(212, 175, 55, 0.55); box-shadow: 0 0 24px rgba(246, 220, 131, 0.24), inset 0 0 24px rgba(255, 235, 140, 0.08); } }
-    .program-box h3 { position: relative; z-index: 1; color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 2.8s ease-in-out infinite; }
+    @keyframes goldGlow { 0%, 100% { text-shadow: 0 0 8px rgba(212, 175, 55, 0.65), 0 0 18px rgba(212, 175, 55, 0.35); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), inset 0 0 18px rgba(255, 215, 0, 0.12); } 50% { text-shadow: 0 0 16px rgba(212, 175, 55, 0.85), 0 0 28px rgba(212, 175, 55, 0.55); box-shadow: 0 0 28px rgba(212, 175, 55, 0.3), inset 0 0 28px rgba(255, 215, 0, 0.18); } }
+    .program-box h3 { position: relative; z-index: 1; color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 3s ease-in-out infinite; }
     .cta { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
     .btn { border: none; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.82rem 1.2rem; display: inline-block; transition: transform 0.2s ease, box-shadow 0.25s ease; }
     .btn-primary { background: linear-gradient(145deg, var(--gold-500), #f0cf65); color: #203226; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25); }
@@ -83,10 +83,8 @@
       mastering modern engineering workflows, and becoming job-ready with confidence.
     </p>
 
-    <div class="hero-image-wrap" aria-label="Students in a classroom video">
-      <video class="hero-image" autoplay muted loop playsinline preload="metadata" poster="https://images.pexels.com/photos/1184572/pexels-photo-1184572.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop">
-        <source src="https://cdn.pixabay.com/video/2020/03/06/33483-396750241_large.mp4" type="video/mp4" />
-      </video>
+    <div class="hero-image-wrap" aria-label="Students in a classroom">
+      <img class="hero-image" src="https://images.pexels.com/photos/1184572/pexels-photo-1184572.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop" alt="Students in a classroom" />
     </div>
 
     <div class="hero-videos" aria-label="Students walking on a school street videos">
