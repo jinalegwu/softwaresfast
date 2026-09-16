@@ -58,12 +58,30 @@
     .step { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 12px; padding: 1rem; position: relative; min-height: 160px; }
     .step-number { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-500); color: #22372a; font-weight: 800; margin-bottom: 0.65rem; }
     .step p { color: var(--text-300); font-size: 0.95rem; }
+    .face-id-panel { margin: 2rem auto 0; max-width: 1080px; background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.78)); border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 22px; padding: 1.6rem; box-shadow: 0 0 24px rgba(212, 175, 55, 0.12), var(--shadow); text-align: left; }
+    .face-id-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr); gap: 1.2rem; align-items: stretch; }
+    .face-id-panel h2 { margin-bottom: 0.8rem; color: var(--gold-300); font-size: clamp(1.45rem, 2vw, 2rem); }
+    .face-id-panel p { color: var(--text-300); line-height: 1.65; }
+    .face-id-note { margin-top: 0.85rem; padding: 0.9rem 1rem; border-radius: 14px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.22); }
+    .face-id-steps { list-style: none; margin-top: 1.1rem; display: grid; gap: 0.8rem; }
+    .face-id-steps li { display: grid; grid-template-columns: 38px 1fr; gap: 0.8rem; align-items: start; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 14px; padding: 0.9rem; }
+    .face-id-steps strong { color: var(--text-100); display: block; margin-bottom: 0.25rem; }
+    .face-id-step-number { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(212, 175, 55, 0.18); color: var(--gold-300); border: 1px solid rgba(212, 175, 55, 0.45); font-weight: 800; }
+    .face-id-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.1rem; align-items: center; }
+    .face-id-button { cursor: pointer; }
+    .face-id-help { font-size: 0.94rem; color: var(--mint-100); opacity: 0.92; }
+    .face-id-status { margin-top: 0.9rem; padding: 0.85rem 1rem; border-radius: 12px; background: rgba(223, 247, 234, 0.08); border: 1px solid rgba(223, 247, 234, 0.18); color: var(--mint-100); font-size: 0.95rem; }
+    .face-id-preview { display: grid; gap: 0.9rem; }
+    .face-id-preview-card { min-height: 100%; border-radius: 18px; border: 1px solid rgba(212, 175, 55, 0.35); background: linear-gradient(180deg, rgba(7, 41, 31, 0.95), rgba(8, 57, 41, 0.78)); padding: 1.2rem; display: grid; gap: 0.9rem; align-content: start; }
+    .face-id-preview-card h3 { color: var(--gold-300); }
+    .face-id-placeholder { aspect-ratio: 4 / 5; width: min(100%, 280px); margin: 0 auto; border-radius: 18px; border: 1px dashed rgba(212, 175, 55, 0.55); background: radial-gradient(circle at top, rgba(212, 175, 55, 0.18), transparent 42%), rgba(255, 255, 255, 0.04); display: grid; place-items: center; padding: 1.2rem; text-align: center; color: var(--text-300); }
+    .face-id-placeholder span { display: block; font-size: 0.94rem; line-height: 1.5; }
     .contact { background: rgba(0, 0, 0, 0.16); border-top: 1px solid rgba(212, 175, 55, 0.35); border-bottom: 1px solid rgba(212, 175, 55, 0.35); border-radius: 14px; padding: 1.4rem; text-align: center; }
     .contact p { color: var(--text-300); margin-bottom: 0.9rem; }
     .footer { text-align: center; color: rgba(223, 247, 234, 0.75); font-size: 0.9rem; padding: 2rem 0 2.4rem; }
     .hero-image-wrap { max-width: 1100px; margin: 2rem auto 0; }
     .hero-image { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 18px; border: 1px solid rgba(212, 175, 55, 0.45); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), var(--shadow); }
-    @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } .path { grid-template-columns: 1fr 1fr; } .stats { grid-template-columns: 1fr 1fr; } .hero-programs, .hero-videos { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } .path { grid-template-columns: 1fr 1fr; } .stats { grid-template-columns: 1fr 1fr; } .hero-programs, .hero-videos, .face-id-grid { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { .grid-3, .path, .stats { grid-template-columns: 1fr; } .hero { padding-top: 3.2rem; } .nav-inner { gap: 0.7rem; } .brand { font-size: 0.95rem; } }
   </style>
 </head>
@@ -99,6 +117,55 @@
         </video>
       </div>
     </div>
+
+    <section class="face-id-panel" aria-labelledby="face-id-title">
+      <div class="face-id-grid">
+        <div>
+          <span class="badge">Face ID Enrollment</span>
+          <h2 id="face-id-title">Set up single-snapshot Face ID for attendance and access</h2>
+          <p>
+            Learners can enroll with one clear camera snapshot. After camera access is allowed, the system captures a
+            single image, confirms the enrollment, and uses that approved snapshot to create a face template for
+            attendance check-in or controlled access workflows.
+          </p>
+          <div class="face-id-note">
+            <p>
+              Recommended backend stack: <strong>FastAPI</strong> or <strong>Flask</strong> for the API,
+              <strong>OpenCV</strong> for camera/image capture handling, and <strong>face_recognition</strong> or
+              <strong>insightface</strong> for face detection plus embedding generation.
+            </p>
+          </div>
+          <ol class="face-id-steps" aria-label="Face ID enrollment steps">
+            <li>
+              <div class="face-id-step-number" aria-hidden="true">1</div>
+              <div><strong>Allow camera access</strong><p>Grant permission so the enrollment page can open your device camera securely in the browser.</p></div>
+            </li>
+            <li>
+              <div class="face-id-step-number" aria-hidden="true">2</div>
+              <div><strong>Capture one clear snapshot</strong><p>Center your face, face the camera directly, and take one well-lit image with no blur or heavy obstruction.</p></div>
+            </li>
+            <li>
+              <div class="face-id-step-number" aria-hidden="true">3</div>
+              <div><strong>Confirm enrollment</strong><p>Review the snapshot preview and approve it so the system can create your face template for future attendance and access checks.</p></div>
+            </li>
+          </ol>
+          <div class="face-id-actions">
+            <button type="button" id="face-id-trigger" class="btn btn-primary face-id-button" aria-describedby="face-id-help">Preview Face ID Setup Flow</button>
+            <span id="face-id-help" class="face-id-help">Tip: use a steady camera, neutral background, and even lighting for the best match quality.</span>
+          </div>
+          <p id="face-id-status" class="face-id-status" aria-live="polite">Status: previewing the planned learner flow for camera access, single-snapshot capture, and enrollment confirmation.</p>
+        </div>
+        <aside class="face-id-preview" aria-label="Enrollment snapshot preview">
+          <div class="face-id-preview-card">
+            <h3>Snapshot Preview</h3>
+            <div id="face-id-preview-placeholder" class="face-id-placeholder">
+              <span id="face-id-preview-text">Captured image preview appears here after camera permission and single-snapshot enrollment.</span>
+            </div>
+            <p>The approved image is then passed to the enrollment API to detect the face and generate a reusable template.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
     <p style="margin-top:1rem; font-weight:700; color: var(--gold-300); letter-spacing:0.8px; text-transform: lowercase;">softwaresfast institute</p>
 
     <div class="hero-programs" aria-label="Institute programs">
@@ -149,5 +216,17 @@
   <footer class="footer container">
     <p>© 2026 Softwaresfast Institute. Learn, Build, Launch.</p>
   </footer>
+  <script>
+    const faceIdTrigger = document.getElementById("face-id-trigger");
+    const faceIdStatus = document.getElementById("face-id-status");
+    const faceIdPreviewText = document.getElementById("face-id-preview-text");
+
+    if (faceIdTrigger && faceIdStatus && faceIdPreviewText) {
+      faceIdTrigger.addEventListener("click", () => {
+        faceIdStatus.textContent = "Status: previewing the Face ID setup steps. The live camera permission, capture, and confirmation flow should connect to the backend starter API before production use.";
+        faceIdPreviewText.textContent = "This placeholder represents where the approved single snapshot will appear after the real camera capture flow is connected.";
+      });
+    }
+  </script>
 </body>
 </html>
