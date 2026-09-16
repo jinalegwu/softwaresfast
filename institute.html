@@ -34,7 +34,7 @@
     .hero p { color: var(--text-300); max-width: 760px; margin: 0 auto 2rem; font-size: clamp(1rem, 1.8vw, 1.15rem); }
     .hero-videos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 1100px; margin: 2rem auto 0; }
     .hero-video { border-radius: 18px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.45); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), var(--shadow); background: rgba(6, 46, 34, 0.5); }
-    .hero-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+    .hero-video img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
     .hero-programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 2rem auto 0; max-width: 920px; }
     .program-box { background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; padding: 1.5rem 1.25rem; box-shadow: var(--shadow); position: relative; }
     .program-box::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top, rgba(246, 220, 131, 0.16), transparent 55%); pointer-events: none; }
@@ -87,16 +87,12 @@
       <img class="hero-image" src="https://images.pexels.com/photos/1184572/pexels-photo-1184572.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop" alt="Students in a classroom" />
     </div>
 
-    <div class="hero-videos" aria-label="Students walking on a school street videos">
+    <div class="hero-videos" aria-label="Students in learning environment">
       <div class="hero-video">
-        <video autoplay muted loop playsinline preload="metadata" poster="https://images.pexels.com/photos/1467987/pexels-photo-1467987.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop">
-          <source src="https://cdn.pixabay.com/video/2023/03/10/154259-807441040_large.mp4" type="video/mp4" />
-        </video>
+        <img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop" alt="Students collaborating" />
       </div>
       <div class="hero-video">
-        <video autoplay muted loop playsinline preload="metadata" poster="https://images.pexels.com/photos/267507/pexels-photo-267507.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop">
-          <source src="https://cdn.pixabay.com/video/2020/05/05/38322-415114276_large.mp4" type="video/mp4" />
-        </video>
+        <img src="https://images.pexels.com/photos/3856009/pexels-photo-3856009.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop" alt="Students studying together" />
       </div>
     </div>
     <p style="margin-top:1rem; font-weight:700; color: var(--gold-300); letter-spacing:0.8px; text-transform: lowercase;">softwaresfast institute</p>
