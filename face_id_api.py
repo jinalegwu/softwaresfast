@@ -102,7 +102,7 @@ async def validate_face_snapshot(snapshot: UploadFile = File(...)) -> dict[str, 
         await snapshot.close()
 
     response = EnrollmentResponse(
-        status="not-implemented",
+        status="validated",
         message=(
             "Snapshot validation succeeded. Connect this starter endpoint to face_recognition or insightface "
             "to generate the final enrollment template and persist it for attendance/access workflows."

@@ -74,6 +74,6 @@ class FaceIdApiTests(unittest.TestCase):
             result = asyncio.run(face_id_api.validate_face_snapshot(upload))
         finally:
             face_id_api.cv2, face_id_api.np = original_cv2, original_np
-        self.assertEqual(result["status"], "not-implemented")
+        self.assertEqual(result["status"], "validated")
         self.assertTrue(result["snapshot_validated"])
         self.assertTrue(upload.closed)
