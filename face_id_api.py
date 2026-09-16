@@ -14,6 +14,13 @@ from typing import Any
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 
+try:
+    import cv2
+    import numpy as np
+except ImportError:  # pragma: no cover - starter dependency guard
+    cv2 = None
+    np = None
+
 
 app = FastAPI(title="Softwaresfast Face ID Enrollment API")
 
@@ -30,6 +37,20 @@ def _validate_snapshot(content_type: str | None) -> None:
         raise HTTPException(status_code=400, detail="Please upload a single image snapshot for enrollment.")
 
 
+def _decode_snapshot(image_bytes: bytes) -> None:
+    if not image_bytes:
+        raise HTTPException(status_code=400, detail="Please upload a non-empty enrollment snapshot.")
+    if cv2 is None or np is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Install OpenCV and numpy to validate and process Face ID enrollment snapshots.",
+        )
+
+    frame = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
+    if frame is None:
+        raise HTTPException(status_code=400, detail="Upload a clear image file that can be decoded for enrollment.")
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
@@ -38,6 +59,9 @@ def health() -> dict[str, str]:
 @app.post("/api/face-id/enroll")
 async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
     _validate_snapshot(snapshot.content_type)
+    image_bytes = await snapshot.read()
+    await snapshot.close()
+    _decode_snapshot(image_bytes)
 
     response = EnrollmentResponse(
         status="starter-ready",
