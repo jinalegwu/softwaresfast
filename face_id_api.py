@@ -39,8 +39,6 @@ def health() -> dict[str, str]:
 async def enroll_face(snapshot: UploadFile = File(...)) -> dict[str, Any]:
     _validate_snapshot(snapshot.content_type)
 
-    await snapshot.read()
-
     response = EnrollmentResponse(
         status="starter-ready",
         message=(
