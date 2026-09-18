@@ -327,15 +327,19 @@
       }
     }
 
-    function toSafeDate(timestamp) {
-      const parsed = new Date(timestamp);
-      return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+    function toTimestamp(timestamp) {
+      const parsed = Date.parse(timestamp);
+      return Number.isNaN(parsed) ? null : parsed;
     }
 
     function renderLog() {
       const entries = getLog()
         .slice()
-        .sort((a, b) => toSafeDate(b.timestamp).getTime() - toSafeDate(a.timestamp).getTime());
+        .sort((a, b) => {
+          const aTime = toTimestamp(a.timestamp);
+          const bTime = toTimestamp(b.timestamp);
+          return (bTime ?? -Infinity) - (aTime ?? -Infinity);
+        });
       logBody.innerHTML = '';
 
       if (!entries.length) {
@@ -345,11 +349,11 @@
       }
 
       entries.forEach((entry) => {
-        const entryDate = toSafeDate(entry.timestamp);
+        const entryTimestamp = toTimestamp(entry.timestamp);
         const row = document.createElement('tr');
         const cells = [
-          dateFormatter.format(entryDate),
-          timeFormatter.format(entryDate),
+          entryTimestamp === null ? 'Invalid date' : dateFormatter.format(new Date(entryTimestamp)),
+          entryTimestamp === null ? 'Invalid time' : timeFormatter.format(new Date(entryTimestamp)),
           entry.student,
           `${entry.program} / ${entry.session}`,
           entry.action
@@ -392,38 +396,36 @@
 
       const now = formatNow();
       const entries = getLog();
-      let latestContextEntry = null;
-      let latestSameActionEntry = null;
-      entries.forEach((entry) => {
-        if (
+      const nowTimestamp = toTimestamp(now.timestamp);
+      const matchingEntries = entries
+        .map((entry) => ({ ...entry, parsedTime: toTimestamp(entry.timestamp) }))
+        .filter((entry) =>
+          entry.parsedTime !== null &&
           entry.student === student &&
           entry.program === program &&
           entry.session === session
-        ) {
-          const entryTime = toSafeDate(entry.timestamp).getTime();
-          if (!latestContextEntry || entryTime > latestContextEntry.time) {
-            latestContextEntry = { entry, time: entryTime };
-          }
-          if (
-            entry.action === action &&
-            (!latestSameActionEntry || entryTime > latestSameActionEntry.time)
-          ) {
-            latestSameActionEntry = { entry, time: entryTime };
-          }
-        }
-      });
-      const hasOpenCheckIn = latestContextEntry?.entry.action === 'Check-In';
+        )
+        .sort((a, b) => a.parsedTime - b.parsedTime);
 
-      if (action === 'Check-Out' && !hasOpenCheckIn) {
+      const latestContextEntry = matchingEntries[matchingEntries.length - 1] || null;
+      let latestSameActionEntry = null;
+      for (let index = matchingEntries.length - 1; index >= 0; index -= 1) {
+        if (matchingEntries[index].action === action) {
+          latestSameActionEntry = matchingEntries[index];
+          break;
+        }
+      }
+
+      if (action === 'Check-Out' && (!latestContextEntry || latestContextEntry.action !== 'Check-In')) {
         setStatus('You must check in before you can check out for this program/session.', 'error');
         return;
       }
 
-      const latestTimestamp = latestSameActionEntry ? latestSameActionEntry.time : null;
-      const nowTimestamp = toSafeDate(now.timestamp).getTime();
+      const latestTimestamp = latestSameActionEntry ? latestSameActionEntry.parsedTime : null;
       if (
         latestSameActionEntry &&
         latestTimestamp !== null &&
+        nowTimestamp !== null &&
         nowTimestamp >= latestTimestamp &&
         nowTimestamp - latestTimestamp < 10000
       ) {
