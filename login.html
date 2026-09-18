@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Softwaresfast Institute student login page." />
+  <title>Student Login | Softwaresfast Institute</title>
+  <style>
+    :root {
+      --deep-green-900: #062e22;
+      --deep-green-800: #0b3b2b;
+      --deep-green-700: #11563e;
+      --deep-green-600: #1a6f51;
+      --gold-500: #d4af37;
+      --gold-300: #f6dc83;
+      --mint-100: #dff7ea;
+      --panel: rgba(255,255,255,0.08);
+      --border: rgba(212,175,55,0.35);
+      --text: #f5fffa;
+      --muted: #cde7d8;
+      --dark: #0d1a14;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 10%, rgba(212,175,55,0.14), transparent 40%), linear-gradient(135deg, #051d17, #0a382c 35%, #0f4a37 100%);
+      color: var(--text);
+    }
+    a { text-decoration: none; color: inherit; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 0; border-bottom: 1px solid rgba(212,175,55,0.2);
+    }
+    .brand { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.06em; color: var(--gold-500); }
+    .nav-links {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: var(--mint-100); padding: 0.5rem 0.85rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
+      transition: 0.2s ease;
+    }
+    .nav-links a:hover { border-color: rgba(212,175,55,0.5); color: var(--gold-300); }
+
+    .page {
+      display: grid; place-items: center; min-height: calc(100vh - 72px); padding: 2rem 0;
+    }
+    .login-card {
+      width: min(520px, 100%);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.22);
+      padding: clamp(1.2rem, 2.5vw, 2rem);
+    }
+    .eyebrow {
+      color: var(--gold-300);
+      font-size: 0.74rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.6rem); margin-bottom: 0.45rem; }
+    .subtitle { color: var(--muted); margin-bottom: 1.4rem; }
+    .field { margin-bottom: 1rem; }
+    label {
+      display: block; margin-bottom: 0.45rem; font-weight: 700; font-size: 0.95rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      font: inherit;
+    }
+    input::placeholder { color: rgba(223,247,234,0.6); }
+    input:focus { outline: 3px solid rgba(212,175,55,0.18); border-color: rgba(212,175,55,0.5); }
+    .password-wrap { position: relative; }
+    .password-wrap button {
+      position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%);
+      border: none; background: transparent; color: var(--gold-300); font-weight: 700; cursor: pointer;
+    }
+    .row {
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      flex-wrap: wrap; margin: 0.8rem 0 1.2rem;
+      color: var(--muted); font-size: 0.92rem;
+    }
+    .checkbox {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+    }
+    .checkbox input { width: auto; accent-color: var(--gold-500); }
+    .btn {
+      display: inline-block; width: 100%; border: none; border-radius: 10px;
+      padding: 0.9rem 1rem; font: inherit; font-weight: 800; cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .primary {
+      background: linear-gradient(145deg, var(--gold-500), #f0cf65);
+      color: #173124; box-shadow: 0 12px 20px rgba(212,175,55,0.2);
+    }
+    .status {
+      min-height: 1.4rem; margin-top: 0.9rem; color: var(--muted); font-size: 0.92rem;
+    }
+    .status.success { color: #d8f7db; font-weight: 700; }
+    .status.error { color: #ffd8d8; font-weight: 700; }
+    .links {
+      display: flex; justify-content: space-between; flex-wrap: wrap;
+      gap: 0.6rem; margin-top: 1rem; color: var(--muted); font-size: 0.92rem;
+    }
+    .links a { color: var(--gold-300); }
+    @media (max-width: 620px) {
+      .topbar { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .row, .links { flex-direction: column; align-items: flex-start; }
+      .nav-links { width: 100%; }
+      .nav-links a { flex: 1 1 auto; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container topbar">
+    <div class="brand">SOFTWARESFAST INSTITUTE</div>
+    <div class="nav-links">
+      <a href="index.html">Main Site</a>
+      <a href="institute.html">Institute</a>
+      <a href="student-enrollment.html">Enroll</a>
+      <a href="attendance.html">Attendance</a>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="eyebrow">Student portal</div>
+      <h1 id="login-title">Welcome back</h1>
+      <p class="subtitle">Login with your student ID or email to continue.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="studentId">Student ID or email</label>
+          <input id="studentId" name="studentId" type="text" placeholder="e.g. SF-1001 or student@school.com" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="password-wrap">
+            <input id="password" name="password" type="password" placeholder="Enter your password" required />
+            <button type="button" id="togglePassword" aria-label="Show password">Show</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="checkbox" for="rememberMe">
+            <input id="rememberMe" type="checkbox" />
+            <span>Remember me</span>
+          </label>
+          <a href="student-enrollment.html">Need to enroll?</a>
+        </div>
+
+        <button class="btn primary" type="submit">Sign in</button>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+
+        <div class="links">
+          <a href="student-enrollment.html">Enroll a student</a>
+          <a href="attendance.html">Check in attendance</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const status = document.getElementById('status');
+    const passwordField = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+
+    function setStatus(message, type = '') {
+      status.textContent = message;
+      status.className = `status ${type}`;
+    }
+
+    togglePassword.addEventListener('click', () => {
+      const show = passwordField.type === 'password';
+      passwordField.type = show ? 'text' : 'password';
+      togglePassword.textContent = show ? 'Hide' : 'Show';
+      togglePassword.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        setStatus('Please enter both your student ID/email and password.', 'error');
+        return;
+      }
+
+      const studentId = document.getElementById('studentId').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!studentId || !password) {
+        setStatus('Please complete both fields before signing in.', 'error');
+        return;
+      }
+
+      setStatus(`Demo sign-in successful for ${studentId}. Connect this form to secure server-side authentication for production use.`, 'success');
+    });
+  </script>
+</body>
+</html>
