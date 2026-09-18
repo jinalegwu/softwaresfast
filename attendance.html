@@ -198,7 +198,7 @@
         <span class="eyebrow">Attendance portal</span>
         <h1 id="attendance-title">Attendance Check-In</h1>
         <p class="lead">Record your check-in or check-out for your learning session.</p>
-        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in <code>sessionStorage</code> for the current browser tab/window context only (including refreshes in that same context). For production, connect to secure server-side authentication and persistent attendance storage.</p>
+        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in <code>sessionStorage</code> for the current tab/window context (including refreshes in that same context). A duplicated tab can start with copied data, but later updates are not synchronized across tabs. For production, connect to secure server-side authentication and persistent attendance storage.</p>
 
         <form id="attendanceForm" novalidate>
           <div class="field">
@@ -237,8 +237,8 @@
           </div>
 
           <div class="actions">
-            <button class="check-in" type="button" data-action="Check-In">Check In</button>
-            <button class="check-out" type="button" data-action="Check-Out">Check Out</button>
+            <button class="check-in" type="submit" name="attendanceAction" value="Check-In">Check In</button>
+            <button class="check-out" type="submit" name="attendanceAction" value="Check-Out">Check Out</button>
           </div>
           <p class="status" id="attendanceStatus" role="alert" aria-live="assertive"></p>
         </form>
@@ -249,7 +249,7 @@
           <h2 id="log-title">Session Attendance Log</h2>
           <button type="button" class="clear-log" id="clearLog">Clear session log</button>
         </div>
-        <p class="log-note">Entries below are saved only in this browser tab and can persist on refresh, but they are not shared across tabs and are cleared when this tab/window is closed.</p>
+        <p class="log-note">Entries below are saved only in this tab/window context and can persist on refresh. A duplicated tab can start with copied data, but later updates are not synchronized across tabs and are cleared when that tab/window is closed.</p>
         <div id="emptyLog" class="empty-log" hidden>No attendance records yet in this tab.</div>
         <div class="table-wrap">
           <table id="logTable" aria-label="Attendance log table" hidden>
@@ -469,8 +469,10 @@
       setStatus(`Demo ${action.toLowerCase()} recorded for ${student}. Connect this flow to secure backend attendance services for production.`, 'success');
     }
 
-    document.querySelectorAll('[data-action]').forEach((button) => {
-      button.addEventListener('click', () => addAttendanceEntry(button.dataset.action));
+    attendanceForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const selectedAction = event.submitter?.value || 'Check-In';
+      addAttendanceEntry(selectedAction);
     });
 
     clearLog.addEventListener('click', () => {
