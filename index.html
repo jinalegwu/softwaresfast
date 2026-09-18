@@ -12,7 +12,6 @@
         .navbar { background-color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top:0; z-index:1000; padding:1rem 0; }
         .navbar .container { display:flex; justify-content:space-between; align-items:center; }
 
-        /* Logo Bouncing Animation */
         @keyframes bounce-seesaw {
             0% { color: #FFD700; transform: rotateZ(0deg); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
             25% { transform: rotateZ(-3deg); text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
@@ -37,7 +36,6 @@
         .hamburger { display:none; flex-direction:column; cursor:pointer; background:none; border:none; padding:5px; }
         .hamburger span { width:25px; height:3px; background-color:#333; margin:5px 0; transition:0.3s; }
 
-        /* Institute Toggle Button */
         .institute-toggle {
             padding: 8px 16px;
             background: linear-gradient(135deg, #1a5c3a 0%, #0f3d26 100%);
@@ -66,7 +64,6 @@
         .tagline { font-size:1.1rem; margin-bottom:2rem; opacity:0.95; }
         .cta-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:3rem; }
 
-        /* Glowing Button Animations */
         @keyframes glow-pulse {
             0% { box-shadow: 0 0 5px rgba(102, 126, 234, 0.4), 0 0 10px rgba(102, 126, 234, 0.2); transform: translateY(0) scale(1); }
             50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.8), 0 0 30px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.3); transform: translateY(-3px) scale(1.05); }
@@ -106,12 +103,11 @@
         .service-card{ background:white; padding:2rem; border-radius:8px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
         .about{ padding:80px 15px; }
         .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
-        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:4rem; color:white; }
+        .placeholder-image{ width:100%; height:300px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:3rem; }
         .process{ padding:80px 15px; background-color:#f8f9fa; }
         .process-timeline{ display:grid; grid-template-columns:repeat(6,1fr); gap:1.5rem; align-items:center; margin-bottom:3rem; }
         .portfolio{ padding:80px 15px; }
 
-        /* Portfolio Slider */
         .portfolio-slider{ position:relative; max-width:900px; margin:0 auto; overflow:hidden; border-radius:12px; }
         .portfolio-track{ display:flex; transition:transform 0.5s ease-in-out; will-change: transform; }
         .portfolio-item{ min-width:100%; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); transition:all 0.3s; flex: 0 0 100%; }
@@ -193,13 +189,13 @@
         .contact-form select {
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.8rem center;
             background-size: 1.3rem;
             padding-right: 2.5rem;
         }
-        .contact-form .form-submit { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.95rem 2rem; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; width: 100%; text-transform: uppercase; letter-spacing: 0.5px; }
+        .contact-form .form-submit { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.95rem 2rem; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; }
         .contact-form .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); }
         .contact-form .form-submit:active { transform: translateY(0); }
 
@@ -244,6 +240,7 @@
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="institute.html" class="institute-toggle">🎓 INSTITUTE</a></li>
+                <li><a href="student-enrollment.html" class="institute-toggle">🎓 ENROLL</a></li>
             </ul>
             <button class="hamburger" aria-label="Toggle navigation">
                 <span></span>
@@ -328,7 +325,7 @@
                 <div class="portfolio-track">
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="E-commerce platform project">
+                            <img class="portfolio-image" src="https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="E-commerce platform">
                         </div>
                         <h3>E-commerce Platform</h3>
                         <p>An enterprise-grade online store with inventory management, secure payments, and advanced analytics built with React and Node.js.</p>
@@ -336,7 +333,7 @@
                     </div>
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Mobile banking app project">
+                            <img class="portfolio-image" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Mobile banking app">
                         </div>
                         <h3>Mobile Banking App</h3>
                         <p>Secure mobile banking solution with multi-factor authentication, real-time transactions, and seamless fund transfers for iOS and Android platforms.</p>
@@ -344,7 +341,7 @@
                     </div>
                     <div class="portfolio-item">
                         <div class="portfolio-image-wrapper">
-                            <img class="portfolio-image" src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Project management system project">
+                            <img class="portfolio-image" src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1600&h=400&fit=crop" alt="Project management system">
                         </div>
                         <h3>Project Management System</h3>
                         <p>Comprehensive project management platform featuring task tracking, team collaboration tools, Gantt charts, real-time reporting and resource allocation.</p>
