@@ -195,7 +195,7 @@
         <span class="eyebrow">Attendance portal</span>
         <h1 id="attendance-title">Attendance Check-In</h1>
         <p class="lead">Record your check-in or check-out for your learning session.</p>
-        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in this browser session only. For production, connect to secure server-side authentication and persistent attendance storage.</p>
+        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in <code>sessionStorage</code> for the current browser tab only. For production, connect to secure server-side authentication and persistent attendance storage.</p>
 
         <form id="attendanceForm" novalidate>
           <div class="field">
@@ -246,8 +246,8 @@
           <h2 id="log-title">Session Attendance Log</h2>
           <button type="button" class="clear-log" id="clearLog">Clear session log</button>
         </div>
-        <p style="color:#607066; margin:0 0 .9rem;">Entries below are stored in this tab session and can persist across refreshes, but are cleared when this tab/window is closed.</p>
-        <div id="emptyLog" class="empty-log" hidden>No attendance records yet for this session.</div>
+        <p style="color:#607066; margin:0 0 .9rem;">Entries below are saved only in this browser tab and can persist on refresh, but they are not shared across tabs and are cleared when this tab/window is closed.</p>
+        <div id="emptyLog" class="empty-log" hidden>No attendance records yet in this tab.</div>
         <table id="logTable" aria-label="Attendance log table" hidden>
           <thead>
             <tr>
@@ -380,6 +380,19 @@
 
       const now = formatNow();
       const entries = getLog();
+      const latestEntry = entries[entries.length - 1];
+      if (
+        latestEntry &&
+        latestEntry.student === student &&
+        latestEntry.program === program &&
+        latestEntry.session === session &&
+        latestEntry.action === action &&
+        Math.abs(toSafeDate(now.timestamp).getTime() - toSafeDate(latestEntry.timestamp).getTime()) < 10000
+      ) {
+        setStatus('Duplicate attendance action detected. Please wait a moment before submitting the same action again.', 'error');
+        return;
+      }
+
       entries.push({
         timestamp: now.timestamp,
         student,
@@ -387,6 +400,9 @@
         session,
         action
       });
+      if (entries.length > 100) {
+        entries.splice(0, entries.length - 100);
+      }
       saveLog(entries);
       renderLog();
       setStatus(`Demo ${action.toLowerCase()} recorded for ${student}. Connect this flow to secure backend attendance services for production.`, 'success');
