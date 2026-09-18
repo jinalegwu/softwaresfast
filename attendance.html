@@ -311,13 +311,19 @@
 
       entries.forEach((entry) => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${entry.date}</td>
-          <td>${entry.time}</td>
-          <td>${entry.student}</td>
-          <td>${entry.program} / ${entry.session}</td>
-          <td>${entry.action}</td>
-        `;
+        const cells = [
+          entry.date,
+          entry.time,
+          entry.student,
+          `${entry.program} / ${entry.session}`,
+          entry.action
+        ];
+
+        cells.forEach((value) => {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          row.appendChild(cell);
+        });
         logBody.appendChild(row);
       });
 
