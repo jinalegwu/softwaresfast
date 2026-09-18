@@ -381,14 +381,19 @@
 
       const now = formatNow();
       const entries = getLog();
-      const latestEntry = entries
-        .filter((entry) =>
+      let latestEntry = null;
+      entries.forEach((entry) => {
+        if (
           entry.student === student &&
           entry.program === program &&
           entry.session === session &&
           entry.action === action
-        )
-        .sort((a, b) => toSafeDate(b.timestamp).getTime() - toSafeDate(a.timestamp).getTime())[0];
+        ) {
+          if (!latestEntry || toSafeDate(entry.timestamp).getTime() > toSafeDate(latestEntry.timestamp).getTime()) {
+            latestEntry = entry;
+          }
+        }
+      });
       if (
         latestEntry &&
         Math.abs(toSafeDate(now.timestamp).getTime() - toSafeDate(latestEntry.timestamp).getTime()) < 10000
