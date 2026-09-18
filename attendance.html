@@ -382,21 +382,25 @@
       const now = formatNow();
       const entries = getLog();
       let latestEntry = null;
-      entries.forEach((entry) => {
+      for (let index = entries.length - 1; index >= 0; index -= 1) {
+        const entry = entries[index];
         if (
           entry.student === student &&
           entry.program === program &&
           entry.session === session &&
           entry.action === action
         ) {
-          if (!latestEntry || toSafeDate(entry.timestamp).getTime() > toSafeDate(latestEntry.timestamp).getTime()) {
-            latestEntry = entry;
-          }
+          latestEntry = entry;
+          break;
         }
-      });
+      }
+      const latestTimestamp = latestEntry ? toSafeDate(latestEntry.timestamp).getTime() : null;
+      const nowTimestamp = toSafeDate(now.timestamp).getTime();
       if (
         latestEntry &&
-        Math.abs(toSafeDate(now.timestamp).getTime() - toSafeDate(latestEntry.timestamp).getTime()) < 10000
+        latestTimestamp !== null &&
+        nowTimestamp >= latestTimestamp &&
+        nowTimestamp - latestTimestamp < 10000
       ) {
         setStatus('Duplicate attendance action detected. Please wait a moment before submitting the same action again.', 'error');
         return;
