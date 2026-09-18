@@ -382,22 +382,33 @@
       const now = formatNow();
       const entries = getLog();
       let latestEntry = null;
+      let latestSameActionEntry = null;
       for (let index = entries.length - 1; index >= 0; index -= 1) {
         const entry = entries[index];
         if (
           entry.student === student &&
           entry.program === program &&
-          entry.session === session &&
-          entry.action === action
+          entry.session === session
         ) {
           latestEntry = entry;
-          break;
+          if (entry.action === action && !latestSameActionEntry) {
+            latestSameActionEntry = entry;
+          }
+          if (latestEntry && latestSameActionEntry) {
+            break;
+          }
         }
       }
-      const latestTimestamp = latestEntry ? toSafeDate(latestEntry.timestamp).getTime() : null;
+
+      if (action === 'Check-Out' && (!latestEntry || latestEntry.action !== 'Check-In')) {
+        setStatus('You must check in before you can check out for this program/session.', 'error');
+        return;
+      }
+
+      const latestTimestamp = latestSameActionEntry ? toSafeDate(latestSameActionEntry.timestamp).getTime() : null;
       const nowTimestamp = toSafeDate(now.timestamp).getTime();
       if (
-        latestEntry &&
+        latestSameActionEntry &&
         latestTimestamp !== null &&
         nowTimestamp >= latestTimestamp &&
         nowTimestamp - latestTimestamp < 10000
