@@ -277,9 +277,11 @@
     const logTable = document.getElementById('logTable');
     const emptyLog = document.getElementById('emptyLog');
     const clearLog = document.getElementById('clearLog');
+    const actionButtons = document.querySelectorAll('button[name="attendanceAction"]');
     const logKey = 'softwaresfastAttendanceLog';
     const maxLogEntries = 100;
     const duplicateWindowMs = 10000;
+    let lastAttendanceAction = 'Check-In';
     const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       day: '2-digit',
       month: 'short',
@@ -475,9 +477,15 @@
       setStatus(`Demo ${action.toLowerCase()} recorded for ${student}. Connect this flow to secure backend attendance services for production.`, 'success');
     }
 
+    actionButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        lastAttendanceAction = button.value;
+      });
+    });
+
     attendanceForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const selectedAction = ('submitter' in event && event.submitter && event.submitter.value) ? event.submitter.value : 'Check-In';
+      const selectedAction = ('submitter' in event && event.submitter && event.submitter.value) ? event.submitter.value : lastAttendanceAction;
       addAttendanceEntry(selectedAction);
     });
 
