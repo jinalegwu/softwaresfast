@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Softwaresfast Institute attendance check-in demo page.">
+  <title>Attendance Check-In | Softwaresfast Institute</title>
+  <style>
+    :root {
+      --primary: #1a5c3a;
+      --primary-dark: #0f3d26;
+      --gold: #d4af37;
+      --ink: #14231b;
+      --muted: #607066;
+      --surface: #ffffff;
+      --canvas: #f3f7f4;
+      --border: #dbe7de;
+      --success: #167544;
+      --danger: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #edf6ef 0%, #f8f5eb 100%);
+    }
+    .site-header {
+      background: rgba(255,255,255,.94);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    .header-inner, .page {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .8rem;
+      flex-wrap: wrap;
+    }
+    .brand { text-decoration: none; font-weight: 800; letter-spacing: .06em; color: var(--primary); }
+    .header-links { display: flex; gap: .55rem; flex-wrap: wrap; }
+    .header-links a {
+      text-decoration: none;
+      color: var(--primary);
+      border: 1px solid #bfd4c4;
+      border-radius: 999px;
+      padding: .48rem .74rem;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .page { padding: 2rem 0 2.5rem; }
+    .layout { display: grid; grid-template-columns: 1.05fr .95fr; gap: 1.2rem; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: clamp(1.1rem, 3vw, 1.8rem);
+      box-shadow: 0 12px 28px rgba(15, 61, 38, .1);
+    }
+    h1 { margin: .5rem 0 .6rem; font-size: clamp(1.7rem, 4vw, 2.3rem); }
+    .eyebrow {
+      color: var(--primary);
+      border: 1px solid #cfe1d4;
+      background: #f2f8f4;
+      border-radius: 999px;
+      padding: .32rem .75rem;
+      font-size: .77rem;
+      letter-spacing: .08em;
+      font-weight: 800;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .lead { color: var(--muted); margin: 0 0 1rem; }
+    .demo-note {
+      border-left: 4px solid var(--gold);
+      background: #fcf9ed;
+      color: #5f5430;
+      padding: .9rem 1rem;
+      border-radius: 8px;
+      line-height: 1.45;
+      margin-bottom: 1rem;
+      font-size: .91rem;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .field { margin-bottom: .95rem; }
+    label { display: block; margin-bottom: .42rem; font-size: .92rem; font-weight: 700; }
+    input, select {
+      width: 100%;
+      padding: .8rem .88rem;
+      border: 1px solid #c8d7cc;
+      border-radius: 9px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+    }
+    input:focus, select:focus { outline: 3px solid rgba(26,92,58,.15); border-color: var(--primary); }
+    .readonly-date {
+      color: #385447;
+      background: #f4f8f5;
+      border: 1px solid #d7e4db;
+      border-radius: 9px;
+      padding: .8rem .88rem;
+      font-weight: 700;
+    }
+
+    .actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: .84rem 1rem;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .2s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .check-in { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
+    .check-out { background: linear-gradient(135deg, #f4c84f, #d4af37); color: #2f351c; }
+    .status { margin-top: 1rem; min-height: 1.4rem; color: var(--muted); }
+    .status.error { color: var(--danger); font-weight: 700; }
+    .status.success { color: var(--success); font-weight: 700; }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: .8rem;
+      flex-wrap: wrap;
+    }
+    .log-header h2 { margin: 0; font-size: 1.2rem; }
+    .clear-log {
+      border: 1px solid #bfd4c4;
+      background: #f4f8f5;
+      color: var(--primary);
+      padding: .45rem .7rem;
+      border-radius: 8px;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: .92rem;
+    }
+    th, td { padding: .72rem .68rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--canvas); color: #2f483b; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .empty-log {
+      border: 1px dashed #bfd4c4;
+      background: #f7faf8;
+      border-radius: 9px;
+      padding: .9rem;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .actions button { width: 100%; }
+      .header-links { width: 100%; }
+      .header-links a { text-align: center; flex: 1 1 100%; }
+      th, td { font-size: .86rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="institute.html">SOFTWARESFAST INSTITUTE</a>
+      <nav class="header-links" aria-label="Attendance related navigation">
+        <a href="login.html">Student Login</a>
+        <a href="student-enrollment.html">Enrollment</a>
+        <a href="index.html">Main Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="layout">
+      <section class="card" aria-labelledby="attendance-title">
+        <span class="eyebrow">Attendance portal</span>
+        <h1 id="attendance-title">Attendance Check-In</h1>
+        <p class="lead">Record your check-in or check-out for your learning session.</p>
+        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in this browser session only. For production, connect to secure server-side authentication and persistent attendance storage.</p>
+
+        <form id="attendanceForm" novalidate>
+          <div class="field">
+            <label for="studentIdentity">Student ID or email</label>
+            <input id="studentIdentity" name="studentIdentity" required autocomplete="username" placeholder="e.g. STU-2045 or student@email.com">
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="program">Program</label>
+              <select id="program" name="program" required>
+                <option value="">Select program</option>
+                <option>Software Engineering Diploma</option>
+                <option>Computer Science Diploma</option>
+                <option>Frontend Engineering Track</option>
+                <option>Backend & API Development</option>
+                <option>Full-Stack Product Lab</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="session">Session</label>
+              <select id="session" name="session" required>
+                <option value="">Select session</option>
+                <option>Morning Session</option>
+                <option>Afternoon Session</option>
+                <option>Evening Session</option>
+                <option>Weekend Session</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="todayDate">Date</label>
+            <div id="todayDate" class="readonly-date" aria-live="polite"></div>
+          </div>
+
+          <div class="actions">
+            <button class="check-in" type="button" data-action="Check-In">Check In</button>
+            <button class="check-out" type="button" data-action="Check-Out">Check Out</button>
+          </div>
+          <p class="status" id="attendanceStatus" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <aside class="card" aria-labelledby="log-title">
+        <div class="log-header">
+          <h2 id="log-title">Session Attendance Log</h2>
+          <button type="button" class="clear-log" id="clearLog">Clear session log</button>
+        </div>
+        <p style="color:#607066; margin:0 0 .9rem;">Entries below stay available only until you close the browser/tab session.</p>
+        <div id="emptyLog" class="empty-log" hidden>No attendance records yet for this session.</div>
+        <table id="logTable" aria-label="Attendance log table" hidden>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Student</th>
+              <th>Program / Session</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="logBody"></tbody>
+        </table>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const attendanceForm = document.getElementById('attendanceForm');
+    const attendanceStatus = document.getElementById('attendanceStatus');
+    const todayDate = document.getElementById('todayDate');
+    const logBody = document.getElementById('logBody');
+    const logTable = document.getElementById('logTable');
+    const emptyLog = document.getElementById('emptyLog');
+    const clearLog = document.getElementById('clearLog');
+    const logKey = 'softwaresfastAttendanceLog';
+
+    function formatNow() {
+      const now = new Date();
+      return {
+        dateLabel: now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+        shortDate: now.toLocaleDateString(),
+        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+    }
+
+    function setDateDisplay() {
+      todayDate.textContent = formatNow().dateLabel;
+    }
+
+    function getLog() {
+      try {
+        return JSON.parse(sessionStorage.getItem(logKey) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLog(entries) {
+      sessionStorage.setItem(logKey, JSON.stringify(entries));
+    }
+
+    function renderLog() {
+      const entries = getLog();
+      logBody.innerHTML = '';
+
+      if (!entries.length) {
+        logTable.hidden = true;
+        emptyLog.hidden = false;
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${entry.date}</td>
+          <td>${entry.time}</td>
+          <td>${entry.student}</td>
+          <td>${entry.program} / ${entry.session}</td>
+          <td>${entry.action}</td>
+        `;
+        logBody.appendChild(row);
+      });
+
+      logTable.hidden = false;
+      emptyLog.hidden = true;
+    }
+
+    function setStatus(message, type = '') {
+      attendanceStatus.className = `status ${type}`;
+      attendanceStatus.textContent = message;
+    }
+
+    function addAttendanceEntry(action) {
+      setStatus('');
+
+      if (!attendanceForm.checkValidity()) {
+        attendanceForm.reportValidity();
+        setStatus('Please complete all required fields before submitting attendance.', 'error');
+        return;
+      }
+
+      const student = document.getElementById('studentIdentity').value.trim();
+      const program = document.getElementById('program').value;
+      const session = document.getElementById('session').value;
+
+      if (!student || !program || !session) {
+        setStatus('Student ID/email, program, and session are required.', 'error');
+        return;
+      }
+
+      const now = formatNow();
+      const entries = getLog();
+      entries.unshift({
+        date: now.shortDate,
+        time: now.time,
+        student,
+        program,
+        session,
+        action
+      });
+      saveLog(entries);
+      renderLog();
+      setStatus(`Demo ${action.toLowerCase()} recorded for ${student}. Connect this flow to secure backend attendance services for production.`, 'success');
+    }
+
+    document.querySelectorAll('[data-action]').forEach((button) => {
+      button.addEventListener('click', () => addAttendanceEntry(button.dataset.action));
+    });
+
+    clearLog.addEventListener('click', () => {
+      sessionStorage.removeItem(logKey);
+      renderLog();
+      setStatus('Session attendance log cleared.', 'success');
+    });
+
+    setDateDisplay();
+    renderLog();
+  </script>
+</body>
+</html>

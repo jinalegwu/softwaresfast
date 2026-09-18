@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Softwaresfast Institute student login demo page.">
+  <title>Student Login | Softwaresfast Institute</title>
+  <style>
+    :root {
+      --primary: #1a5c3a;
+      --primary-dark: #0f3d26;
+      --gold: #d4af37;
+      --ink: #14231b;
+      --muted: #5f6f65;
+      --surface: #ffffff;
+      --border: #dce8df;
+      --success: #167544;
+      --danger: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #edf6ef 0%, #f8f5eb 100%);
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .site-header {
+      background: rgba(255,255,255,.94);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    .header-inner, .page {
+      width: min(1050px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .8rem;
+      flex-wrap: wrap;
+    }
+    .brand { text-decoration: none; font-weight: 800; letter-spacing: .06em; color: var(--primary); }
+    .quick-links { display: flex; gap: .55rem; flex-wrap: wrap; }
+    .quick-links a {
+      text-decoration: none;
+      color: var(--primary);
+      border: 1px solid #bfd4c4;
+      padding: .5rem .75rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+    .quick-links a:hover, .quick-links a:focus-visible { border-color: var(--gold); color: #5e4a12; }
+
+    .page { display: grid; place-items: center; padding: 2rem 0; }
+    .card {
+      width: min(560px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(15, 61, 38, .12);
+      padding: clamp(1.2rem, 3vw, 2rem);
+    }
+    .eyebrow {
+      display: inline-block;
+      color: var(--primary);
+      border: 1px solid #cfe1d4;
+      background: #f2f8f4;
+      border-radius: 999px;
+      padding: .35rem .75rem;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 { margin: .8rem 0 .5rem; font-size: clamp(1.7rem, 5vw, 2.3rem); }
+    .lead { margin: 0 0 1.3rem; color: var(--muted); }
+    .demo-note {
+      border-left: 4px solid var(--gold);
+      background: #fcf9ed;
+      color: #5f5430;
+      padding: .85rem .95rem;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      line-height: 1.45;
+      font-size: .9rem;
+    }
+
+    .field { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: .45rem; font-size: .93rem; font-weight: 700; }
+    input {
+      width: 100%;
+      padding: .8rem .9rem;
+      border: 1px solid #c8d7cc;
+      border-radius: 9px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+    }
+    input:focus { outline: 3px solid rgba(26,92,58,.15); border-color: var(--primary); }
+    .password-wrap { position: relative; }
+    .toggle-password {
+      position: absolute;
+      right: .45rem;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 1px solid #bfd4c4;
+      border-radius: 7px;
+      background: #f3f8f4;
+      color: var(--primary);
+      font: inherit;
+      font-weight: 700;
+      padding: .36rem .55rem;
+      cursor: pointer;
+    }
+    .options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .8rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .remember {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      color: #425148;
+      font-size: .92rem;
+    }
+    .remember input { width: auto; accent-color: var(--primary); }
+    .options-row a { color: var(--primary); font-weight: 700; }
+
+    .submit {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: .86rem 1rem;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 7px 18px rgba(15, 61, 38, .23);
+    }
+    .status {
+      margin-top: 1rem;
+      min-height: 1.4rem;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+    .status.error { color: var(--danger); font-weight: 700; }
+    .status.success { color: var(--success); font-weight: 700; }
+
+    .alt-links {
+      margin-top: 1.1rem;
+      border-top: 1px solid var(--border);
+      padding-top: .9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      justify-content: center;
+      font-size: .92rem;
+    }
+    .alt-links a { color: var(--primary); font-weight: 700; }
+
+    @media (max-width: 540px) {
+      .quick-links { width: 100%; }
+      .quick-links a { text-align: center; flex: 1 1 100%; }
+      .toggle-password { position: static; transform: none; margin-top: .5rem; }
+      .options-row { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="institute.html">SOFTWARESFAST INSTITUTE</a>
+      <nav class="quick-links" aria-label="Student navigation links">
+        <a href="student-enrollment.html">Enrollment</a>
+        <a href="attendance.html">Attendance</a>
+        <a href="index.html">Main Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card" aria-labelledby="login-title">
+      <span class="eyebrow">Student access</span>
+      <h1 id="login-title">Student Login</h1>
+      <p class="lead">Sign in with your student email or student ID to continue.</p>
+      <p class="demo-note"><strong>Demo only:</strong> This page does not perform real authentication. Connect it to secure server-side authentication for production use.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="studentIdentity">Student ID or email</label>
+          <input id="studentIdentity" name="studentIdentity" autocomplete="username" required aria-describedby="identityHint" placeholder="e.g. STU-2045 or student@email.com">
+          <small id="identityHint" style="color:#64748b;">Use the same identity used during enrollment.</small>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="password-wrap">
+            <input id="password" name="password" type="password" minlength="6" autocomplete="current-password" required>
+            <button class="toggle-password" type="button" id="togglePassword" aria-controls="password" aria-pressed="false">Show</button>
+          </div>
+        </div>
+
+        <div class="options-row">
+          <label class="remember" for="rememberMe">
+            <input id="rememberMe" name="rememberMe" type="checkbox">
+            <span>Remember me on this device</span>
+          </label>
+          <a href="student-enrollment.html">Need an account? Enroll</a>
+        </div>
+
+        <button class="submit" type="submit">Sign In</button>
+        <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="alt-links" aria-label="Additional student links">
+        <a href="attendance.html">Go to attendance check-in</a>
+        <span aria-hidden="true">•</span>
+        <a href="institute.html">Back to institute portal</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const loginStatus = document.getElementById('loginStatus');
+
+    togglePassword.addEventListener('click', () => {
+      const currentlyHidden = passwordInput.type === 'password';
+      passwordInput.type = currentlyHidden ? 'text' : 'password';
+      togglePassword.textContent = currentlyHidden ? 'Hide' : 'Show';
+      togglePassword.setAttribute('aria-pressed', String(currentlyHidden));
+      passwordInput.focus();
+    });
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      loginStatus.className = 'status';
+
+      if (!loginForm.checkValidity()) {
+        loginForm.reportValidity();
+        loginStatus.textContent = 'Please enter a valid student ID/email and password.';
+        loginStatus.classList.add('error');
+        return;
+      }
+
+      const identity = document.getElementById('studentIdentity').value.trim();
+      const password = passwordInput.value;
+
+      if (!identity || password.length < 6) {
+        loginStatus.textContent = 'Please provide your identity and a password with at least 6 characters.';
+        loginStatus.classList.add('error');
+        return;
+      }
+
+      const rememberMe = document.getElementById('rememberMe').checked ? 'enabled' : 'disabled';
+      loginStatus.textContent = `Demo sign-in successful for ${identity}. Remember-me is ${rememberMe}. Integrate secure backend authentication before production.`;
+      loginStatus.classList.add('success');
+    });
+  </script>
+</body>
+</html>
