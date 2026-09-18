@@ -389,6 +389,10 @@
       return openCheckInCount > 0;
     }
 
+    function normalizeIdentity(value) {
+      return value.trim().toLowerCase();
+    }
+
     function addAttendanceEntry(action) {
       setStatus('');
 
@@ -399,6 +403,7 @@
       }
 
       const student = document.getElementById('studentIdentity').value.trim();
+      const identityKey = normalizeIdentity(student);
       const program = document.getElementById('program').value;
       const session = document.getElementById('session').value;
 
@@ -414,7 +419,7 @@
         .map((entry) => ({ ...entry, parsedTime: toTimestamp(entry.timestamp) }))
         .filter((entry) =>
           entry.parsedTime !== null &&
-          entry.student === student &&
+          (entry.identityKey || normalizeIdentity(entry.student || '')) === identityKey &&
           entry.program === program &&
           entry.session === session
         )
@@ -455,6 +460,7 @@
       entries.push({
         timestamp: now.timestamp,
         student,
+        identityKey,
         program,
         session,
         action
@@ -471,7 +477,7 @@
 
     attendanceForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const selectedAction = event.submitter?.value || 'Check-In';
+      const selectedAction = ('submitter' in event && event.submitter && event.submitter.value) ? event.submitter.value : 'Check-In';
       addAttendanceEntry(selectedAction);
     });
 

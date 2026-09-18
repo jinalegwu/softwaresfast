@@ -206,7 +206,7 @@
           <label for="password">Password</label>
           <div class="password-wrap">
             <input id="password" name="password" type="password" minlength="6" autocomplete="current-password" required>
-            <button class="toggle-password" type="button" id="togglePassword" aria-controls="password" aria-pressed="false">Show</button>
+            <button class="toggle-password" type="button" id="togglePassword" aria-controls="password" aria-pressed="false" aria-label="Show password">Show</button>
           </div>
         </div>
 
@@ -241,6 +241,7 @@
       passwordInput.type = currentlyHidden ? 'text' : 'password';
       togglePassword.textContent = currentlyHidden ? 'Hide' : 'Show';
       togglePassword.setAttribute('aria-pressed', String(currentlyHidden));
+      togglePassword.setAttribute('aria-label', currentlyHidden ? 'Hide password' : 'Show password');
       passwordInput.focus();
     });
 
