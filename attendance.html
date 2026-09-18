@@ -378,15 +378,15 @@
     }
 
     function hasOpenCheckIn(entries) {
-      let openCheckIn = false;
+      let openCheckInCount = 0;
       entries.forEach((entry) => {
         if (entry.action === 'Check-In') {
-          openCheckIn = true;
-        } else if (entry.action === 'Check-Out' && openCheckIn) {
-          openCheckIn = false;
+          openCheckInCount += 1;
+        } else if (entry.action === 'Check-Out' && openCheckInCount > 0) {
+          openCheckInCount -= 1;
         }
       });
-      return openCheckIn;
+      return openCheckInCount > 0;
     }
 
     function addAttendanceEntry(action) {
@@ -430,6 +430,11 @@
         }
       }
 
+      if (action === 'Check-In' && hasUnmatchedCheckIn) {
+        setStatus('You already have an active check-in for this program/session. Please check out first.', 'error');
+        return;
+      }
+
       if (action === 'Check-Out' && (!latestContextEntry || !hasUnmatchedCheckIn)) {
         setStatus('You must check in before you can check out for this program/session.', 'error');
         return;
@@ -469,9 +474,13 @@
     });
 
     clearLog.addEventListener('click', () => {
-      sessionStorage.removeItem(logKey);
-      renderLog();
-      setStatus('Session attendance log cleared.', 'success');
+      try {
+        sessionStorage.removeItem(logKey);
+        renderLog();
+        setStatus('Session attendance log cleared.', 'success');
+      } catch {
+        setStatus('Could not clear attendance log in this browser tab. Check storage settings and try again.', 'error');
+      }
     });
 
     setDateDisplay();
