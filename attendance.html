@@ -246,7 +246,7 @@
           <h2 id="log-title">Session Attendance Log</h2>
           <button type="button" class="clear-log" id="clearLog">Clear session log</button>
         </div>
-        <p style="color:#607066; margin:0 0 .9rem;">Entries below stay available only until you close the browser/tab session.</p>
+        <p style="color:#607066; margin:0 0 .9rem;">Entries below are stored in this tab session and can persist across refreshes, but are cleared when this tab/window is closed.</p>
         <div id="emptyLog" class="empty-log" hidden>No attendance records yet for this session.</div>
         <table id="logTable" aria-label="Attendance log table" hidden>
           <thead>
@@ -273,13 +273,29 @@
     const emptyLog = document.getElementById('emptyLog');
     const clearLog = document.getElementById('clearLog');
     const logKey = 'softwaresfastAttendanceLog';
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+    const longDateFormatter = new Intl.DateTimeFormat('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const timeFormatter = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
 
     function formatNow() {
       const now = new Date();
       return {
-        dateLabel: now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
-        shortDate: now.toLocaleDateString(),
-        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        dateLabel: longDateFormatter.format(now),
+        timestamp: now.toISOString()
       };
     }
 
@@ -299,8 +315,15 @@
       sessionStorage.setItem(logKey, JSON.stringify(entries));
     }
 
+    function toSafeDate(timestamp) {
+      const parsed = new Date(timestamp);
+      return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+    }
+
     function renderLog() {
-      const entries = getLog();
+      const entries = getLog()
+        .slice()
+        .sort((a, b) => toSafeDate(b.timestamp).getTime() - toSafeDate(a.timestamp).getTime());
       logBody.innerHTML = '';
 
       if (!entries.length) {
@@ -310,10 +333,11 @@
       }
 
       entries.forEach((entry) => {
+        const entryDate = toSafeDate(entry.timestamp);
         const row = document.createElement('tr');
         const cells = [
-          entry.date,
-          entry.time,
+          dateFormatter.format(entryDate),
+          timeFormatter.format(entryDate),
           entry.student,
           `${entry.program} / ${entry.session}`,
           entry.action
@@ -356,9 +380,8 @@
 
       const now = formatNow();
       const entries = getLog();
-      entries.unshift({
-        date: now.shortDate,
-        time: now.time,
+      entries.push({
+        timestamp: now.timestamp,
         student,
         program,
         session,
