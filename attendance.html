@@ -147,12 +147,14 @@
     }
     table {
       width: 100%;
+      min-width: 680px;
       border-collapse: collapse;
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
       font-size: .92rem;
     }
+    .table-wrap { overflow-x: auto; }
     th, td { padding: .72rem .68rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
     th { background: var(--canvas); color: #2f483b; }
     tbody tr:last-child td { border-bottom: 0; }
@@ -249,18 +251,20 @@
         </div>
         <p class="log-note">Entries below are saved only in this browser tab and can persist on refresh, but they are not shared across tabs and are cleared when this tab/window is closed.</p>
         <div id="emptyLog" class="empty-log" hidden>No attendance records yet in this tab.</div>
-        <table id="logTable" aria-label="Attendance log table" hidden>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Student</th>
-              <th>Program / Session</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="logBody"></tbody>
-        </table>
+        <div class="table-wrap">
+          <table id="logTable" aria-label="Attendance log table" hidden>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Student</th>
+                <th scope="col">Program / Session</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
       </aside>
     </div>
   </main>
@@ -388,45 +392,34 @@
 
       const now = formatNow();
       const entries = getLog();
-      const matchingEntries = entries
-        .filter((entry) =>
-          entry.student === student &&
-          entry.program === program &&
-          entry.session === session
-        )
-        .sort((a, b) => toSafeDate(a.timestamp).getTime() - toSafeDate(b.timestamp).getTime());
-      let hasOpenCheckIn = false;
-      matchingEntries.forEach((entry) => {
-        if (entry.action === 'Check-In') {
-          hasOpenCheckIn = true;
-        } else if (entry.action === 'Check-Out' && hasOpenCheckIn) {
-          hasOpenCheckIn = false;
-        }
-      });
-
+      let latestContextEntry = null;
       let latestSameActionEntry = null;
-      for (let index = entries.length - 1; index >= 0; index -= 1) {
-        const entry = entries[index];
+      entries.forEach((entry) => {
         if (
           entry.student === student &&
           entry.program === program &&
           entry.session === session
         ) {
-          if (entry.action === action && !latestSameActionEntry) {
-            latestSameActionEntry = entry;
+          const entryTime = toSafeDate(entry.timestamp).getTime();
+          if (!latestContextEntry || entryTime > latestContextEntry.time) {
+            latestContextEntry = { entry, time: entryTime };
           }
-          if (latestSameActionEntry) {
-            break;
+          if (
+            entry.action === action &&
+            (!latestSameActionEntry || entryTime > latestSameActionEntry.time)
+          ) {
+            latestSameActionEntry = { entry, time: entryTime };
           }
         }
-      }
+      });
+      const hasOpenCheckIn = latestContextEntry?.entry.action === 'Check-In';
 
       if (action === 'Check-Out' && !hasOpenCheckIn) {
         setStatus('You must check in before you can check out for this program/session.', 'error');
         return;
       }
 
-      const latestTimestamp = latestSameActionEntry ? toSafeDate(latestSameActionEntry.timestamp).getTime() : null;
+      const latestTimestamp = latestSameActionEntry ? latestSameActionEntry.time : null;
       const nowTimestamp = toSafeDate(now.timestamp).getTime();
       if (
         latestSameActionEntry &&
