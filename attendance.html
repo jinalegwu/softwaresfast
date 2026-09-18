@@ -240,7 +240,7 @@
             <button class="check-in" type="button" data-action="Check-In">Check In</button>
             <button class="check-out" type="button" data-action="Check-Out">Check Out</button>
           </div>
-          <p class="status" id="attendanceStatus" role="status" aria-live="polite"></p>
+          <p class="status" id="attendanceStatus" role="alert" aria-live="assertive"></p>
         </form>
       </section>
 
@@ -377,6 +377,18 @@
       attendanceStatus.textContent = message;
     }
 
+    function hasOpenCheckIn(entries) {
+      let openCheckIn = false;
+      entries.forEach((entry) => {
+        if (entry.action === 'Check-In') {
+          openCheckIn = true;
+        } else if (entry.action === 'Check-Out' && openCheckIn) {
+          openCheckIn = false;
+        }
+      });
+      return openCheckIn;
+    }
+
     function addAttendanceEntry(action) {
       setStatus('');
 
@@ -409,14 +421,7 @@
         .sort((a, b) => a.parsedTime - b.parsedTime);
 
       const latestContextEntry = matchingEntries[matchingEntries.length - 1] || null;
-      let hasUnmatchedCheckIn = false;
-      matchingEntries.forEach((entry) => {
-        if (entry.action === 'Check-In') {
-          hasUnmatchedCheckIn = true;
-        } else if (entry.action === 'Check-Out' && hasUnmatchedCheckIn) {
-          hasUnmatchedCheckIn = false;
-        }
-      });
+      const hasUnmatchedCheckIn = hasOpenCheckIn(matchingEntries);
       let latestSameActionEntry = null;
       for (let index = matchingEntries.length - 1; index >= 0; index -= 1) {
         if (matchingEntries[index].action === action) {
