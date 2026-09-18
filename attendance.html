@@ -242,7 +242,7 @@
 
           <div class="field">
             <label for="todayDate">Date</label>
-            <div id="todayDate" class="readonly-date" aria-live="polite"></div>
+            <input id="todayDate" name="attendanceDate" class="readonly-date" type="text" readonly aria-live="polite">
           </div>
 
           <div class="actions">
@@ -329,7 +329,7 @@
     }
 
     function setDateDisplay() {
-      todayDate.textContent = formatNow().dateLabel;
+      todayDate.value = formatNow().dateLabel;
     }
 
     function getLog() {
@@ -399,18 +399,6 @@
       attendanceStatus.textContent = message;
     }
 
-    function hasOpenCheckIn(entries) {
-      let openCheckInCount = 0;
-      entries.forEach((entry) => {
-        if (entry.action === 'Check-In') {
-          openCheckInCount += 1;
-        } else if (entry.action === 'Check-Out' && openCheckInCount > 0) {
-          openCheckInCount -= 1;
-        }
-      });
-      return openCheckInCount > 0;
-    }
-
     function normalizeIdentity(value) {
       return value.trim().toLowerCase();
     }
@@ -448,7 +436,7 @@
         .sort((a, b) => a.parsedTime - b.parsedTime);
 
       const latestContextEntry = matchingEntries[matchingEntries.length - 1] || null;
-      const hasUnmatchedCheckIn = hasOpenCheckIn(matchingEntries);
+      const hasUnmatchedCheckIn = latestContextEntry ? latestContextEntry.action === 'Check-In' : false;
       if (action === 'Check-In' && hasUnmatchedCheckIn) {
         setStatus('You already have an active check-in for this program/session. Please check out first.', 'error');
         return;
