@@ -164,6 +164,7 @@
       color: var(--muted);
       font-size: .9rem;
     }
+    .log-note { color: #607066; margin: 0 0 .9rem; }
 
     @media (max-width: 880px) {
       .layout { grid-template-columns: 1fr; }
@@ -246,7 +247,7 @@
           <h2 id="log-title">Session Attendance Log</h2>
           <button type="button" class="clear-log" id="clearLog">Clear session log</button>
         </div>
-        <p style="color:#607066; margin:0 0 .9rem;">Entries below are saved only in this browser tab and can persist on refresh, but they are not shared across tabs and are cleared when this tab/window is closed.</p>
+        <p class="log-note">Entries below are saved only in this browser tab and can persist on refresh, but they are not shared across tabs and are cleared when this tab/window is closed.</p>
         <div id="emptyLog" class="empty-log" hidden>No attendance records yet in this tab.</div>
         <table id="logTable" aria-label="Attendance log table" hidden>
           <thead>
@@ -380,13 +381,16 @@
 
       const now = formatNow();
       const entries = getLog();
-      const latestEntry = entries[entries.length - 1];
+      const latestEntry = entries
+        .filter((entry) =>
+          entry.student === student &&
+          entry.program === program &&
+          entry.session === session &&
+          entry.action === action
+        )
+        .sort((a, b) => toSafeDate(b.timestamp).getTime() - toSafeDate(a.timestamp).getTime())[0];
       if (
         latestEntry &&
-        latestEntry.student === student &&
-        latestEntry.program === program &&
-        latestEntry.session === session &&
-        latestEntry.action === action &&
         Math.abs(toSafeDate(now.timestamp).getTime() - toSafeDate(latestEntry.timestamp).getTime()) < 10000
       ) {
         setStatus('Duplicate attendance action detected. Please wait a moment before submitting the same action again.', 'error');
