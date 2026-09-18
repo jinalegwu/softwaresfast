@@ -279,6 +279,7 @@
     const clearLog = document.getElementById('clearLog');
     const logKey = 'softwaresfastAttendanceLog';
     const maxLogEntries = 100;
+    const duplicateWindowMs = 10000;
     const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       day: '2-digit',
       month: 'short',
@@ -408,6 +409,14 @@
         .sort((a, b) => a.parsedTime - b.parsedTime);
 
       const latestContextEntry = matchingEntries[matchingEntries.length - 1] || null;
+      let hasUnmatchedCheckIn = false;
+      matchingEntries.forEach((entry) => {
+        if (entry.action === 'Check-In') {
+          hasUnmatchedCheckIn = true;
+        } else if (entry.action === 'Check-Out' && hasUnmatchedCheckIn) {
+          hasUnmatchedCheckIn = false;
+        }
+      });
       let latestSameActionEntry = null;
       for (let index = matchingEntries.length - 1; index >= 0; index -= 1) {
         if (matchingEntries[index].action === action) {
@@ -416,7 +425,7 @@
         }
       }
 
-      if (action === 'Check-Out' && (!latestContextEntry || latestContextEntry.action !== 'Check-In')) {
+      if (action === 'Check-Out' && (!latestContextEntry || !hasUnmatchedCheckIn)) {
         setStatus('You must check in before you can check out for this program/session.', 'error');
         return;
       }
@@ -427,7 +436,7 @@
         latestTimestamp !== null &&
         nowTimestamp !== null &&
         nowTimestamp >= latestTimestamp &&
-        nowTimestamp - latestTimestamp < 10000
+        nowTimestamp - latestTimestamp < duplicateWindowMs
       ) {
         setStatus('Duplicate attendance action detected. Please wait a moment before submitting the same action again.', 'error');
         return;

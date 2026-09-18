@@ -250,7 +250,7 @@
 
       if (!loginForm.checkValidity()) {
         loginForm.reportValidity();
-        loginStatus.textContent = 'Student ID/email and password are required.';
+        loginStatus.textContent = 'Student ID/email is required and password must be at least 6 characters.';
         loginStatus.classList.add('error');
         return;
       }
