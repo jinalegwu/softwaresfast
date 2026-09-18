@@ -273,7 +273,7 @@
         <p class="log-note">Entries below are saved only in this tab/window context and can persist on refresh. A duplicated tab can start with copied data, but later updates are not synchronized across tabs and are cleared when that tab/window is closed.</p>
         <div id="emptyLog" class="empty-log" hidden>No attendance records yet in this tab.</div>
         <div class="table-wrap">
-          <table id="logTable" aria-label="Attendance log table" hidden>
+          <table id="logTable" hidden>
             <caption>Session attendance log</caption>
             <thead>
               <tr>
@@ -449,14 +449,6 @@
 
       const latestContextEntry = matchingEntries[matchingEntries.length - 1] || null;
       const hasUnmatchedCheckIn = hasOpenCheckIn(matchingEntries);
-      let latestSameActionEntry = null;
-      for (let index = matchingEntries.length - 1; index >= 0; index -= 1) {
-        if (matchingEntries[index].action === action) {
-          latestSameActionEntry = matchingEntries[index];
-          break;
-        }
-      }
-
       if (action === 'Check-In' && hasUnmatchedCheckIn) {
         setStatus('You already have an active check-in for this program/session. Please check out first.', 'error');
         return;
@@ -467,9 +459,10 @@
         return;
       }
 
-      const latestTimestamp = latestSameActionEntry ? latestSameActionEntry.parsedTime : null;
+      const latestTimestamp = latestContextEntry ? latestContextEntry.parsedTime : null;
       if (
-        latestSameActionEntry &&
+        latestContextEntry &&
+        latestContextEntry.action === action &&
         latestTimestamp !== null &&
         nowTimestamp !== null &&
         nowTimestamp >= latestTimestamp &&
