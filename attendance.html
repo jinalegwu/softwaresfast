@@ -196,7 +196,7 @@
         <span class="eyebrow">Attendance portal</span>
         <h1 id="attendance-title">Attendance Check-In</h1>
         <p class="lead">Record your check-in or check-out for your learning session.</p>
-        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in <code>sessionStorage</code> for the current browser tab only. For production, connect to secure server-side authentication and persistent attendance storage.</p>
+        <p class="demo-note"><strong>Front-end demo notice:</strong> This page stores attendance entries in <code>sessionStorage</code> for the current browser tab/window context only (including refreshes in that same context). For production, connect to secure server-side authentication and persistent attendance storage.</p>
 
         <form id="attendanceForm" novalidate>
           <div class="field">
@@ -314,7 +314,13 @@
     }
 
     function saveLog(entries) {
-      sessionStorage.setItem(logKey, JSON.stringify(entries));
+      try {
+        sessionStorage.setItem(logKey, JSON.stringify(entries));
+        return true;
+      } catch {
+        setStatus('Could not save attendance in this browser tab. Check storage settings and try again.', 'error');
+        return false;
+      }
     }
 
     function toSafeDate(timestamp) {
@@ -382,18 +388,19 @@
 
       const now = formatNow();
       const entries = getLog();
-      let hasOpenCheckIn = false;
-      entries.forEach((entry) => {
-        if (
+      const matchingEntries = entries
+        .filter((entry) =>
           entry.student === student &&
           entry.program === program &&
           entry.session === session
-        ) {
-          if (entry.action === 'Check-In') {
-            hasOpenCheckIn = true;
-          } else if (entry.action === 'Check-Out' && hasOpenCheckIn) {
-            hasOpenCheckIn = false;
-          }
+        )
+        .sort((a, b) => toSafeDate(a.timestamp).getTime() - toSafeDate(b.timestamp).getTime());
+      let hasOpenCheckIn = false;
+      matchingEntries.forEach((entry) => {
+        if (entry.action === 'Check-In') {
+          hasOpenCheckIn = true;
+        } else if (entry.action === 'Check-Out' && hasOpenCheckIn) {
+          hasOpenCheckIn = false;
         }
       });
 
@@ -441,7 +448,9 @@
       if (entries.length > maxLogEntries) {
         entries.splice(0, entries.length - maxLogEntries);
       }
-      saveLog(entries);
+      if (!saveLog(entries)) {
+        return;
+      }
       renderLog();
       setStatus(`Demo ${action.toLowerCase()} recorded for ${student}. Connect this flow to secure backend attendance services for production.`, 'success');
     }
