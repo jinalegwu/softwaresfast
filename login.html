@@ -250,7 +250,7 @@
 
       if (!loginForm.checkValidity()) {
         loginForm.reportValidity();
-        loginStatus.textContent = 'Please enter a valid student ID/email and password.';
+        loginStatus.textContent = 'Student ID/email and password are required.';
         loginStatus.classList.add('error');
         return;
       }

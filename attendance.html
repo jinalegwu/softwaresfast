@@ -274,6 +274,7 @@
     const emptyLog = document.getElementById('emptyLog');
     const clearLog = document.getElementById('clearLog');
     const logKey = 'softwaresfastAttendanceLog';
+    const maxLogEntries = 100;
     const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       day: '2-digit',
       month: 'short',
@@ -381,7 +382,21 @@
 
       const now = formatNow();
       const entries = getLog();
-      let latestEntry = null;
+      let hasOpenCheckIn = false;
+      entries.forEach((entry) => {
+        if (
+          entry.student === student &&
+          entry.program === program &&
+          entry.session === session
+        ) {
+          if (entry.action === 'Check-In') {
+            hasOpenCheckIn = true;
+          } else if (entry.action === 'Check-Out' && hasOpenCheckIn) {
+            hasOpenCheckIn = false;
+          }
+        }
+      });
+
       let latestSameActionEntry = null;
       for (let index = entries.length - 1; index >= 0; index -= 1) {
         const entry = entries[index];
@@ -390,17 +405,16 @@
           entry.program === program &&
           entry.session === session
         ) {
-          latestEntry = entry;
           if (entry.action === action && !latestSameActionEntry) {
             latestSameActionEntry = entry;
           }
-          if (latestEntry && latestSameActionEntry) {
+          if (latestSameActionEntry) {
             break;
           }
         }
       }
 
-      if (action === 'Check-Out' && (!latestEntry || latestEntry.action !== 'Check-In')) {
+      if (action === 'Check-Out' && !hasOpenCheckIn) {
         setStatus('You must check in before you can check out for this program/session.', 'error');
         return;
       }
@@ -424,8 +438,8 @@
         session,
         action
       });
-      if (entries.length > 100) {
-        entries.splice(0, entries.length - 100);
+      if (entries.length > maxLogEntries) {
+        entries.splice(0, entries.length - maxLogEntries);
       }
       saveLog(entries);
       renderLog();
