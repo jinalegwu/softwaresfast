@@ -251,14 +251,7 @@
       startButton.hidden = true;
 
       const firstName = new URLSearchParams(window.location.search).get('firstName');
-      let learnerName = 'Student';
-      if (firstName) {
-        try {
-          learnerName = /%[0-9A-Fa-f]{2}/.test(firstName) ? decodeURIComponent(firstName) : firstName;
-        } catch (error) {
-          learnerName = firstName;
-        }
-      }
+      const learnerName = firstName ? firstName : 'Student';
       completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
       setContinueEnabled(true);
@@ -270,6 +263,7 @@
     captureButton.addEventListener('click', capturePhoto);
     retakeButton.addEventListener('click', () => {
       stopCamera();
+      stage.classList.remove('captured');
       startButton.hidden = false;
       startButton.disabled = false;
       startButton.textContent = 'Start camera';
