@@ -265,7 +265,7 @@
   </footer>
   </div>
 
-  <div class="program-modal" id="programCoursesModalOverlay" hidden>
+  <div class="program-modal" id="programCoursesModalOverlay" aria-hidden="true" hidden>
     <div class="program-modal-backdrop" data-close-modal="true"></div>
     <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" tabindex="-1">
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
@@ -360,6 +360,7 @@
       function closeProgramModal() {
         if (programModal.hidden) return;
         programModal.hidden = true;
+        programModal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
@@ -419,6 +420,7 @@
           document.addEventListener('keydown', handleProgramModalKeydown);
         }
         programModal.hidden = false;
+        programModal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
         if (pageContent) {
           pageContent.setAttribute('aria-hidden', 'true');
