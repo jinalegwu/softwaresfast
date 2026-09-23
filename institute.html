@@ -350,10 +350,10 @@
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
-        if (pageContentState.ariaHidden === null) {
-          pageContent.removeAttribute('aria-hidden');
-        } else {
+        if (pageContentState.ariaHidden !== null) {
           pageContent.setAttribute('aria-hidden', pageContentState.ariaHidden);
+        } else {
+          pageContent.removeAttribute('aria-hidden');
         }
         pageContent.inert = pageContentState.inert;
         if (lastFocusedProgramTrigger) {
@@ -398,12 +398,12 @@
         lastFocusedProgramTrigger = trigger;
         programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
         if (programModal.hidden) {
+          pageContentState.ariaHidden = pageContent.getAttribute('aria-hidden');
+          pageContentState.inert = pageContent.inert;
           document.addEventListener('keydown', handleProgramModalKeydown);
         }
         programModal.hidden = false;
         document.body.classList.add('modal-open');
-        pageContentState.ariaHidden = pageContent.getAttribute('aria-hidden');
-        pageContentState.inert = pageContent.inert;
         pageContent.setAttribute('aria-hidden', 'true');
         pageContent.inert = true;
         programModalPanel.focus();
