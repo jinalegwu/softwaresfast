@@ -255,12 +255,6 @@
           event.preventDefault();
           const targetButton = event.key === 'Home' ? selectorButtons[0] : selectorButtons[selectorButtons.length - 1];
           setActiveDocument(targetButton.getAttribute('data-doc-target'), true);
-          return;
-        }
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          const target = button.getAttribute('data-doc-target');
-          setActiveDocument(target, true);
         }
       });
     });
