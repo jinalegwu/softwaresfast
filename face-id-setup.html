@@ -196,6 +196,10 @@
     }
 
     async function startCamera() {
+      if (sessionStorage.getItem('enrollmentComplete') !== 'true') {
+        setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
+        return;
+      }
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setStatus('Camera access is not supported by this browser. You can continue enrollment on a supported device.', 'error');
         return;
@@ -228,6 +232,10 @@
     }
 
     function capturePhoto() {
+      if (sessionStorage.getItem('enrollmentComplete') !== 'true') {
+        setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
+        return;
+      }
       if (!video.videoWidth || !video.videoHeight) {
         setStatus('The camera is still loading. Please try again in a moment.', 'error');
         return;
