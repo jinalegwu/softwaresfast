@@ -345,6 +345,7 @@
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
         if (lastFocusedProgramTrigger) {
           lastFocusedProgramTrigger.focus();
+          lastFocusedProgramTrigger = null;
         }
       }
 
@@ -363,7 +364,10 @@
           if (!focusableElements.length) return;
           const firstElement = focusableElements[0];
           const lastElement = focusableElements[focusableElements.length - 1];
-          if (event.shiftKey && document.activeElement === firstElement) {
+          if (document.activeElement === programModalPanel) {
+            event.preventDefault();
+            (event.shiftKey ? lastElement : firstElement).focus();
+          } else if (event.shiftKey && document.activeElement === firstElement) {
             event.preventDefault();
             lastElement.focus();
           } else if (!event.shiftKey && document.activeElement === lastElement) {
