@@ -39,13 +39,28 @@
     .hero-video-stack { display: grid; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 1rem; }
     .hero-video { min-height: 0; }
     .hero-programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 2rem auto 0; max-width: 920px; }
-    .program-box { position: relative; background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; padding: 1.5rem 1.25rem; box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18); overflow: hidden; }
+    .program-box { position: relative; background: linear-gradient(145deg, rgba(6, 46, 34, 0.92), rgba(17, 86, 62, 0.85)); border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 18px; box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18); overflow: hidden; }
     .program-box::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top, rgba(246, 220, 131, 0.16), transparent 55%); pointer-events: none; }
     @keyframes goldGlow {
       0%, 100% { text-shadow: 0 0 8px rgba(212, 175, 55, 0.65), 0 0 18px rgba(212, 175, 55, 0.35); box-shadow: 0 0 18px rgba(212, 175, 55, 0.18), inset 0 0 18px rgba(255, 215, 0, 0.08); }
       50% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.9), 0 0 24px rgba(212, 175, 55, 0.55); }
     }
-    .program-box h3 { position: relative; z-index: 1; color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 2.6s ease-in-out infinite; }
+    .program-trigger { position: relative; z-index: 1; width: 100%; min-height: 100%; border: none; background: transparent; color: inherit; padding: 1.5rem 1.25rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; text-align: left; cursor: pointer; }
+    .program-trigger:hover { background: rgba(255, 255, 255, 0.04); }
+    .program-trigger:focus-visible { outline: 3px solid var(--gold-300); outline-offset: -3px; }
+    .program-title { color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 2.6s ease-in-out infinite; }
+    .program-trigger-hint { color: var(--text-300); font-size: 0.88rem; font-weight: 600; }
+    .program-modal[hidden] { display: none; }
+    .program-modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 1rem; }
+    .program-modal-backdrop { position: absolute; inset: 0; background: rgba(2, 15, 11, 0.8); backdrop-filter: blur(6px); }
+    .program-modal-panel { position: relative; width: min(680px, 100%); max-height: min(85vh, 760px); overflow-y: auto; border-radius: 20px; padding: 1.5rem; background: linear-gradient(160deg, rgba(6, 46, 34, 0.97), rgba(11, 59, 43, 0.94)); border: 1px solid rgba(212, 175, 55, 0.5); box-shadow: var(--shadow); }
+    .program-modal-panel h2 { text-align: left; margin-bottom: 0.75rem; }
+    .program-modal-panel p { color: var(--text-300); margin-bottom: 1rem; line-height: 1.6; }
+    .program-modal-close { position: absolute; top: 0.85rem; right: 0.85rem; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.45); background: rgba(255, 255, 255, 0.08); color: var(--text-100); font-size: 1.5rem; cursor: pointer; }
+    .program-modal-close:hover, .program-modal-close:focus-visible { background: rgba(212, 175, 55, 0.18); outline: none; }
+    .program-course-list { list-style: none; display: grid; gap: 0.75rem; }
+    .program-course-list li { padding: 0.9rem 1rem; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.22); background: rgba(255, 255, 255, 0.05); color: var(--text-100); }
+    body.modal-open { overflow: hidden; }
     .cta { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
     .btn { border: none; text-decoration: none; font-weight: 700; border-radius: 10px; padding: 0.82rem 1.2rem; display: inline-block; transition: transform 0.2s ease, box-shadow 0.25s ease; cursor: pointer; }
     .btn-primary { background: linear-gradient(145deg, var(--gold-500), #f0cf65); color: #203226; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.25); }
@@ -136,8 +151,18 @@
     <p style="margin-top:1rem; font-weight:700; color: var(--gold-300); letter-spacing:0.8px; text-transform: lowercase;">softwaresfast institute</p>
 
     <div class="hero-programs" aria-label="Institute programs">
-      <div class="program-box"><h3>DIPLOMA IN SOFTWARE ENGINEERING</h3></div>
-      <div class="program-box"><h3>DIPLOMA IN COMPUTER SCIENCE</h3></div>
+      <div class="program-box">
+        <button type="button" class="program-trigger" data-program="software-engineering" aria-haspopup="dialog" aria-controls="programCoursesModal" aria-expanded="false">
+          <span class="program-title">DIPLOMA IN SOFTWARE ENGINEERING</span>
+          <span class="program-trigger-hint">View course list</span>
+        </button>
+      </div>
+      <div class="program-box">
+        <button type="button" class="program-trigger" data-program="computer-science" aria-haspopup="dialog" aria-controls="programCoursesModal" aria-expanded="false">
+          <span class="program-title">DIPLOMA IN COMPUTER SCIENCE</span>
+          <span class="program-trigger-hint">View course list</span>
+        </button>
+      </div>
     </div>
 
     <div class="cta">
@@ -152,6 +177,17 @@
       <div class="stat"><h3>Career</h3><p>Portfolio Focused</p></div>
     </div>
   </header>
+
+  <div class="program-modal" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" hidden>
+    <div class="program-modal-backdrop" data-close-modal="true"></div>
+    <div class="program-modal-panel" tabindex="-1">
+      <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
+      <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
+      <h2 id="programModalTitle">Diploma Program Courses</h2>
+      <p id="programModalDescription">Select a diploma program to review the core subjects covered in the training.</p>
+      <ul class="program-course-list" id="programCourseList"></ul>
+    </div>
+  </div>
 
   <section id="programs" class="section container">
     <h2>Programs You Can Join</h2>
@@ -240,6 +276,123 @@
 
   <script>
     (function () {
+      const programCatalog = {
+        'software-engineering': {
+          title: 'Diploma in Software Engineering',
+          description: 'This diploma covers the practical subjects commonly expected in an entry-to-intermediate software engineering program, with emphasis on building and shipping working software.',
+          courses: [
+            'Introduction to Programming',
+            'Web Development Fundamentals',
+            'Object-Oriented Programming',
+            'Data Structures and Algorithms',
+            'Database Design and SQL',
+            'Software Requirements and Systems Analysis',
+            'Software Design and Architecture',
+            'Version Control and Collaborative Development',
+            'Software Testing and Quality Assurance',
+            'UI/UX Fundamentals for Developers',
+            'DevOps and Cloud Deployment Basics',
+            'Capstone Product Development Project'
+          ]
+        },
+        'computer-science': {
+          title: 'Diploma in Computer Science',
+          description: 'This diploma highlights foundational computing subjects that support broad technical study, problem solving, and applied software development.',
+          courses: [
+            'Computer Fundamentals and Digital Literacy',
+            'Programming Principles',
+            'Discrete Mathematics',
+            'Data Structures and Algorithms',
+            'Computer Architecture',
+            'Operating Systems',
+            'Database Systems',
+            'Computer Networks',
+            'Web Technologies',
+            'Software Engineering Principles',
+            'Cybersecurity Fundamentals',
+            'Introduction to Artificial Intelligence'
+          ]
+        }
+      };
+      const programTriggers = document.querySelectorAll('.program-trigger');
+      const programModal = document.getElementById('programCoursesModal');
+      const programModalPanel = programModal.querySelector('.program-modal-panel');
+      const programModalTitle = document.getElementById('programModalTitle');
+      const programModalDescription = document.getElementById('programModalDescription');
+      const programCourseList = document.getElementById('programCourseList');
+      const programModalClose = document.getElementById('programModalClose');
+      let lastFocusedProgramTrigger = null;
+
+      function populateProgramCourses(programKey) {
+        const program = programCatalog[programKey];
+        if (!program) return;
+        programModalTitle.textContent = program.title;
+        programModalDescription.textContent = program.description;
+        programCourseList.innerHTML = '';
+        program.courses.forEach((course) => {
+          const item = document.createElement('li');
+          item.textContent = course;
+          programCourseList.appendChild(item);
+        });
+      }
+
+      function closeProgramModal() {
+        if (programModal.hidden) return;
+        programModal.hidden = true;
+        document.body.classList.remove('modal-open');
+        document.removeEventListener('keydown', handleProgramModalKeydown);
+        programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+        if (lastFocusedProgramTrigger) {
+          lastFocusedProgramTrigger.focus();
+        }
+      }
+
+      function handleProgramModalKeydown(event) {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeProgramModal();
+          return;
+        }
+        if (event.key === 'Tab') {
+          const focusableElements = Array.from(programModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+            .filter((element) => !element.hasAttribute('disabled'));
+          if (!focusableElements.length) return;
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+          if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+
+      function openProgramModal(programKey, trigger) {
+        populateProgramCourses(programKey);
+        lastFocusedProgramTrigger = trigger;
+        programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
+        programModal.hidden = false;
+        document.body.classList.add('modal-open');
+        document.addEventListener('keydown', handleProgramModalKeydown);
+        programModalPanel.focus();
+      }
+
+      programTriggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          openProgramModal(trigger.getAttribute('data-program'), trigger);
+        });
+      });
+
+      programModal.addEventListener('click', (event) => {
+        if (event.target === programModal || event.target.hasAttribute('data-close-modal')) {
+          closeProgramModal();
+        }
+      });
+
+      programModalClose.addEventListener('click', closeProgramModal);
+
       const tabs = document.querySelectorAll('.verify-tab');
       const docNumberLabel = document.getElementById('docNumberLabel');
       const docNumberInput = document.getElementById('docNumber');
