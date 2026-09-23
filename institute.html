@@ -325,8 +325,9 @@
       const programModalClose = document.getElementById('programModalClose');
       const pageContent = document.getElementById('pageContent');
       const pageContentState = {
-        ariaHidden: pageContent.getAttribute('aria-hidden'),
-        inert: pageContent.inert
+        hadAriaHidden: pageContent ? pageContent.hasAttribute('aria-hidden') : false,
+        ariaHidden: pageContent ? pageContent.getAttribute('aria-hidden') : null,
+        inert: pageContent ? pageContent.inert : false
       };
       let lastFocusedProgramTrigger = null;
 
@@ -350,12 +351,14 @@
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
-        if (pageContentState.ariaHidden !== null) {
-          pageContent.setAttribute('aria-hidden', pageContentState.ariaHidden);
-        } else {
-          pageContent.removeAttribute('aria-hidden');
+        if (pageContent) {
+          if (pageContentState.hadAriaHidden) {
+            pageContent.setAttribute('aria-hidden', pageContentState.ariaHidden);
+          } else {
+            pageContent.removeAttribute('aria-hidden');
+          }
+          pageContent.inert = pageContentState.inert;
         }
-        pageContent.inert = pageContentState.inert;
         if (lastFocusedProgramTrigger) {
           lastFocusedProgramTrigger.focus();
           lastFocusedProgramTrigger = null;
@@ -369,7 +372,7 @@
           return;
         }
         if (event.key === 'Tab') {
-          const focusableElements = Array.from(programModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+          const focusableElements = Array.from(programModalPanel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
             .filter((element) => !element.hasAttribute('disabled')
               && !element.hidden
               && element.getAttribute('aria-hidden') !== 'true'
@@ -398,14 +401,19 @@
         lastFocusedProgramTrigger = trigger;
         programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
         if (programModal.hidden) {
-          pageContentState.ariaHidden = pageContent.getAttribute('aria-hidden');
-          pageContentState.inert = pageContent.inert;
+          if (pageContent) {
+            pageContentState.hadAriaHidden = pageContent.hasAttribute('aria-hidden');
+            pageContentState.ariaHidden = pageContent.getAttribute('aria-hidden');
+            pageContentState.inert = pageContent.inert;
+          }
           document.addEventListener('keydown', handleProgramModalKeydown);
         }
         programModal.hidden = false;
         document.body.classList.add('modal-open');
-        pageContent.setAttribute('aria-hidden', 'true');
-        pageContent.inert = true;
+        if (pageContent) {
+          pageContent.setAttribute('aria-hidden', 'true');
+          pageContent.inert = true;
+        }
         programModalPanel.focus();
       }
 
