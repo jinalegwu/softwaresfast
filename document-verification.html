@@ -84,6 +84,8 @@
     .disclaimer { margin-top: 1.4rem; padding: .9rem 1rem; border-left: 4px solid var(--gold-500); border-radius: 8px; background: rgba(0, 0, 0, 0.18); color: var(--text-300); font-size: .85rem; line-height: 1.5; }
     .flow-warning { display: none; margin: 0 auto 1rem; max-width: 760px; border-radius: 10px; padding: .85rem 1rem; background: rgba(180, 60, 60, 0.2); border: 1px solid rgba(220, 100, 100, 0.6); color: #ffd9d9; font-size: .9rem; }
     .flow-warning.show { display: block; }
+    .flow-action { display: none; margin: 0 auto 1rem; max-width: 760px; text-align: center; color: var(--gold-300); font-weight: 700; text-decoration: underline; }
+    .flow-action.show { display: block; }
 
     @media (max-width: 680px) {
       .nav-inner { flex-direction: column; align-items: flex-start; }
@@ -111,6 +113,7 @@
       <p>Provide either your National Identity Card details or your International Passport details below. This page validates required fields and prepares records for future secure backend integration.</p>
     </section>
     <p class="flow-warning" id="flowWarning" role="alert"></p>
+    <a class="flow-action" id="flowRecoveryLink" href="student-enrollment.html">Complete previous required step</a>
 
     <p id="tabInstructions" class="upload-help" style="text-align:center; margin:0 0 .6rem;">Use left/right arrow keys to switch document type tabs.</p>
     <div class="doc-options" role="tablist" aria-label="Choose verification document type" aria-describedby="tabInstructions">
@@ -211,6 +214,7 @@
     const selectorButtons = Array.from(document.querySelectorAll('.doc-option'));
     const formCards = Array.from(document.querySelectorAll('[data-doc-form]'));
     const flowWarning = document.getElementById('flowWarning');
+    const flowRecoveryLink = document.getElementById('flowRecoveryLink');
 
     function showFlowWarning(message) {
       flowWarning.textContent = message;
@@ -272,8 +276,17 @@
       sessionStorage.removeItem('documentVerificationComplete');
       showFlowWarning('Please complete student enrollment and Face ID setup first before submitting document verification.');
       setFormControlsEnabled(false);
+      flowRecoveryLink.classList.add('show');
+      if (sessionStorage.getItem('studentDetailsComplete') !== 'true') {
+        flowRecoveryLink.href = 'student-enrollment.html';
+        flowRecoveryLink.textContent = 'Start with student enrollment';
+      } else {
+        flowRecoveryLink.href = 'face-id-setup.html';
+        flowRecoveryLink.textContent = 'Complete Face ID setup';
+      }
     } else {
       setFormControlsEnabled(true);
+      flowRecoveryLink.classList.remove('show');
     }
   </script>
 </body>

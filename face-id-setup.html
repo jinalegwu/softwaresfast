@@ -211,10 +211,6 @@
         setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
         return;
       }
-      if (sessionStorage.getItem('documentVerificationComplete') === 'true') {
-        setStatus('Identity flow already completed. Return to enrollment if you need to restart.', 'success');
-        return;
-      }
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setStatus('Camera access is not supported by this browser. You can continue enrollment on a supported device.', 'error');
         return;
@@ -251,10 +247,6 @@
         setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
         return;
       }
-      if (sessionStorage.getItem('documentVerificationComplete') === 'true') {
-        setStatus('Identity flow already completed. Return to enrollment if you need to restart.', 'success');
-        return;
-      }
       if (!video.videoWidth || !video.videoHeight) {
         setStatus('The camera is still loading. Please try again in a moment.', 'error');
         return;
@@ -269,8 +261,14 @@
       retakeButton.hidden = false;
       startButton.hidden = true;
 
-      const firstName = new URLSearchParams(window.location.search).get('firstName');
-      const learnerName = firstName ? firstName : 'Student';
+      let learnerName = 'Student';
+      try {
+        const snapshot = JSON.parse(sessionStorage.getItem('studentDetailsSnapshot') || '{}');
+        if (snapshot.firstName) learnerName = snapshot.firstName;
+      } catch (error) {
+        const firstName = new URLSearchParams(window.location.search).get('firstName');
+        if (firstName) learnerName = firstName;
+      }
       completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
       setContinueEnabled(true);
