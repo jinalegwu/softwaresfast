@@ -377,10 +377,12 @@
         if (!populateProgramCourses(programKey)) return;
         lastFocusedProgramTrigger = trigger;
         programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
+        if (programModal.hidden) {
+          document.addEventListener('keydown', handleProgramModalKeydown);
+        }
         programModal.hidden = false;
         document.body.classList.add('modal-open');
-        document.addEventListener('keydown', handleProgramModalKeydown);
-        programModalClose.focus();
+        programModalPanel.focus();
       }
 
       programTriggers.forEach((trigger) => {
