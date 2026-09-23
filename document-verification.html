@@ -110,12 +110,12 @@
     </section>
 
     <div class="doc-options" role="tablist" aria-label="Choose verification document type">
-      <button type="button" class="doc-option active" data-doc-target="national">Use National Identity Card</button>
-      <button type="button" class="doc-option" data-doc-target="passport">Use International Passport</button>
+      <button type="button" class="doc-option active" id="tabNational" role="tab" aria-selected="true" aria-controls="panelNational" data-doc-target="national">Use National Identity Card</button>
+      <button type="button" class="doc-option" id="tabPassport" role="tab" aria-selected="false" aria-controls="panelPassport" data-doc-target="passport">Use International Passport</button>
     </div>
 
     <section class="verification-grid" aria-label="Identity document verification forms">
-      <article class="verify-card" data-doc-form="national" aria-labelledby="nationalIdTitle">
+      <article class="verify-card" id="panelNational" role="tabpanel" aria-labelledby="tabNational" data-doc-form="national">
         <h2 id="nationalIdTitle">National Identity Card Verification</h2>
         <p>Use the details exactly as they appear on your card.</p>
         <form id="nationalIdForm" novalidate>
@@ -141,7 +141,7 @@
         </form>
       </article>
 
-      <article class="verify-card" data-doc-form="passport" aria-labelledby="passportTitle" hidden>
+      <article class="verify-card" id="panelPassport" role="tabpanel" aria-labelledby="tabPassport" data-doc-form="passport" hidden>
         <h2 id="passportTitle">International Passport Verification</h2>
         <p>Use details from the passport bio-data page.</p>
         <form id="passportForm" novalidate>
@@ -203,8 +203,12 @@
     selectorButtons.forEach((button) => {
       button.addEventListener('click', () => {
         const target = button.getAttribute('data-doc-target');
-        selectorButtons.forEach((item) => item.classList.remove('active'));
+        selectorButtons.forEach((item) => {
+          item.classList.remove('active');
+          item.setAttribute('aria-selected', 'false');
+        });
         button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
         formCards.forEach((card) => {
           card.hidden = card.getAttribute('data-doc-form') !== target;
         });

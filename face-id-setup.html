@@ -83,6 +83,7 @@
     .completion.show { display: block; }
     .next-actions { margin-top: 1rem; display: flex; gap: .65rem; flex-wrap: wrap; }
     .next-link { text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: .45rem .8rem; color: var(--primary); font-size: .88rem; font-weight: 700; }
+    .next-link.disabled { opacity: .5; pointer-events: none; }
 
     @media (max-width: 760px) {
       .page { padding: 2rem 0; }
@@ -139,7 +140,7 @@
 
       <div class="next-actions" aria-label="Next steps">
         <a class="next-link" href="student-enrollment.html">Back to enrollment</a>
-        <a class="next-link" href="document-verification.html">Continue to document verification</a>
+        <a class="next-link disabled" href="document-verification.html" id="continueToVerification" aria-disabled="true">Continue to document verification</a>
       </div>
     </section>
   </main>
@@ -153,6 +154,7 @@
     const retakeButton = document.getElementById('retakePhoto');
     const status = document.getElementById('cameraStatus');
     const completion = document.getElementById('completionMessage');
+    const continueLink = document.getElementById('continueToVerification');
 
     let stream = null;
 
@@ -177,6 +179,8 @@
         retakeButton.hidden = true;
         completion.classList.remove('show');
         completion.textContent = '';
+        continueLink.classList.add('disabled');
+        continueLink.setAttribute('aria-disabled', 'true');
         setStatus('Camera is ready. Center your face in the guide, then capture your photo.', 'success');
       } catch (error) {
         setStatus('We could not access your camera. Please allow camera permission and try again.', 'error');
@@ -210,6 +214,8 @@
       const learnerName = firstName ? firstName : 'Student';
       completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
+      continueLink.classList.remove('disabled');
+      continueLink.setAttribute('aria-disabled', 'false');
       setStatus('Enrollment photo captured successfully in this browser session.', 'success');
     }
 
