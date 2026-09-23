@@ -216,6 +216,14 @@
       flowWarning.classList.add('show');
     }
 
+    function setFormControlsEnabled(enabled) {
+      formCards.forEach((card) => {
+        card.querySelectorAll('input, select, textarea, button').forEach((control) => {
+          control.disabled = !enabled;
+        });
+      });
+    }
+
     function setActiveDocument(target, focusButton = false) {
       const activeButton = selectorButtons.find((item) => item.getAttribute('data-doc-target') === target);
       if (!activeButton) return;
@@ -262,6 +270,9 @@
     if (sessionStorage.getItem('studentDetailsComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
       sessionStorage.removeItem('documentVerificationComplete');
       showFlowWarning('Please complete student enrollment and Face ID setup first before submitting document verification.');
+      setFormControlsEnabled(false);
+    } else {
+      setFormControlsEnabled(true);
     }
   </script>
 </body>

@@ -179,6 +179,7 @@
 
     const detailsComplete = sessionStorage.getItem('studentDetailsComplete') === 'true';
     const faceIdComplete = sessionStorage.getItem('faceIdComplete') === 'true';
+    const documentVerificationComplete = sessionStorage.getItem('documentVerificationComplete') === 'true';
 
     if (!detailsComplete) {
       sessionStorage.removeItem('faceIdComplete');
@@ -186,7 +187,14 @@
       startButton.disabled = true;
       startButton.textContent = 'Complete enrollment first';
     }
-    if (detailsComplete && faceIdComplete) {
+    if (detailsComplete && documentVerificationComplete) {
+      completion.textContent = 'Your identity flow is already complete in this browser session, including document verification.';
+      completion.classList.add('show');
+      setContinueEnabled(true);
+      setStatus('Document verification already completed.', 'success');
+      startButton.disabled = true;
+      startButton.textContent = 'Flow complete';
+    } else if (detailsComplete && faceIdComplete) {
       completion.textContent = 'Face ID setup is already completed in this browser session. You can continue to document verification or recapture a new photo.';
       completion.classList.add('show');
       setContinueEnabled(true);
@@ -198,6 +206,10 @@
     async function startCamera() {
       if (sessionStorage.getItem('studentDetailsComplete') !== 'true') {
         setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
+        return;
+      }
+      if (sessionStorage.getItem('documentVerificationComplete') === 'true') {
+        setStatus('Identity flow already completed. Return to enrollment if you need to restart.', 'success');
         return;
       }
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -234,6 +246,10 @@
     function capturePhoto() {
       if (sessionStorage.getItem('studentDetailsComplete') !== 'true') {
         setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
+        return;
+      }
+      if (sessionStorage.getItem('documentVerificationComplete') === 'true') {
+        setStatus('Identity flow already completed. Return to enrollment if you need to restart.', 'success');
         return;
       }
       if (!video.videoWidth || !video.videoHeight) {
