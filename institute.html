@@ -341,6 +341,7 @@
         ariaHidden: pageContent ? pageContent.getAttribute('aria-hidden') : null,
         inert: pageContent ? pageContent.inert : false
       };
+      const hasProgramModal = !!(programTriggers.length && programModal && programModalPanel && programModalTitle && programModalDescription && programCourseList && programModalClose);
       let lastFocusedProgramTrigger = null;
 
       function populateProgramCourses(programKey) {
@@ -429,19 +430,21 @@
         programModalClose.focus();
       }
 
-      programTriggers.forEach((trigger) => {
-        trigger.addEventListener('click', () => {
-          openProgramModal(trigger.getAttribute('data-program'), trigger);
+      if (hasProgramModal) {
+        programTriggers.forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            openProgramModal(trigger.getAttribute('data-program'), trigger);
+          });
         });
-      });
 
-      programModal.addEventListener('click', (event) => {
-        if (event.target === programModal || (event.target instanceof Element && event.target.hasAttribute('data-close-modal'))) {
-          closeProgramModal();
-        }
-      });
+        programModal.addEventListener('click', (event) => {
+          if (event.target === programModal || (event.target instanceof Element && event.target.hasAttribute('data-close-modal'))) {
+            closeProgramModal();
+          }
+        });
 
-      programModalClose.addEventListener('click', closeProgramModal);
+        programModalClose.addEventListener('click', closeProgramModal);
+      }
 
       const tabs = document.querySelectorAll('.verify-tab');
       const docNumberLabel = document.getElementById('docNumberLabel');
