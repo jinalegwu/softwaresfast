@@ -323,6 +323,7 @@
       const programModalClose = document.getElementById('programModalClose');
       const pageContentElements = Array.from(document.body.children)
         .filter((element) => element !== programModal && element.tagName !== 'SCRIPT');
+      const pageContentStates = new Map();
       let lastFocusedProgramTrigger = null;
 
       function populateProgramCourses(programKey) {
@@ -346,9 +347,17 @@
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
         pageContentElements.forEach((element) => {
-          element.removeAttribute('aria-hidden');
-          element.inert = false;
+          const previousState = pageContentStates.get(element);
+          if (previousState) {
+            if (previousState.ariaHidden === null) {
+              element.removeAttribute('aria-hidden');
+            } else {
+              element.setAttribute('aria-hidden', previousState.ariaHidden);
+            }
+            element.inert = previousState.inert;
+          }
         });
+        pageContentStates.clear();
         if (lastFocusedProgramTrigger) {
           lastFocusedProgramTrigger.focus();
           lastFocusedProgramTrigger = null;
@@ -395,11 +404,15 @@
         }
         programModal.hidden = false;
         document.body.classList.add('modal-open');
+        programModalPanel.focus();
         pageContentElements.forEach((element) => {
+          pageContentStates.set(element, {
+            ariaHidden: element.getAttribute('aria-hidden'),
+            inert: element.inert
+          });
           element.setAttribute('aria-hidden', 'true');
           element.inert = true;
         });
-        programModalPanel.focus();
       }
 
       programTriggers.forEach((trigger) => {
