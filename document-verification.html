@@ -110,8 +110,8 @@
     </section>
 
     <div class="doc-options" role="tablist" aria-label="Choose verification document type">
-      <button type="button" class="doc-option active" id="tabNational" role="tab" aria-selected="true" aria-controls="panelNational" data-doc-target="national">Use National Identity Card</button>
-      <button type="button" class="doc-option" id="tabPassport" role="tab" aria-selected="false" aria-controls="panelPassport" data-doc-target="passport">Use International Passport</button>
+      <button type="button" class="doc-option active" id="tabNational" role="tab" aria-selected="true" aria-controls="panelNational" tabindex="0" data-doc-target="national">Use National Identity Card</button>
+      <button type="button" class="doc-option" id="tabPassport" role="tab" aria-selected="false" aria-controls="panelPassport" tabindex="-1" data-doc-target="passport">Use International Passport</button>
     </div>
 
     <section class="verification-grid" aria-label="Identity document verification forms">
@@ -198,20 +198,46 @@
     attachFormHandler('nationalIdForm', 'nationalStatus', 'National Identity Card details captured in this browser session. Connect a secure backend to complete verification.');
     attachFormHandler('passportForm', 'passportStatus', 'International Passport details captured in this browser session. Connect a secure backend to complete verification.');
 
-    const selectorButtons = document.querySelectorAll('.doc-option');
-    const formCards = document.querySelectorAll('[data-doc-form]');
+    const selectorButtons = Array.from(document.querySelectorAll('.doc-option'));
+    const formCards = Array.from(document.querySelectorAll('[data-doc-form]'));
+
+    function setActiveDocument(target, focusButton = false) {
+      const activeButton = selectorButtons.find((item) => item.getAttribute('data-doc-target') === target);
+      if (!activeButton) return;
+
+      selectorButtons.forEach((item) => {
+        const selected = item === activeButton;
+        item.tabIndex = selected ? 0 : -1;
+        item.classList.toggle('active', selected);
+        item.setAttribute('aria-selected', selected ? 'true' : 'false');
+      });
+      formCards.forEach((card) => {
+        card.hidden = card.getAttribute('data-doc-form') !== target;
+      });
+      if (focusButton) activeButton.focus();
+    }
+
     selectorButtons.forEach((button) => {
       button.addEventListener('click', () => {
         const target = button.getAttribute('data-doc-target');
-        selectorButtons.forEach((item) => {
-          item.classList.remove('active');
-          item.setAttribute('aria-selected', 'false');
-        });
-        button.classList.add('active');
-        button.setAttribute('aria-selected', 'true');
-        formCards.forEach((card) => {
-          card.hidden = card.getAttribute('data-doc-form') !== target;
-        });
+        setActiveDocument(target, false);
+      });
+
+      button.addEventListener('keydown', (event) => {
+        const currentIndex = selectorButtons.indexOf(button);
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+          event.preventDefault();
+          const direction = event.key === 'ArrowRight' ? 1 : -1;
+          const nextIndex = (currentIndex + direction + selectorButtons.length) % selectorButtons.length;
+          const target = selectorButtons[nextIndex].getAttribute('data-doc-target');
+          setActiveDocument(target, true);
+          return;
+        }
+        if (event.key === 'Home' || event.key === 'End') {
+          event.preventDefault();
+          const targetButton = event.key === 'Home' ? selectorButtons[0] : selectorButtons[selectorButtons.length - 1];
+          setActiveDocument(targetButton.getAttribute('data-doc-target'), true);
+        }
       });
     });
   </script>
