@@ -52,7 +52,7 @@
 
     .context { display: grid; grid-template-columns: 92px 1fr; gap: 1rem; align-items: center; }
     .context-photo { width: 92px; height: 92px; border-radius: 12px; object-fit: cover; border: 1px solid #c6dccb; background: #f6faf7; }
-    .context-meta { font-size: .92rem; color: #44544b; }
+    .context-meta { font-size: .92rem; color: #44544b; white-space: pre-line; }
 
     .verification-tabs { display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: .85rem; }
     .verification-tab { border: 1px solid var(--border); background: #f6faf7; color: var(--primary); padding: .55rem .8rem; font-size: .82rem; border-radius: 999px; }
@@ -133,7 +133,7 @@
         <h2 id="verification-title">Document verification</h2>
         <p class="card-description">Capture your document using camera, or upload an image if camera access is unavailable.</p>
 
-        <div class="verification-tabs" role="tablist" aria-label="Identity document type">
+        <div class="verification-tabs" aria-label="Identity document type">
           <button type="button" class="verification-tab active" data-doc="national_id">National Identity Card</button>
           <button type="button" class="verification-tab" data-doc="passport">International Passport</button>
         </div>
@@ -229,7 +229,7 @@
 
     function renderContext() {
       if (!enrollmentContextRaw) {
-        contextMeta.innerHTML = '<strong>No saved enrollment context found.</strong><br>Return to Student Enrollment and complete steps 1 and 2 first.';
+        contextMeta.textContent = 'No saved enrollment context found.\nReturn to Student Enrollment and complete steps 1 and 2 first.';
         contextPhoto.alt = 'No captured face verification photo yet';
         contextPhoto.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23f6faf7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="Segoe UI" font-size="14">No photo</text></svg>';
         setStatus('Please go back and complete student enrollment details and Face ID setup.', 'error');
@@ -244,7 +244,7 @@
       }
 
       const name = [enrollmentContext.firstName, enrollmentContext.lastName].filter(Boolean).join(' ');
-      contextMeta.innerHTML = `<strong>${name || 'Student'}</strong><br>${enrollmentContext.program || 'Program not selected'}<br>${enrollmentContext.email || ''}`;
+      contextMeta.textContent = `${name || 'Student'}\n${enrollmentContext.program || 'Program not selected'}\n${enrollmentContext.email || ''}`;
       contextPhoto.src = enrollmentContext.facePhotoDataUrl || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23f6faf7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="Segoe UI" font-size="14">No photo</text></svg>';
       fullNameInput.value = name;
       setStatus('Continue by entering your document details and submitting verification.', 'success');
@@ -364,7 +364,7 @@
 
       stopCamera();
       progressComplete.classList.add('active', 'complete');
-      completion.innerHTML = `<strong>Enrollment complete (demo).</strong> Your ${currentDocType === 'passport' ? 'passport' : 'national identity'} details were validated on this page and marked as submitted.`;
+      completion.textContent = `Enrollment complete (demo). Your ${currentDocType === 'passport' ? 'passport' : 'national identity'} details were validated on this page and marked as submitted.`;
       completion.classList.add('show');
       setStatus('Document verification submitted in this demo flow. Backend/API integration is still required for real checks.', 'success');
       sessionStorage.removeItem('enrollmentContext');
