@@ -112,7 +112,6 @@
   </style>
 </head>
 <body>
-  <div id="pageContent">
   <nav class="nav">
     <div class="container nav-inner">
       <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
@@ -120,6 +119,7 @@
     </div>
   </nav>
 
+  <main id="pageContent">
   <header class="hero container">
     <span class="badge">Build real-world skills</span>
     <h1>Learn Software Engineering by Building Real Client Projects</h1>
@@ -263,11 +263,11 @@
   <footer class="footer container">
     <p>© 2026 Softwaresfast Institute. Learn, Build, Launch.</p>
   </footer>
-  </div>
+  </main>
 
   <div class="program-modal" id="programCoursesModalOverlay" aria-hidden="true" hidden>
     <div class="program-modal-backdrop" data-close-modal="true"></div>
-    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription" tabindex="-1">
+    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription programModalDescription" tabindex="-1">
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
       <h2 id="programModalTitle" tabindex="-1">Diploma Program Courses</h2>
@@ -336,12 +336,10 @@
       const programModalDescription = document.getElementById('programModalDescription');
       const programCourseList = document.getElementById('programCourseList');
       const programModalClose = document.getElementById('programModalClose');
+      const pageNav = document.querySelector('.nav');
       const pageContent = document.getElementById('pageContent');
-      const pageContentState = {
-        hadAriaHidden: pageContent ? pageContent.hasAttribute('aria-hidden') : false,
-        ariaHidden: pageContent ? pageContent.getAttribute('aria-hidden') : null,
-        inert: pageContent ? pageContent.inert : false
-      };
+      const backgroundElements = [pageNav, pageContent].filter(Boolean);
+      const backgroundStates = new Map();
       const hasProgramModal = !!(programTriggers.length && programModal && programModalPanel && programModalTitle && programModalDescription && programCourseList && programModalClose);
       let lastFocusedProgramTrigger = null;
 
@@ -366,14 +364,18 @@
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
-        if (pageContent) {
-          if (pageContentState.hadAriaHidden) {
-            pageContent.setAttribute('aria-hidden', pageContentState.ariaHidden);
-          } else {
-            pageContent.removeAttribute('aria-hidden');
+        backgroundElements.forEach((element) => {
+          const previousState = backgroundStates.get(element);
+          if (previousState) {
+            if (previousState.hadAriaHidden) {
+              element.setAttribute('aria-hidden', previousState.ariaHidden);
+            } else {
+              element.removeAttribute('aria-hidden');
+            }
+            element.inert = previousState.inert;
           }
-          pageContent.inert = pageContentState.inert;
-        }
+        });
+        backgroundStates.clear();
         if (lastFocusedProgramTrigger) {
           lastFocusedProgramTrigger.focus();
           lastFocusedProgramTrigger = null;
@@ -414,20 +416,22 @@
         lastFocusedProgramTrigger = trigger;
         programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
         if (programModal.hidden) {
-          if (pageContent) {
-            pageContentState.hadAriaHidden = pageContent.hasAttribute('aria-hidden');
-            pageContentState.ariaHidden = pageContent.getAttribute('aria-hidden');
-            pageContentState.inert = pageContent.inert;
-          }
+          backgroundElements.forEach((element) => {
+            backgroundStates.set(element, {
+              hadAriaHidden: element.hasAttribute('aria-hidden'),
+              ariaHidden: element.getAttribute('aria-hidden'),
+              inert: element.inert
+            });
+          });
           document.addEventListener('keydown', handleProgramModalKeydown);
         }
         programModal.hidden = false;
         programModal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
-        if (pageContent) {
-          pageContent.setAttribute('aria-hidden', 'true');
-          pageContent.inert = true;
-        }
+        backgroundElements.forEach((element) => {
+          element.setAttribute('aria-hidden', 'true');
+          element.inert = true;
+        });
         programModalClose.focus();
       }
 
