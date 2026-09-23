@@ -267,7 +267,7 @@
 
   <div class="program-modal" id="programCoursesModalOverlay" hidden>
     <div class="program-modal-backdrop" data-close-modal="true"></div>
-    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription programModalDescription" aria-hidden="true" tabindex="-1" hidden>
+    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription programModalDescription" tabindex="-1" hidden>
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
       <h2 id="programModalTitle" tabindex="-1">Diploma Program Courses</h2>
@@ -345,7 +345,12 @@
 
       function populateProgramCourses(programKey) {
         const program = programCatalog[programKey];
-        if (!program || !Array.isArray(program.courses)) return false;
+        if (!program || !Array.isArray(program.courses)) {
+          programModalTitle.textContent = 'Program details unavailable';
+          programModalDescription.textContent = 'We could not load the course list for this diploma right now. Please contact admissions for the current curriculum outline.';
+          programCourseList.innerHTML = '<li>Course information is temporarily unavailable.</li>';
+          return true;
+        }
         programModalTitle.textContent = program.title;
         programModalDescription.textContent = program.description;
         programCourseList.innerHTML = '';
@@ -362,7 +367,6 @@
         programModal.hidden = true;
         programModal.classList.remove('is-open');
         programModalPanel.hidden = true;
-        programModalPanel.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
         backgroundElements.forEach((element) => {
@@ -428,13 +432,12 @@
         programModal.hidden = false;
         programModal.classList.add('is-open');
         programModalPanel.hidden = false;
-        programModalPanel.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
+        programModalClose.focus();
         backgroundElements.forEach((element) => {
           element.setAttribute('aria-hidden', 'true');
           element.inert = true;
         });
-        programModalClose.focus();
       }
 
       if (hasProgramModal) {
