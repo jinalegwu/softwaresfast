@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Softwaresfast Institute Face ID setup page.">
+  <title>Face ID Setup | Softwaresfast Institute</title>
+  <style>
+    :root {
+      --primary: #1a5c3a;
+      --primary-dark: #0f3d26;
+      --gold: #d4af37;
+      --ink: #14231b;
+      --muted: #64748b;
+      --surface: #ffffff;
+      --border: #dce8df;
+      --success: #167544;
+      --danger: #b42318;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #edf6ef 0%, #f8f5eb 100%);
+    }
+
+    .site-header {
+      padding: 1rem 0;
+      background: rgba(255,255,255,.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .header-inner, .page { width: min(900px, calc(100% - 2rem)); margin: 0 auto; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .brand { text-decoration: none; font-weight: 800; letter-spacing: .06em; color: var(--primary); }
+    .header-links { display: flex; gap: .55rem; flex-wrap: wrap; justify-content: flex-end; }
+    .header-link { color: var(--primary); font-weight: 700; text-decoration: none; border: 1px solid #c6dccb; border-radius: 999px; padding: .45rem .8rem; }
+    .header-link:hover { text-decoration: underline; }
+
+    .page { padding: 3rem 0; }
+    .intro { text-align: center; max-width: 700px; margin: 0 auto 2rem; }
+    .eyebrow { color: var(--primary); font-weight: 800; letter-spacing: .1em; font-size: .75rem; text-transform: uppercase; }
+    h1 { margin: .45rem 0 .7rem; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; }
+    .intro p { margin: 0; color: var(--muted); }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: clamp(1.25rem, 3vw, 2rem); box-shadow: 0 10px 30px rgba(15, 61, 38, .08); }
+    .card h2 { margin: 0 0 .35rem; font-size: 1.35rem; }
+    .card-description { margin: 0 0 1.2rem; color: var(--muted); }
+
+    .face-stage {
+      min-height: 310px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+      border: 2px dashed #b7ccbb;
+      border-radius: 15px;
+      background: radial-gradient(circle at center, #e5f1e7, #f7faf7 68%);
+    }
+    video, canvas { display: none; width: 100%; height: 310px; object-fit: cover; }
+    .face-stage.camera-on video, .face-stage.captured canvas { display: block; }
+    .face-stage.camera-on .face-placeholder, .face-stage.captured .face-placeholder { display: none; }
+    .face-placeholder { text-align: center; color: var(--muted); padding: 2rem; }
+    .face-icon { width: 104px; height: 104px; display: grid; place-items: center; margin: 0 auto 1rem; border-radius: 50%; border: 4px solid var(--primary); font-size: 3rem; color: var(--primary); }
+    .face-guide { position: absolute; width: 155px; height: 200px; border: 3px solid var(--gold); border-radius: 50%; pointer-events: none; box-shadow: 0 0 0 999px rgba(10, 31, 18, .1); }
+    .face-stage:not(.camera-on) .face-guide, .face-stage.captured .face-guide { display: none; }
+
+    .face-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+    button { border: 0; border-radius: 9px; padding: .82rem 1rem; font: inherit; font-weight: 800; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
+    button:hover { transform: translateY(-1px); }
+    .primary { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 5px 14px rgba(15, 61, 38, .22); }
+    .secondary { color: var(--primary); background: #edf5ef; border: 1px solid #c6dccb; }
+
+    .status { min-height: 1.4rem; margin: 1rem 0 0; color: var(--muted); font-size: .9rem; }
+    .status.success { color: var(--success); font-weight: 700; }
+    .status.error { color: var(--danger); font-weight: 700; }
+
+    .privacy-note { margin-top: 1rem; padding: .9rem 1rem; border-left: 4px solid var(--gold); background: #fcf9ed; color: #5f5430; font-size: .85rem; line-height: 1.5; }
+    .completion { display: none; margin-top: 1rem; padding: 1rem; border-radius: 10px; background: #effaf2; border: 1px solid #a9d8bd; color: #115d35; }
+    .completion.show { display: block; }
+    .next-actions { margin-top: 1rem; display: flex; gap: .65rem; flex-wrap: wrap; }
+    .next-link { text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: .45rem .8rem; color: var(--primary); font-size: .88rem; font-weight: 700; }
+
+    @media (max-width: 760px) {
+      .page { padding: 2rem 0; }
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      .header-links { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
+      <div class="header-links">
+        <a class="header-link" href="student-enrollment.html">Enrollment</a>
+        <a class="header-link" href="document-verification.html">Document Verification</a>
+        <a class="header-link" href="institute.html">Institute</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="intro" aria-labelledby="pageTitle">
+      <div class="eyebrow">Institute portal</div>
+      <h1 id="pageTitle">Face ID Setup</h1>
+      <p>Capture a clear, well-lit photo to complete your enrollment identity setup.</p>
+    </section>
+
+    <section class="card" aria-labelledby="faceTitle">
+      <h2 id="faceTitle">Face verification photo</h2>
+      <p class="card-description">Allow camera access and center your face within the guide before capturing.</p>
+
+      <div class="face-stage" id="faceStage">
+        <div class="face-placeholder">
+          <div class="face-icon" aria-hidden="true">◉</div>
+          <strong>No enrollment photo yet</strong>
+          <p>Allow camera access to begin.</p>
+        </div>
+        <video id="camera" autoplay playsinline aria-label="Camera preview"></video>
+        <canvas id="photoCanvas" aria-label="Captured enrollment photo"></canvas>
+        <div class="face-guide" aria-hidden="true"></div>
+      </div>
+
+      <div class="face-actions">
+        <button class="primary" type="button" id="startCamera">Start camera</button>
+        <button class="secondary" type="button" id="capturePhoto" disabled>Capture photo</button>
+        <button class="secondary" type="button" id="retakePhoto" hidden>Retake photo</button>
+      </div>
+      <p class="status" id="cameraStatus" role="status">Your camera is off.</p>
+
+      <div class="completion" id="completionMessage" role="status"></div>
+      <div class="privacy-note">
+        <strong>Privacy:</strong> This demo keeps the captured photo only in this browser session. A production Face ID system needs secure server-side enrollment, explicit consent, access control, and encrypted storage.
+      </div>
+
+      <div class="next-actions" aria-label="Next steps">
+        <a class="next-link" href="student-enrollment.html">Back to enrollment</a>
+        <a class="next-link" href="document-verification.html">Continue to document verification</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const stage = document.getElementById('faceStage');
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('photoCanvas');
+    const startButton = document.getElementById('startCamera');
+    const captureButton = document.getElementById('capturePhoto');
+    const retakeButton = document.getElementById('retakePhoto');
+    const status = document.getElementById('cameraStatus');
+    const completion = document.getElementById('completionMessage');
+
+    let stream = null;
+
+    function setStatus(message, type = '') {
+      status.textContent = message;
+      status.className = `status ${type}`;
+    }
+
+    async function startCamera() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setStatus('Camera access is not supported by this browser. You can continue enrollment on a supported device.', 'error');
+        return;
+      }
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        video.srcObject = stream;
+        stage.classList.remove('captured');
+        stage.classList.add('camera-on');
+        startButton.textContent = 'Camera on';
+        startButton.disabled = true;
+        captureButton.disabled = false;
+        retakeButton.hidden = true;
+        completion.classList.remove('show');
+        completion.textContent = '';
+        setStatus('Camera is ready. Center your face in the guide, then capture your photo.', 'success');
+      } catch (error) {
+        setStatus('We could not access your camera. Please allow camera permission and try again.', 'error');
+      }
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+        stream = null;
+      }
+      video.srcObject = null;
+    }
+
+    function capturePhoto() {
+      if (!video.videoWidth || !video.videoHeight) {
+        setStatus('The camera is still loading. Please try again in a moment.', 'error');
+        return;
+      }
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      stopCamera();
+      stage.classList.remove('camera-on');
+      stage.classList.add('captured');
+      captureButton.disabled = true;
+      retakeButton.hidden = false;
+      startButton.hidden = true;
+
+      const firstName = new URLSearchParams(window.location.search).get('firstName');
+      const learnerName = firstName ? firstName : 'Student';
+      completion.innerHTML = `<strong>Face ID setup complete.</strong> ${learnerName}, continue to document verification to finish this demo flow.`;
+      completion.classList.add('show');
+      setStatus('Enrollment photo captured successfully in this browser session.', 'success');
+    }
+
+    startButton.addEventListener('click', startCamera);
+    captureButton.addEventListener('click', capturePhoto);
+    retakeButton.addEventListener('click', () => {
+      startButton.hidden = false;
+      startButton.disabled = false;
+      startButton.textContent = 'Start camera';
+      startCamera();
+    });
+
+    window.addEventListener('beforeunload', stopCamera);
+  </script>
+</body>
+</html>
