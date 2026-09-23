@@ -50,8 +50,8 @@
     .program-trigger:focus-visible { outline: 3px solid var(--gold-300); outline-offset: -3px; }
     .program-title { color: var(--gold-300); font-size: clamp(1rem, 1.8vw, 1.35rem); line-height: 1.35; letter-spacing: 0.8px; text-transform: uppercase; animation: goldGlow 2.6s ease-in-out infinite; }
     .program-trigger-hint { color: var(--text-300); font-size: 0.88rem; font-weight: 600; }
-    .program-modal[hidden] { display: none; }
-    .program-modal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 1rem; }
+    .program-modal { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; padding: 1rem; }
+    .program-modal.is-open { display: grid; }
     .program-modal-backdrop { position: absolute; inset: 0; background: rgba(2, 15, 11, 0.8); backdrop-filter: blur(6px); }
     .program-modal-panel { position: relative; width: min(680px, 100%); max-height: min(85vh, 760px); overflow-y: auto; border-radius: 20px; padding: 1.5rem; background: linear-gradient(160deg, rgba(6, 46, 34, 0.97), rgba(11, 59, 43, 0.94)); border: 1px solid rgba(212, 175, 55, 0.5); box-shadow: var(--shadow); }
     .program-modal-panel h2 { text-align: left; margin-bottom: 0.75rem; }
@@ -153,13 +153,13 @@
 
     <div class="hero-programs" aria-label="Institute programs">
       <div class="program-box">
-        <button type="button" class="program-trigger" data-program="software-engineering" aria-haspopup="dialog" aria-controls="programCoursesModalOverlay" aria-expanded="false">
+        <button type="button" class="program-trigger" data-program="software-engineering" aria-haspopup="dialog" aria-controls="programCoursesModal" aria-expanded="false">
           <span class="program-title">DIPLOMA IN SOFTWARE ENGINEERING</span>
           <span class="program-trigger-hint">View course list</span>
         </button>
       </div>
       <div class="program-box">
-        <button type="button" class="program-trigger" data-program="computer-science" aria-haspopup="dialog" aria-controls="programCoursesModalOverlay" aria-expanded="false">
+        <button type="button" class="program-trigger" data-program="computer-science" aria-haspopup="dialog" aria-controls="programCoursesModal" aria-expanded="false">
           <span class="program-title">DIPLOMA IN COMPUTER SCIENCE</span>
           <span class="program-trigger-hint">View course list</span>
         </button>
@@ -265,9 +265,9 @@
   </footer>
   </main>
 
-  <div class="program-modal" id="programCoursesModalOverlay" aria-hidden="true" hidden>
+  <div class="program-modal" id="programCoursesModalOverlay">
     <div class="program-modal-backdrop" data-close-modal="true"></div>
-    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription programModalDescription" tabindex="-1">
+    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription programModalDescription" aria-hidden="true" tabindex="-1" hidden>
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
       <h2 id="programModalTitle" tabindex="-1">Diploma Program Courses</h2>
@@ -358,9 +358,10 @@
       }
 
       function closeProgramModal() {
-        if (programModal.hidden) return;
-        programModal.hidden = true;
-        programModal.setAttribute('aria-hidden', 'true');
+        if (programModalPanel.hidden) return;
+        programModal.classList.remove('is-open');
+        programModalPanel.hidden = true;
+        programModalPanel.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
@@ -415,7 +416,7 @@
         if (!populateProgramCourses(programKey)) return;
         lastFocusedProgramTrigger = trigger;
         programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
-        if (programModal.hidden) {
+        if (programModalPanel.hidden) {
           backgroundElements.forEach((element) => {
             backgroundStates.set(element, {
               hadAriaHidden: element.hasAttribute('aria-hidden'),
@@ -425,8 +426,9 @@
           });
           document.addEventListener('keydown', handleProgramModalKeydown);
         }
-        programModal.hidden = false;
-        programModal.setAttribute('aria-hidden', 'false');
+        programModal.classList.add('is-open');
+        programModalPanel.hidden = false;
+        programModalPanel.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
         backgroundElements.forEach((element) => {
           element.setAttribute('aria-hidden', 'true');
