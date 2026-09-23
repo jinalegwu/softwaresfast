@@ -228,6 +228,7 @@
         completion.textContent = '';
         setContinueEnabled(false);
         sessionStorage.removeItem('faceIdComplete');
+        sessionStorage.removeItem('documentVerificationComplete');
         setStatus('Camera is ready. Center your face in the guide, then capture your photo.', 'success');
       } catch (error) {
         setStatus('We could not access your camera. Please allow camera permission and try again.', 'error');
@@ -261,14 +262,12 @@
       retakeButton.hidden = false;
       startButton.hidden = true;
 
-      let learnerName = 'Student';
+      const firstName = new URLSearchParams(window.location.search).get('firstName');
+      let learnerName = firstName || 'Student';
       try {
         const snapshot = JSON.parse(sessionStorage.getItem('studentDetailsSnapshot') || '{}');
         if (snapshot.firstName) learnerName = snapshot.firstName;
-      } catch (error) {
-        const firstName = new URLSearchParams(window.location.search).get('firstName');
-        if (firstName) learnerName = firstName;
-      }
+      } catch (error) {}
       completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
       setContinueEnabled(true);

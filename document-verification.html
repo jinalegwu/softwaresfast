@@ -222,6 +222,10 @@
     }
 
     function setFormControlsEnabled(enabled) {
+      selectorButtons.forEach((button) => {
+        button.disabled = !enabled;
+        button.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      });
       formCards.forEach((card) => {
         card.querySelectorAll('input, select, textarea, .btn-primary').forEach((control) => {
           control.disabled = !enabled;
