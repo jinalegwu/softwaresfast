@@ -216,6 +216,7 @@
       flowWarning.classList.add('show');
       selectorButtons.forEach((button) => {
         button.disabled = true;
+        button.setAttribute('aria-disabled', 'true');
       });
       formCards.forEach((card) => {
         card.querySelectorAll('input, select, textarea, button').forEach((control) => {
@@ -233,6 +234,7 @@
         item.tabIndex = selected ? 0 : -1;
         item.classList.toggle('active', selected);
         item.setAttribute('aria-selected', selected ? 'true' : 'false');
+        item.setAttribute('aria-disabled', 'false');
       });
       formCards.forEach((card) => {
         card.hidden = card.getAttribute('data-doc-form') !== target;
