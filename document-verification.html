@@ -211,18 +211,9 @@
     const formCards = Array.from(document.querySelectorAll('[data-doc-form]'));
     const flowWarning = document.getElementById('flowWarning');
 
-    function disableVerificationForms(message) {
+    function showFlowWarning(message) {
       flowWarning.textContent = message;
       flowWarning.classList.add('show');
-      selectorButtons.forEach((button) => {
-        button.disabled = true;
-        button.setAttribute('aria-disabled', 'true');
-      });
-      formCards.forEach((card) => {
-        card.querySelectorAll('input, select, textarea, button').forEach((control) => {
-          control.disabled = true;
-        });
-      });
     }
 
     function setActiveDocument(target, focusButton = false) {
@@ -268,7 +259,7 @@
 
     if (sessionStorage.getItem('enrollmentComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
       sessionStorage.removeItem('documentVerificationComplete');
-      disableVerificationForms('Please complete student enrollment and Face ID setup first before submitting document verification.');
+      showFlowWarning('Please complete student enrollment and Face ID setup first before submitting document verification.');
     }
   </script>
 </body>
