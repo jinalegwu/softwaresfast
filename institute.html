@@ -267,10 +267,11 @@
 
   <div class="program-modal" id="programCoursesModalOverlay" aria-hidden="true" hidden>
     <div class="program-modal-backdrop" data-close-modal="true"></div>
-    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" tabindex="-1">
+    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalAssistiveDescription" tabindex="-1">
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
       <h2 id="programModalTitle" tabindex="-1">Diploma Program Courses</h2>
+      <p id="programModalAssistiveDescription">Review the locally embedded course list for the selected diploma program. Use the close button or press Escape to return to the institute page.</p>
       <p id="programModalDescription">Select a diploma program to review the core subjects covered in the training.</p>
       <ul class="program-course-list" id="programCourseList" aria-labelledby="programModalTitle"></ul>
     </div>
@@ -346,7 +347,7 @@
 
       function populateProgramCourses(programKey) {
         const program = programCatalog[programKey];
-        if (!program) return false;
+        if (!program || !Array.isArray(program.courses)) return false;
         programModalTitle.textContent = program.title;
         programModalDescription.textContent = program.description;
         programCourseList.innerHTML = '';
@@ -386,7 +387,7 @@
           return;
         }
         if (event.key === 'Tab') {
-          const focusableElements = Array.from(programModalPanel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+          const focusableElements = Array.from(programModalPanel.querySelectorAll('button, [href], input, select, textarea, summary, audio[controls], video[controls], [contenteditable=\"true\"], [tabindex]:not([tabindex=\"-1\"])'))
             .filter((element) => !element.hasAttribute('disabled')
               && !element.hidden
               && element.getAttribute('aria-hidden') !== 'true'
