@@ -270,52 +270,56 @@
     <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" tabindex="-1">
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
-      <h2 id="programModalTitle">Diploma Program Courses</h2>
+      <h2 id="programModalTitle" tabindex="-1">Diploma Program Courses</h2>
       <p id="programModalDescription">Select a diploma program to review the core subjects covered in the training.</p>
       <ul class="program-course-list" id="programCourseList" aria-labelledby="programModalTitle"></ul>
     </div>
   </div>
 
+  <script type="application/json" id="programCatalogData">
+    {
+      "software-engineering": {
+        "title": "Diploma in Software Engineering",
+        "description": "This diploma covers the practical subjects commonly expected in an entry-to-intermediate software engineering program, with emphasis on building and shipping working software.",
+        "courses": [
+          "Introduction to Programming",
+          "Web Development Fundamentals",
+          "Object-Oriented Programming",
+          "Data Structures and Algorithms",
+          "Database Design and SQL",
+          "Software Requirements and Systems Analysis",
+          "Software Design and Architecture",
+          "Version Control and Collaborative Development",
+          "Software Testing and Quality Assurance",
+          "UI/UX Fundamentals for Developers",
+          "DevOps and Cloud Deployment Basics",
+          "Capstone Product Development Project"
+        ]
+      },
+      "computer-science": {
+        "title": "Diploma in Computer Science",
+        "description": "This diploma highlights foundational computing subjects that support broad technical study, problem solving, and applied software development.",
+        "courses": [
+          "Computer Fundamentals and Digital Literacy",
+          "Programming Principles",
+          "Discrete Mathematics",
+          "Data Structures and Algorithms",
+          "Computer Architecture",
+          "Operating Systems",
+          "Database Systems",
+          "Computer Networks",
+          "Web Technologies",
+          "Software Engineering Principles",
+          "Cybersecurity Fundamentals",
+          "Introduction to Artificial Intelligence"
+        ]
+      }
+    }
+  </script>
+
   <script>
     (function () {
-      const programCatalog = {
-        'software-engineering': {
-          title: 'Diploma in Software Engineering',
-          description: 'This diploma covers the practical subjects commonly expected in an entry-to-intermediate software engineering program, with emphasis on building and shipping working software.',
-          courses: [
-            'Introduction to Programming',
-            'Web Development Fundamentals',
-            'Object-Oriented Programming',
-            'Data Structures and Algorithms',
-            'Database Design and SQL',
-            'Software Requirements and Systems Analysis',
-            'Software Design and Architecture',
-            'Version Control and Collaborative Development',
-            'Software Testing and Quality Assurance',
-            'UI/UX Fundamentals for Developers',
-            'DevOps and Cloud Deployment Basics',
-            'Capstone Product Development Project'
-          ]
-        },
-        'computer-science': {
-          title: 'Diploma in Computer Science',
-          description: 'This diploma highlights foundational computing subjects that support broad technical study, problem solving, and applied software development.',
-          courses: [
-            'Computer Fundamentals and Digital Literacy',
-            'Programming Principles',
-            'Discrete Mathematics',
-            'Data Structures and Algorithms',
-            'Computer Architecture',
-            'Operating Systems',
-            'Database Systems',
-            'Computer Networks',
-            'Web Technologies',
-            'Software Engineering Principles',
-            'Cybersecurity Fundamentals',
-            'Introduction to Artificial Intelligence'
-          ]
-        }
-      };
+      const programCatalog = JSON.parse(document.getElementById('programCatalogData').textContent);
       const programTriggers = document.querySelectorAll('.program-trigger');
       const programModal = document.getElementById('programCoursesModalOverlay');
       const programModalPanel = document.getElementById('programCoursesModal');
@@ -380,16 +384,14 @@
           if (!focusableElements.length) return;
           const firstElement = focusableElements[0];
           const lastElement = focusableElements[focusableElements.length - 1];
-          if (!programModalPanel.contains(document.activeElement)) {
+          const activeElement = document.activeElement;
+          if (!programModalPanel.contains(activeElement) || !focusableElements.includes(activeElement)) {
             event.preventDefault();
             (event.shiftKey ? lastElement : firstElement).focus();
-          } else if (document.activeElement === programModalPanel) {
-            event.preventDefault();
-            (event.shiftKey ? lastElement : firstElement).focus();
-          } else if (event.shiftKey && document.activeElement === firstElement) {
+          } else if (event.shiftKey && activeElement === firstElement) {
             event.preventDefault();
             lastElement.focus();
-          } else if (!event.shiftKey && document.activeElement === lastElement) {
+          } else if (!event.shiftKey && activeElement === lastElement) {
             event.preventDefault();
             firstElement.focus();
           }
@@ -414,7 +416,7 @@
           pageContent.setAttribute('aria-hidden', 'true');
           pageContent.inert = true;
         }
-        programModalPanel.focus();
+        programModalTitle.focus();
       }
 
       programTriggers.forEach((trigger) => {
@@ -424,7 +426,7 @@
       });
 
       programModal.addEventListener('click', (event) => {
-        if (event.target === programModal || event.target.hasAttribute('data-close-modal')) {
+        if (event.target === programModal || (event.target instanceof Element && event.target.hasAttribute('data-close-modal'))) {
           closeProgramModal();
         }
       });
