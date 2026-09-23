@@ -118,7 +118,7 @@
     </div>
 
     <section class="verification-grid" aria-label="Identity document verification forms">
-      <article class="verify-card" id="panelNational" role="tabpanel" aria-labelledby="tabNational" data-doc-form="national">
+      <article class="verify-card" id="panelNational" role="tabpanel" aria-labelledby="tabNational" aria-hidden="false" data-doc-form="national">
         <h2 id="nationalIdTitle">National Identity Card Verification</h2>
         <p>Use the details exactly as they appear on your card.</p>
         <form id="nationalIdForm" novalidate>
@@ -144,7 +144,7 @@
         </form>
       </article>
 
-      <article class="verify-card" id="panelPassport" role="tabpanel" aria-labelledby="tabPassport" data-doc-form="passport" hidden>
+      <article class="verify-card" id="panelPassport" role="tabpanel" aria-labelledby="tabPassport" aria-hidden="true" data-doc-form="passport" hidden>
         <h2 id="passportTitle">International Passport Verification</h2>
         <p>Use details from the passport bio-data page.</p>
         <form id="passportForm" novalidate>
@@ -228,7 +228,9 @@
         item.setAttribute('aria-disabled', 'false');
       });
       formCards.forEach((card) => {
-        card.hidden = card.getAttribute('data-doc-form') !== target;
+        const isHidden = card.getAttribute('data-doc-form') !== target;
+        card.hidden = isHidden;
+        card.setAttribute('aria-hidden', isHidden ? 'true' : 'false');
       });
       if (focusButton) activeButton.focus();
     }

@@ -251,7 +251,14 @@
       startButton.hidden = true;
 
       const firstName = new URLSearchParams(window.location.search).get('firstName');
-      const learnerName = firstName ? firstName : 'Student';
+      let learnerName = 'Student';
+      if (firstName) {
+        try {
+          learnerName = /%[0-9A-Fa-f]{2}/.test(firstName) ? decodeURIComponent(firstName) : firstName;
+        } catch (error) {
+          learnerName = firstName;
+        }
+      }
       completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
       setContinueEnabled(true);
