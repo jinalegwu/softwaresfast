@@ -140,7 +140,7 @@
 
       <div class="next-actions" aria-label="Next steps">
         <a class="next-link" href="student-enrollment.html">Back to enrollment</a>
-        <button class="next-link disabled" type="button" id="continueToVerification" disabled>Continue to document verification</button>
+        <a class="next-link disabled" id="continueToVerification" aria-disabled="true" tabindex="-1">Continue to document verification</a>
       </div>
     </section>
   </main>
@@ -163,10 +163,35 @@
       status.className = `status ${type}`;
     }
 
-    if (sessionStorage.getItem('enrollmentComplete') !== 'true') {
+    function setContinueEnabled(enabled) {
+      if (enabled) {
+        continueLink.classList.remove('disabled');
+        continueLink.setAttribute('href', 'document-verification.html');
+        continueLink.setAttribute('aria-disabled', 'false');
+        continueLink.tabIndex = 0;
+      } else {
+        continueLink.classList.add('disabled');
+        continueLink.removeAttribute('href');
+        continueLink.setAttribute('aria-disabled', 'true');
+        continueLink.tabIndex = -1;
+      }
+    }
+
+    const enrollmentComplete = sessionStorage.getItem('enrollmentComplete') === 'true';
+    const faceIdComplete = sessionStorage.getItem('faceIdComplete') === 'true';
+
+    if (!enrollmentComplete) {
       setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
       startButton.disabled = true;
       startButton.textContent = 'Complete enrollment first';
+    }
+    if (faceIdComplete) {
+      completion.textContent = 'Face ID setup is already completed in this browser session. You can continue to document verification or recapture a new photo.';
+      completion.classList.add('show');
+      setContinueEnabled(true);
+      setStatus('Face ID setup previously completed.', 'success');
+    } else {
+      setContinueEnabled(false);
     }
 
     async function startCamera() {
@@ -185,8 +210,7 @@
         retakeButton.hidden = true;
         completion.classList.remove('show');
         completion.textContent = '';
-        continueLink.classList.add('disabled');
-        continueLink.disabled = true;
+        setContinueEnabled(false);
         sessionStorage.removeItem('faceIdComplete');
         setStatus('Camera is ready. Center your face in the guide, then capture your photo.', 'success');
       } catch (error) {
@@ -221,8 +245,7 @@
       const learnerName = firstName ? firstName : 'Student';
       completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
-      continueLink.classList.remove('disabled');
-      continueLink.disabled = false;
+      setContinueEnabled(true);
       sessionStorage.setItem('faceIdComplete', 'true');
       setStatus('Enrollment photo captured successfully in this browser session.', 'success');
     }
@@ -234,11 +257,6 @@
       startButton.disabled = false;
       startButton.textContent = 'Start camera';
       startCamera();
-    });
-    continueLink.addEventListener('click', () => {
-      if (!continueLink.disabled) {
-        window.location.href = 'document-verification.html';
-      }
     });
 
     window.addEventListener('beforeunload', stopCamera);

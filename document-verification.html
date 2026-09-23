@@ -136,7 +136,7 @@
           </div>
           <div class="field">
             <label for="nationalIdImage">Upload National Identity Card image</label>
-            <input id="nationalIdImage" name="nationalIdImage" type="file" accept="image/*,.pdf" required />
+            <input id="nationalIdImage" name="nationalIdImage" type="file" accept="image/*,.pdf" capture="environment" required />
             <p class="upload-help">Accepted formats: image or PDF. Ensure text is readable and edges are visible.</p>
           </div>
           <button class="btn btn-primary" type="submit">Confirm National ID Details</button>
@@ -166,7 +166,7 @@
           </div>
           <div class="field">
             <label for="passportImage">Upload passport bio-data page</label>
-            <input id="passportImage" name="passportImage" type="file" accept="image/*,.pdf" required />
+            <input id="passportImage" name="passportImage" type="file" accept="image/*,.pdf" capture="environment" required />
             <p class="upload-help">Upload a clear image/PDF of the bio-data page for review in future integrations.</p>
           </div>
           <button class="btn btn-primary" type="submit">Confirm Passport Details</button>
