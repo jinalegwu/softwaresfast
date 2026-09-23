@@ -113,7 +113,7 @@
     <div class="progress" aria-label="Enrollment progress">
       <div class="progress-step complete">1. Student details</div>
       <div class="progress-step complete">2. Face ID setup</div>
-      <div class="progress-step active">3. Document verification</div>
+      <div class="progress-step active" id="progressDocument">3. Document verification</div>
       <div class="progress-step" id="progressComplete">4. Enrollment complete</div>
     </div>
 
@@ -135,9 +135,9 @@
         <p class="card-description">Capture your document using camera, or upload an image if camera access is unavailable.</p>
 
         <form id="verificationForm" novalidate>
-          <div class="verification-tabs" role="tablist" aria-label="Identity document type">
-            <button type="button" role="tab" aria-selected="true" class="verification-tab active" data-doc="national_id">National Identity Card</button>
-            <button type="button" role="tab" aria-selected="false" class="verification-tab" data-doc="passport">International Passport</button>
+          <div class="verification-tabs" aria-label="Identity document type">
+            <button type="button" aria-pressed="true" class="verification-tab active" data-doc="national_id">National Identity Card</button>
+            <button type="button" aria-pressed="false" class="verification-tab" data-doc="passport">International Passport</button>
           </div>
 
           <div class="field">
@@ -208,6 +208,7 @@
     const fileUpload = document.getElementById('fileUpload');
     const verifyStatus = document.getElementById('verifyStatus');
     const completion = document.getElementById('completionMessage');
+    const progressDocument = document.getElementById('progressDocument');
     const progressComplete = document.getElementById('progressComplete');
     const submitVerificationBtn = document.getElementById('submitVerificationBtn');
     const verificationForm = document.getElementById('verificationForm');
@@ -245,6 +246,7 @@
       try {
         enrollmentContext = JSON.parse(enrollmentContextRaw);
       } catch (error) {
+        submitVerificationBtn.disabled = true;
         setStatus('Saved enrollment details could not be read. Please restart enrollment.', 'error');
         return;
       }
@@ -315,9 +317,9 @@
     tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         tabs.forEach((item) => item.classList.remove('active'));
-        tabs.forEach((item) => item.setAttribute('aria-selected', 'false'));
+        tabs.forEach((item) => item.setAttribute('aria-pressed', 'false'));
         tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('aria-pressed', 'true');
         currentDocType = tab.getAttribute('data-doc');
         if (currentDocType === 'passport') {
           docNumberLabel.textContent = 'Passport Number';
@@ -371,6 +373,8 @@
       }
 
       stopCamera();
+      progressDocument.classList.remove('active');
+      progressDocument.classList.add('complete');
       progressComplete.classList.add('active', 'complete');
       completion.textContent = `Enrollment complete (demo). Your ${currentDocType === 'passport' ? 'passport' : 'national identity'} details were validated on this page and marked as submitted.`;
       completion.classList.add('show');
