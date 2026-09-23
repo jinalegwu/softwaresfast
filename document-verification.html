@@ -71,6 +71,7 @@
 
     button { border: 0; border-radius: 9px; padding: .82rem 1rem; font: inherit; font-weight: 800; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
     button:hover { transform: translateY(-1px); }
+    button:focus-visible, .secondary:focus-visible { outline: 3px solid rgba(26,92,58,.25); outline-offset: 2px; }
     .primary { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 5px 14px rgba(15, 61, 38, .22); }
     .secondary { color: var(--primary); background: #edf5ef; border: 1px solid #c6dccb; }
 
@@ -133,49 +134,51 @@
         <h2 id="verification-title">Document verification</h2>
         <p class="card-description">Capture your document using camera, or upload an image if camera access is unavailable.</p>
 
-        <div class="verification-tabs" aria-label="Identity document type">
-          <button type="button" class="verification-tab active" data-doc="national_id">National Identity Card</button>
-          <button type="button" class="verification-tab" data-doc="passport">International Passport</button>
-        </div>
-
-        <div class="field">
-          <label for="fullName">Full name (as on document)</label>
-          <input id="fullName" type="text" autocomplete="name" required>
-        </div>
-        <div class="field">
-          <label for="docNumber" id="docNumberLabel">National ID Number</label>
-          <input id="docNumber" type="text" required>
-        </div>
-        <div class="field">
-          <label for="docCountry">Country of issue</label>
-          <input id="docCountry" type="text" required>
-        </div>
-        <div class="field">
-          <label for="docExpiry">Expiry date</label>
-          <input id="docExpiry" type="date">
-        </div>
-
-        <div class="capture-box">
-          <div class="capture-frame">
-            <span class="placeholder-text" id="capturePlaceholder">Camera preview appears here after you start the camera.</span>
-            <video id="cameraVideo" autoplay playsinline muted hidden></video>
-            <canvas id="captureCanvas" hidden></canvas>
-            <img id="capturedImage" alt="Captured document preview" hidden>
+        <form id="verificationForm" novalidate>
+          <div class="verification-tabs" role="tablist" aria-label="Identity document type">
+            <button type="button" role="tab" aria-selected="true" class="verification-tab active" data-doc="national_id">National Identity Card</button>
+            <button type="button" role="tab" aria-selected="false" class="verification-tab" data-doc="passport">International Passport</button>
           </div>
-          <div class="capture-actions">
-            <button type="button" class="secondary" id="startCameraBtn">Start camera</button>
-            <button type="button" class="primary" id="snapPhotoBtn" disabled>Capture document</button>
-            <button type="button" class="secondary" id="retakeBtn" hidden>Retake</button>
-          </div>
-          <div class="upload-fallback">
-            Or upload a document image instead:
-            <input type="file" id="fileUpload" accept="image/*" capture="environment">
-          </div>
-        </div>
 
-        <div class="actions">
-          <button type="button" class="primary" id="submitVerificationBtn">Submit document verification</button>
-        </div>
+          <div class="field">
+            <label for="fullName">Full name (as on document)</label>
+            <input id="fullName" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="docNumber" id="docNumberLabel">National ID Number</label>
+            <input id="docNumber" type="text" required>
+          </div>
+          <div class="field">
+            <label for="docCountry">Country of issue</label>
+            <input id="docCountry" type="text" required>
+          </div>
+          <div class="field">
+            <label for="docExpiry">Expiry date</label>
+            <input id="docExpiry" type="date">
+          </div>
+
+          <div class="capture-box">
+            <div class="capture-frame">
+              <span class="placeholder-text" id="capturePlaceholder">Camera preview appears here after you start the camera.</span>
+              <video id="cameraVideo" autoplay playsinline muted hidden></video>
+              <canvas id="captureCanvas" hidden></canvas>
+              <img id="capturedImage" alt="Captured document preview" hidden>
+            </div>
+            <div class="capture-actions">
+              <button type="button" class="secondary" id="startCameraBtn">Start camera</button>
+              <button type="button" class="primary" id="snapPhotoBtn" disabled>Capture document</button>
+              <button type="button" class="secondary" id="retakeBtn" hidden>Retake</button>
+            </div>
+            <div class="upload-fallback">
+              Or upload a document image instead:
+              <input type="file" id="fileUpload" accept="image/*" capture="environment">
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary" id="submitVerificationBtn">Submit document verification</button>
+          </div>
+        </form>
 
         <p class="status" id="verifyStatus" role="status"></p>
         <div class="completion" id="completionMessage" role="status"></div>
@@ -206,6 +209,8 @@
     const verifyStatus = document.getElementById('verifyStatus');
     const completion = document.getElementById('completionMessage');
     const progressComplete = document.getElementById('progressComplete');
+    const submitVerificationBtn = document.getElementById('submitVerificationBtn');
+    const verificationForm = document.getElementById('verificationForm');
 
     let currentDocType = 'national_id';
     let stream = null;
@@ -232,6 +237,7 @@
         contextMeta.textContent = 'No saved enrollment context found.\nReturn to Student Enrollment and complete steps 1 and 2 first.';
         contextPhoto.alt = 'No captured face verification photo yet';
         contextPhoto.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23f6faf7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="Segoe UI" font-size="14">No photo</text></svg>';
+        submitVerificationBtn.disabled = true;
         setStatus('Please go back and complete student enrollment details and Face ID setup.', 'error');
         return;
       }
@@ -309,7 +315,9 @@
     tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         tabs.forEach((item) => item.classList.remove('active'));
+        tabs.forEach((item) => item.setAttribute('aria-selected', 'false'));
         tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
         currentDocType = tab.getAttribute('data-doc');
         if (currentDocType === 'passport') {
           docNumberLabel.textContent = 'Passport Number';
@@ -346,16 +354,16 @@
       reader.readAsDataURL(file);
     });
 
-    document.getElementById('submitVerificationBtn').addEventListener('click', () => {
+    verificationForm.addEventListener('submit', (event) => {
+      event.preventDefault();
       completion.classList.remove('show');
+      if (!verificationForm.checkValidity()) {
+        verificationForm.reportValidity();
+        return;
+      }
       const fullName = fullNameInput.value.trim();
       const docNumber = docNumberInput.value.trim();
       const docCountry = docCountryInput.value.trim();
-
-      if (!fullName || !docNumber || !docCountry) {
-        setStatus('Please fill in full name, document number, and country of issue.', 'error');
-        return;
-      }
 
       if (!capturedDataUrl) {
         setStatus('Please capture or upload your document image before submitting.', 'error');
