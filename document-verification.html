@@ -112,7 +112,8 @@
     </section>
     <p class="flow-warning" id="flowWarning" role="alert"></p>
 
-    <div class="doc-options" role="tablist" aria-label="Choose verification document type">
+    <p id="tabInstructions" class="upload-help" style="text-align:center; margin:0 0 .6rem;">Use left/right arrow keys to switch document type tabs.</p>
+    <div class="doc-options" role="tablist" aria-label="Choose verification document type" aria-describedby="tabInstructions">
       <button type="button" class="doc-option active" id="tabNational" role="tab" aria-selected="true" aria-controls="panelNational" tabindex="0" data-doc-target="national">Use National Identity Card</button>
       <button type="button" class="doc-option" id="tabPassport" role="tab" aria-selected="false" aria-controls="panelPassport" tabindex="-1" data-doc-target="passport">Use International Passport</button>
     </div>
@@ -218,7 +219,7 @@
 
     function setFormControlsEnabled(enabled) {
       formCards.forEach((card) => {
-        card.querySelectorAll('input, select, textarea, button').forEach((control) => {
+        card.querySelectorAll('input, select, textarea, .btn-primary').forEach((control) => {
           control.disabled = !enabled;
         });
       });

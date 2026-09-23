@@ -199,6 +199,9 @@
       completion.classList.add('show');
       setContinueEnabled(true);
       setStatus('Face ID setup previously completed.', 'success');
+      startButton.hidden = false;
+      startButton.disabled = false;
+      startButton.textContent = 'Recapture photo';
     } else {
       setContinueEnabled(false);
     }
