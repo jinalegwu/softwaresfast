@@ -194,7 +194,7 @@
           showStatus(status, 'Please complete all required fields before continuing.', 'error');
           return;
         }
-        if (sessionStorage.getItem('enrollmentComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
+        if (sessionStorage.getItem('studentDetailsComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
           sessionStorage.removeItem('documentVerificationComplete');
           showStatus(status, 'Please complete enrollment and Face ID setup before submitting document verification.', 'error');
           return;
@@ -265,7 +265,7 @@
       });
     });
 
-    if (sessionStorage.getItem('enrollmentComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
+    if (sessionStorage.getItem('studentDetailsComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
       sessionStorage.removeItem('documentVerificationComplete');
       showFlowWarning('Please complete student enrollment and Face ID setup first before submitting document verification.');
     }

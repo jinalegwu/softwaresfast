@@ -177,16 +177,16 @@
       }
     }
 
-    const enrollmentComplete = sessionStorage.getItem('enrollmentComplete') === 'true';
+    const detailsComplete = sessionStorage.getItem('studentDetailsComplete') === 'true';
     const faceIdComplete = sessionStorage.getItem('faceIdComplete') === 'true';
 
-    if (!enrollmentComplete) {
+    if (!detailsComplete) {
       sessionStorage.removeItem('faceIdComplete');
       setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
       startButton.disabled = true;
       startButton.textContent = 'Complete enrollment first';
     }
-    if (enrollmentComplete && faceIdComplete) {
+    if (detailsComplete && faceIdComplete) {
       completion.textContent = 'Face ID setup is already completed in this browser session. You can continue to document verification or recapture a new photo.';
       completion.classList.add('show');
       setContinueEnabled(true);
@@ -196,7 +196,7 @@
     }
 
     async function startCamera() {
-      if (sessionStorage.getItem('enrollmentComplete') !== 'true') {
+      if (sessionStorage.getItem('studentDetailsComplete') !== 'true') {
         setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
         return;
       }
@@ -232,7 +232,7 @@
     }
 
     function capturePhoto() {
-      if (sessionStorage.getItem('enrollmentComplete') !== 'true') {
+      if (sessionStorage.getItem('studentDetailsComplete') !== 'true') {
         setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
         return;
       }
