@@ -208,7 +208,7 @@
 
       const firstName = new URLSearchParams(window.location.search).get('firstName');
       const learnerName = firstName ? firstName : 'Student';
-      completion.innerHTML = `<strong>Face ID setup complete.</strong> ${learnerName}, continue to document verification to finish this demo flow.`;
+      completion.textContent = `Face ID setup complete. ${learnerName}, continue to document verification to finish this demo flow.`;
       completion.classList.add('show');
       setStatus('Enrollment photo captured successfully in this browser session.', 'success');
     }
