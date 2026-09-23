@@ -84,6 +84,7 @@
     .next-actions { margin-top: 1rem; display: flex; gap: .65rem; flex-wrap: wrap; }
     .next-link { text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: .45rem .8rem; color: var(--primary); font-size: .88rem; font-weight: 700; background: #fff; font-family: inherit; }
     .next-link.disabled { opacity: .5; cursor: not-allowed; }
+    .next-link:focus-visible { outline: 3px solid rgba(26, 92, 58, .25); outline-offset: 2px; }
 
     @media (max-width: 760px) {
       .page { padding: 2rem 0; }
@@ -186,6 +187,7 @@
         completion.textContent = '';
         continueLink.classList.add('disabled');
         continueLink.disabled = true;
+        sessionStorage.removeItem('faceIdComplete');
         setStatus('Camera is ready. Center your face in the guide, then capture your photo.', 'success');
       } catch (error) {
         setStatus('We could not access your camera. Please allow camera permission and try again.', 'error');
