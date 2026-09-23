@@ -185,7 +185,7 @@
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
       <h2 id="programModalTitle">Diploma Program Courses</h2>
       <p id="programModalDescription">Select a diploma program to review the core subjects covered in the training.</p>
-      <ul class="program-course-list" id="programCourseList"></ul>
+      <ul class="program-course-list" id="programCourseList" aria-labelledby="programModalTitle"></ul>
     </div>
   </div>
 
@@ -325,7 +325,7 @@
 
       function populateProgramCourses(programKey) {
         const program = programCatalog[programKey];
-        if (!program) return;
+        if (!program) return false;
         programModalTitle.textContent = program.title;
         programModalDescription.textContent = program.description;
         programCourseList.innerHTML = '';
@@ -334,6 +334,7 @@
           item.textContent = course;
           programCourseList.appendChild(item);
         });
+        return true;
       }
 
       function closeProgramModal() {
@@ -355,7 +356,10 @@
         }
         if (event.key === 'Tab') {
           const focusableElements = Array.from(programModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
-            .filter((element) => !element.hasAttribute('disabled'));
+            .filter((element) => !element.hasAttribute('disabled')
+              && !element.hidden
+              && element.getAttribute('aria-hidden') !== 'true'
+              && (element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0));
           if (!focusableElements.length) return;
           const firstElement = focusableElements[0];
           const lastElement = focusableElements[focusableElements.length - 1];
@@ -370,13 +374,13 @@
       }
 
       function openProgramModal(programKey, trigger) {
-        populateProgramCourses(programKey);
+        if (!populateProgramCourses(programKey)) return;
         lastFocusedProgramTrigger = trigger;
         programTriggers.forEach((item) => item.setAttribute('aria-expanded', item === trigger ? 'true' : 'false'));
         programModal.hidden = false;
         document.body.classList.add('modal-open');
         document.addEventListener('keydown', handleProgramModalKeydown);
-        programModalPanel.focus();
+        programModalClose.focus();
       }
 
       programTriggers.forEach((trigger) => {
