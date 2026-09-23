@@ -82,6 +82,8 @@
     .status.error { background: rgba(180, 60, 60, 0.18); border: 1px solid rgba(220, 100, 100, 0.5); color: var(--danger); }
 
     .disclaimer { margin-top: 1.4rem; padding: .9rem 1rem; border-left: 4px solid var(--gold-500); border-radius: 8px; background: rgba(0, 0, 0, 0.18); color: var(--text-300); font-size: .85rem; line-height: 1.5; }
+    .flow-warning { display: none; margin: 0 auto 1rem; max-width: 760px; border-radius: 10px; padding: .85rem 1rem; background: rgba(180, 60, 60, 0.2); border: 1px solid rgba(220, 100, 100, 0.6); color: #ffd9d9; font-size: .9rem; }
+    .flow-warning.show { display: block; }
 
     @media (max-width: 680px) {
       .nav-inner { flex-direction: column; align-items: flex-start; }
@@ -108,6 +110,7 @@
       <h1 id="verificationPageTitle">Document Verification Page</h1>
       <p>Provide either your National Identity Card details or your International Passport details below. This page validates required fields and prepares records for future secure backend integration.</p>
     </section>
+    <p class="flow-warning" id="flowWarning" role="alert"></p>
 
     <div class="doc-options" role="tablist" aria-label="Choose verification document type">
       <button type="button" class="doc-option active" id="tabNational" role="tab" aria-selected="true" aria-controls="panelNational" tabindex="0" data-doc-target="national">Use National Identity Card</button>
@@ -200,6 +203,20 @@
 
     const selectorButtons = Array.from(document.querySelectorAll('.doc-option'));
     const formCards = Array.from(document.querySelectorAll('[data-doc-form]'));
+    const flowWarning = document.getElementById('flowWarning');
+
+    function disableVerificationForms(message) {
+      flowWarning.textContent = message;
+      flowWarning.classList.add('show');
+      selectorButtons.forEach((button) => {
+        button.disabled = true;
+      });
+      formCards.forEach((card) => {
+        card.querySelectorAll('input, button').forEach((control) => {
+          control.disabled = true;
+        });
+      });
+    }
 
     function setActiveDocument(target, focusButton = false) {
       const activeButton = selectorButtons.find((item) => item.getAttribute('data-doc-target') === target);
@@ -240,6 +257,10 @@
         }
       });
     });
+
+    if (sessionStorage.getItem('enrollmentComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
+      disableVerificationForms('Please complete student enrollment and Face ID setup first before submitting document verification.');
+    }
   </script>
 </body>
 </html>

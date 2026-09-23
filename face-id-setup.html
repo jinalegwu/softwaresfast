@@ -98,7 +98,6 @@
       <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
       <div class="header-links">
         <a class="header-link" href="student-enrollment.html">Enrollment</a>
-        <a class="header-link" href="document-verification.html">Document Verification</a>
         <a class="header-link" href="institute.html">Institute</a>
       </div>
     </div>
@@ -163,6 +162,12 @@
       status.className = `status ${type}`;
     }
 
+    if (sessionStorage.getItem('enrollmentComplete') !== 'true') {
+      setStatus('Please complete student enrollment details before setting up Face ID.', 'error');
+      startButton.disabled = true;
+      startButton.textContent = 'Complete enrollment first';
+    }
+
     async function startCamera() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setStatus('Camera access is not supported by this browser. You can continue enrollment on a supported device.', 'error');
@@ -216,6 +221,7 @@
       completion.classList.add('show');
       continueLink.classList.remove('disabled');
       continueLink.disabled = false;
+      sessionStorage.setItem('faceIdComplete', 'true');
       setStatus('Enrollment photo captured successfully in this browser session.', 'success');
     }
 

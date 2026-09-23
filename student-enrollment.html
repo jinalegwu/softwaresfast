@@ -68,8 +68,6 @@
     .checkbox-row input { width: auto; margin-top: .25rem; accent-color: var(--primary); }
 
     .submit { width: 100%; margin-top: .5rem; border: 0; border-radius: 9px; padding: .82rem 1rem; font: inherit; font-weight: 800; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 5px 14px rgba(15, 61, 38, .22); }
-    .helper-actions { margin-top: 1rem; display: flex; gap: .65rem; flex-wrap: wrap; }
-    .helper-link { text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: .45rem .8rem; color: var(--primary); font-size: .88rem; font-weight: 700; }
     .status { min-height: 1.35rem; margin-top: .9rem; font-size: .88rem; color: var(--muted); }
     .status.error { color: var(--danger); font-weight: 700; }
 
@@ -88,7 +86,6 @@
       <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
       <div class="header-links">
         <a class="back-link" href="institute.html">Institute</a>
-        <a class="back-link" href="document-verification.html">Document Verification</a>
       </div>
     </div>
   </header>
@@ -148,10 +145,6 @@
         <button class="submit" type="submit">Continue to Face ID setup</button>
       </form>
       <p id="formStatus" class="status" role="status" aria-live="polite"></p>
-      <div class="helper-actions">
-        <a class="helper-link" href="face-id-setup.html">Go to Face ID setup</a>
-        <a class="helper-link" href="document-verification.html">Open Document Verification Page</a>
-      </div>
     </section>
   </main>
 
@@ -171,6 +164,8 @@
         return;
       }
 
+      sessionStorage.setItem('enrollmentComplete', 'true');
+      sessionStorage.removeItem('faceIdComplete');
       const firstName = encodeURIComponent(document.getElementById('firstName').value.trim());
       window.location.href = `face-id-setup.html?firstName=${firstName}`;
     });
