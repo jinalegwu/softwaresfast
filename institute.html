@@ -319,7 +319,15 @@
 
   <script>
     (function () {
-      const programCatalog = JSON.parse(document.getElementById('programCatalogData').textContent);
+      let programCatalog = {};
+      const programCatalogElement = document.getElementById('programCatalogData');
+      if (programCatalogElement) {
+        try {
+          programCatalog = JSON.parse(programCatalogElement.textContent);
+        } catch (error) {
+          console.error('Unable to load institute program catalog.', error);
+        }
+      }
       const programTriggers = document.querySelectorAll('.program-trigger');
       const programModal = document.getElementById('programCoursesModalOverlay');
       const programModalPanel = document.getElementById('programCoursesModal');
@@ -416,7 +424,7 @@
           pageContent.setAttribute('aria-hidden', 'true');
           pageContent.inert = true;
         }
-        programModalTitle.focus();
+        programModalClose.focus();
       }
 
       programTriggers.forEach((trigger) => {
