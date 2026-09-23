@@ -260,6 +260,7 @@
     });
 
     if (sessionStorage.getItem('enrollmentComplete') !== 'true' || sessionStorage.getItem('faceIdComplete') !== 'true') {
+      sessionStorage.removeItem('documentVerificationComplete');
       disableVerificationForms('Please complete student enrollment and Face ID setup first before submitting document verification.');
     }
   </script>
