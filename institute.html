@@ -178,9 +178,9 @@
     </div>
   </header>
 
-  <div class="program-modal" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" hidden>
+  <div class="program-modal" id="programCoursesModalOverlay" hidden>
     <div class="program-modal-backdrop" data-close-modal="true"></div>
-    <div class="program-modal-panel" tabindex="-1">
+    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" tabindex="-1">
       <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
       <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
       <h2 id="programModalTitle">Diploma Program Courses</h2>
@@ -315,12 +315,14 @@
         }
       };
       const programTriggers = document.querySelectorAll('.program-trigger');
-      const programModal = document.getElementById('programCoursesModal');
-      const programModalPanel = programModal.querySelector('.program-modal-panel');
+      const programModal = document.getElementById('programCoursesModalOverlay');
+      const programModalPanel = document.getElementById('programCoursesModal');
       const programModalTitle = document.getElementById('programModalTitle');
       const programModalDescription = document.getElementById('programModalDescription');
       const programCourseList = document.getElementById('programCourseList');
       const programModalClose = document.getElementById('programModalClose');
+      const pageContentElements = Array.from(document.body.children)
+        .filter((element) => element !== programModal && element.tagName !== 'SCRIPT');
       let lastFocusedProgramTrigger = null;
 
       function populateProgramCourses(programKey) {
@@ -343,6 +345,10 @@
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+        pageContentElements.forEach((element) => {
+          element.removeAttribute('aria-hidden');
+          element.inert = false;
+        });
         if (lastFocusedProgramTrigger) {
           lastFocusedProgramTrigger.focus();
           lastFocusedProgramTrigger = null;
@@ -364,7 +370,10 @@
           if (!focusableElements.length) return;
           const firstElement = focusableElements[0];
           const lastElement = focusableElements[focusableElements.length - 1];
-          if (document.activeElement === programModalPanel) {
+          if (!programModalPanel.contains(document.activeElement)) {
+            event.preventDefault();
+            (event.shiftKey ? lastElement : firstElement).focus();
+          } else if (document.activeElement === programModalPanel) {
             event.preventDefault();
             (event.shiftKey ? lastElement : firstElement).focus();
           } else if (event.shiftKey && document.activeElement === firstElement) {
@@ -386,6 +395,10 @@
         }
         programModal.hidden = false;
         document.body.classList.add('modal-open');
+        pageContentElements.forEach((element) => {
+          element.setAttribute('aria-hidden', 'true');
+          element.inert = true;
+        });
         programModalPanel.focus();
       }
 
