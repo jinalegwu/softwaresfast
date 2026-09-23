@@ -106,7 +106,6 @@
   </style>
 </head>
 <body>
-  <div id="pageContent">
   <nav class="nav">
     <div class="container nav-inner">
       <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
@@ -263,26 +262,30 @@
   <footer class="footer container">
     <p>© 2026 Softwaresfast Institute. Learn, Build, Launch.</p>
   </footer>
-  </div>
 
-  <div id="programModal" hidden aria-hidden="true">
+  <div
+    id="programModal"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="programModalTitle"
+    aria-describedby="programModalDescription"
+  >
     <div class="program-modal-overlay" data-close-modal></div>
     <div
       class="program-modal-panel"
       id="programModalPanel"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="programModalTitle"
-      aria-describedby="programModalDescription"
       tabindex="-1"
     >
       <button type="button" class="program-modal-close btn btn-secondary" id="programModalCloseBtn" aria-label="Close course list">Close</button>
-      <p class="badge">Course list</p>
-      <h2 id="programModalTitle">Program Courses</h2>
-      <p id="programModalDescription" class="section-lead">Review the core learning modules included in this diploma program.</p>
-      <div class="program-modal-content">
-        <ul id="programCourseList"></ul>
-      </div>
+      <section class="program-modal-body" aria-label="Program course details">
+        <p class="badge">Course list</p>
+        <h2 id="programModalTitle">Program Courses</h2>
+        <p id="programModalDescription" class="section-lead">Review the core learning modules included in this diploma program.</p>
+        <div class="program-modal-content">
+          <ul id="programCourseList"></ul>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -335,10 +338,7 @@
       const programCourseList = document.getElementById('programCourseList');
       const programModalCloseBtn = document.getElementById('programModalCloseBtn');
       const modalBackground = programModal ? programModal.querySelector('[data-close-modal]') : null;
-      const pageContentBaseline = pageContent ? {
-        hadAriaHidden: pageContent.hasAttribute('aria-hidden'),
-        ariaHiddenValue: pageContent.getAttribute('aria-hidden')
-      } : null;
+      let pageContentBaseline = null;
       let lastFocusedElement = null;
 
       function restorePageContentState() {
@@ -360,7 +360,6 @@
       function closeProgramModal() {
         if (!programModal || !programModalPanel) return;
         programModal.hidden = true;
-        programModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         restorePageContentState();
         if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
@@ -374,20 +373,29 @@
         if (!program) return;
 
         lastFocusedElement = triggerButton || document.activeElement;
+        pageContentBaseline = pageContent ? {
+          hadAriaHidden: pageContent.hasAttribute('aria-hidden'),
+          ariaHiddenValue: pageContent.getAttribute('aria-hidden')
+        } : null;
         programModalTitle.textContent = program.title;
         programModalDescription.textContent = program.description;
-        programCourseList.innerHTML = program.courses.map((course) => `<li>${course}</li>`).join('');
-
-        programModal.hidden = false;
-        programModal.setAttribute('aria-hidden', 'false');
+        programCourseList.replaceChildren();
+        program.courses.forEach((course) => {
+          const courseItem = document.createElement('li');
+          courseItem.textContent = course;
+          programCourseList.appendChild(courseItem);
+        });
         document.body.style.overflow = 'hidden';
         if (pageContent) {
           pageContent.setAttribute('aria-hidden', 'true');
         }
-        programModalPanel.focus();
+        programModal.hidden = false;
+        programModalPanel.focus({ preventScroll: true });
       }
 
-      if (programButtons.length && programModal && programModalPanel && programModalCloseBtn) {
+      if (programButtons.length && programModal && programModalPanel && programModalCloseBtn && programModal.dataset.initialized !== 'true') {
+        programModal.dataset.initialized = 'true';
+
         programButtons.forEach((button) => {
           button.addEventListener('click', () => openProgramModal(button.getAttribute('data-program'), button));
         });
@@ -398,7 +406,7 @@
           modalBackground.addEventListener('click', closeProgramModal);
         }
 
-        document.addEventListener('keydown', (event) => {
+        programModal.addEventListener('keydown', (event) => {
           if (programModal.hidden) return;
 
           if (event.key === 'Escape') {
