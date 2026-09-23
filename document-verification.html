@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Softwaresfast Institute document verification step.">
+  <title>Document Verification Page</title>
+  <style>
+    :root {
+      --primary: #1a5c3a;
+      --primary-dark: #0f3d26;
+      --gold: #d4af37;
+      --ink: #14231b;
+      --muted: #64748b;
+      --surface: #ffffff;
+      --border: #dce8df;
+      --success: #167544;
+      --danger: #b42318;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #edf6ef 0%, #f8f5eb 100%);
+    }
+    a { color: inherit; }
+    .site-header { padding: 1rem 0; background: rgba(255,255,255,.92); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
+    .header-inner, .page { width: min(1100px, calc(100% - 2rem)); margin: 0 auto; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .brand { text-decoration: none; font-weight: 800; letter-spacing: .06em; color: var(--primary); }
+    .back-link { color: var(--primary); font-weight: 700; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+
+    .page { padding: 3rem 0; }
+    .intro { text-align: center; max-width: 760px; margin: 0 auto 2rem; }
+    .eyebrow { color: var(--primary); font-weight: 800; letter-spacing: .1em; font-size: .75rem; text-transform: uppercase; }
+    h1 { margin: .45rem 0 .7rem; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; }
+    .intro p { margin: 0; color: var(--muted); }
+
+    .progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; margin: 0 auto 2rem; max-width: 960px; }
+    .progress-step { background: rgba(255,255,255,.7); color: var(--muted); padding: .8rem; border: 1px solid var(--border); border-radius: 10px; text-align: center; font-size: .9rem; font-weight: 700; }
+    .progress-step.active { color: #fff; background: var(--primary); border-color: var(--primary); }
+    .progress-step.complete { color: var(--success); border-color: #a9d8bd; background: #effaf2; }
+
+    .layout { display: grid; grid-template-columns: 1fr .95fr; gap: 1.5rem; align-items: start; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: clamp(1.25rem, 3vw, 2rem); box-shadow: 0 10px 30px rgba(15, 61, 38, .08); }
+    .card h2 { margin: 0 0 .35rem; font-size: 1.35rem; }
+    .card-description { margin: 0 0 1.25rem; color: var(--muted); }
+
+    .context { display: grid; grid-template-columns: 92px 1fr; gap: 1rem; align-items: center; }
+    .context-photo { width: 92px; height: 92px; border-radius: 12px; object-fit: cover; border: 1px solid #c6dccb; background: #f6faf7; }
+    .context-meta { font-size: .92rem; color: #44544b; }
+
+    .verification-tabs { display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: .85rem; }
+    .verification-tab { border: 1px solid var(--border); background: #f6faf7; color: var(--primary); padding: .55rem .8rem; font-size: .82rem; border-radius: 999px; }
+    .verification-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .field { margin-bottom: .9rem; }
+    label { display: block; margin-bottom: .45rem; font-size: .9rem; font-weight: 700; }
+    input { width: 100%; padding: .78rem .9rem; border: 1px solid #cbd8cf; border-radius: 9px; font: inherit; color: var(--ink); background: #fff; }
+    input:focus { outline: 3px solid rgba(26,92,58,.15); border-color: var(--primary); }
+
+    .capture-box { border: 1px dashed #b7ccbb; border-radius: 14px; padding: .95rem; text-align: center; background: #f8fbf9; }
+    .capture-frame { position: relative; width: 100%; min-height: 260px; border-radius: 10px; overflow: hidden; background: #edf5ef; display: flex; align-items: center; justify-content: center; }
+    .capture-frame video, .capture-frame canvas, .capture-frame img { width: 100%; height: 260px; object-fit: cover; display: block; }
+    .placeholder-text { color: var(--muted); font-size: .88rem; padding: 1rem; }
+    .capture-actions { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center; margin-top: .85rem; }
+
+    button { border: 0; border-radius: 9px; padding: .82rem 1rem; font: inherit; font-weight: 800; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
+    button:hover { transform: translateY(-1px); }
+    .primary { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); box-shadow: 0 5px 14px rgba(15, 61, 38, .22); }
+    .secondary { color: var(--primary); background: #edf5ef; border: 1px solid #c6dccb; }
+
+    .upload-fallback { margin-top: .85rem; font-size: .82rem; color: var(--muted); text-align: left; }
+    .upload-fallback input[type="file"] { margin-top: .35rem; }
+    .status { min-height: 1.4rem; margin: 1rem 0 0; color: var(--muted); font-size: .9rem; }
+    .status.success { color: var(--success); font-weight: 700; }
+    .status.error { color: var(--danger); font-weight: 700; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+    .completion { display: none; margin-top: 1.25rem; padding: 1rem; border-radius: 10px; background: #effaf2; border: 1px solid #a9d8bd; color: #115d35; }
+    .completion.show { display: block; }
+    .future-note { margin-top: 1rem; padding: .9rem 1rem; border-left: 4px solid var(--gold); background: #fcf9ed; color: #5f5430; font-size: .85rem; line-height: 1.5; }
+
+    @media (max-width: 860px) {
+      .page { padding: 2rem 0; }
+      .layout { grid-template-columns: 1fr; }
+      .progress-step { font-size: .78rem; padding: .65rem .35rem; }
+      .context { grid-template-columns: 76px 1fr; }
+      .context-photo { width: 76px; height: 76px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
+      <a class="back-link" href="student-enrollment.html">← Back to Student Enrollment</a>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow">Institute portal</div>
+      <h1 id="page-title">Document Verification Page</h1>
+      <p>Verify identity with a National Identity Card or International Passport to complete enrollment.</p>
+    </section>
+
+    <div class="progress" aria-label="Enrollment progress">
+      <div class="progress-step complete">1. Student details</div>
+      <div class="progress-step complete">2. Face ID setup</div>
+      <div class="progress-step active">3. Document verification</div>
+      <div class="progress-step" id="progressComplete">4. Enrollment complete</div>
+    </div>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="context-title">
+        <h2 id="context-title">Enrollment context</h2>
+        <p class="card-description">Review the student details captured in the previous step.</p>
+        <div class="context">
+          <img id="contextPhoto" class="context-photo" alt="Captured face verification photo" />
+          <div class="context-meta" id="contextMeta"></div>
+        </div>
+        <div class="actions">
+          <a class="secondary" style="text-decoration:none; display:inline-block;" href="student-enrollment.html">Edit student details / Face ID</a>
+        </div>
+      </section>
+
+      <aside class="card" aria-labelledby="verification-title">
+        <h2 id="verification-title">Document verification</h2>
+        <p class="card-description">Capture your document using camera, or upload an image if camera access is unavailable.</p>
+
+        <div class="verification-tabs" role="tablist" aria-label="Identity document type">
+          <button type="button" class="verification-tab active" data-doc="national_id">National Identity Card</button>
+          <button type="button" class="verification-tab" data-doc="passport">International Passport</button>
+        </div>
+
+        <div class="field">
+          <label for="fullName">Full name (as on document)</label>
+          <input id="fullName" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="docNumber" id="docNumberLabel">National ID Number</label>
+          <input id="docNumber" type="text" required>
+        </div>
+        <div class="field">
+          <label for="docCountry">Country of issue</label>
+          <input id="docCountry" type="text" required>
+        </div>
+        <div class="field">
+          <label for="docExpiry">Expiry date</label>
+          <input id="docExpiry" type="date">
+        </div>
+
+        <div class="capture-box">
+          <div class="capture-frame">
+            <span class="placeholder-text" id="capturePlaceholder">Camera preview appears here after you start the camera.</span>
+            <video id="cameraVideo" autoplay playsinline muted hidden></video>
+            <canvas id="captureCanvas" hidden></canvas>
+            <img id="capturedImage" alt="Captured document preview" hidden>
+          </div>
+          <div class="capture-actions">
+            <button type="button" class="secondary" id="startCameraBtn">Start camera</button>
+            <button type="button" class="primary" id="snapPhotoBtn" disabled>Capture document</button>
+            <button type="button" class="secondary" id="retakeBtn" hidden>Retake</button>
+          </div>
+          <div class="upload-fallback">
+            Or upload a document image instead:
+            <input type="file" id="fileUpload" accept="image/*" capture="environment">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="primary" id="submitVerificationBtn">Submit document verification</button>
+        </div>
+
+        <p class="status" id="verifyStatus" role="status"></p>
+        <div class="completion" id="completionMessage" role="status"></div>
+        <div class="future-note">
+          <strong>Demo notice:</strong> This static flow only performs client-side validation and preview. Backend/API integration for real identity checks, secure storage, and compliance is still required.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const contextMeta = document.getElementById('contextMeta');
+    const contextPhoto = document.getElementById('contextPhoto');
+    const tabs = document.querySelectorAll('.verification-tab');
+    const docNumberLabel = document.getElementById('docNumberLabel');
+    const docNumberInput = document.getElementById('docNumber');
+    const fullNameInput = document.getElementById('fullName');
+    const docCountryInput = document.getElementById('docCountry');
+    const docExpiryInput = document.getElementById('docExpiry');
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('captureCanvas');
+    const capturedImage = document.getElementById('capturedImage');
+    const placeholderText = document.getElementById('capturePlaceholder');
+    const startBtn = document.getElementById('startCameraBtn');
+    const snapBtn = document.getElementById('snapPhotoBtn');
+    const retakeBtn = document.getElementById('retakeBtn');
+    const fileUpload = document.getElementById('fileUpload');
+    const verifyStatus = document.getElementById('verifyStatus');
+    const completion = document.getElementById('completionMessage');
+    const progressComplete = document.getElementById('progressComplete');
+
+    let currentDocType = 'national_id';
+    let stream = null;
+    let capturedDataUrl = null;
+
+    const enrollmentContextRaw = sessionStorage.getItem('enrollmentContext');
+    let enrollmentContext = null;
+
+    function setStatus(message, type = '') {
+      verifyStatus.textContent = message;
+      verifyStatus.className = `status ${type}`;
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+        stream = null;
+      }
+      video.srcObject = null;
+    }
+
+    function renderContext() {
+      if (!enrollmentContextRaw) {
+        contextMeta.innerHTML = '<strong>No saved enrollment context found.</strong><br>Return to Student Enrollment and complete steps 1 and 2 first.';
+        contextPhoto.alt = 'No captured face verification photo yet';
+        contextPhoto.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23f6faf7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="Segoe UI" font-size="14">No photo</text></svg>';
+        setStatus('Please go back and complete student enrollment details and Face ID setup.', 'error');
+        return;
+      }
+
+      try {
+        enrollmentContext = JSON.parse(enrollmentContextRaw);
+      } catch (error) {
+        setStatus('Saved enrollment details could not be read. Please restart enrollment.', 'error');
+        return;
+      }
+
+      const name = [enrollmentContext.firstName, enrollmentContext.lastName].filter(Boolean).join(' ');
+      contextMeta.innerHTML = `<strong>${name || 'Student'}</strong><br>${enrollmentContext.program || 'Program not selected'}<br>${enrollmentContext.email || ''}`;
+      contextPhoto.src = enrollmentContext.facePhotoDataUrl || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23f6faf7"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="Segoe UI" font-size="14">No photo</text></svg>';
+      fullNameInput.value = name;
+      setStatus('Continue by entering your document details and submitting verification.', 'success');
+    }
+
+    async function startCamera() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setStatus('Camera access is not supported by this browser. Please upload a document image.', 'error');
+        return;
+      }
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+        video.srcObject = stream;
+        video.hidden = false;
+        canvas.hidden = true;
+        capturedImage.hidden = true;
+        placeholderText.hidden = true;
+        snapBtn.disabled = false;
+        startBtn.disabled = true;
+        startBtn.textContent = 'Camera on';
+        setStatus('Camera ready. Center your document and capture.', 'success');
+      } catch (error) {
+        setStatus('Unable to access camera. Please allow permission or upload an image instead.', 'error');
+      }
+    }
+
+    function capturePhoto() {
+      if (!video.videoWidth || !video.videoHeight) {
+        setStatus('Camera is still loading. Please try again.', 'error');
+        return;
+      }
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      capturedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+      capturedImage.src = capturedDataUrl;
+      capturedImage.hidden = false;
+      video.hidden = true;
+      canvas.hidden = true;
+      stopCamera();
+      snapBtn.disabled = true;
+      retakeBtn.hidden = false;
+      startBtn.disabled = false;
+      startBtn.textContent = 'Start camera';
+      setStatus('Document captured. Review and submit verification.', 'success');
+    }
+
+    function resetCapture() {
+      capturedDataUrl = null;
+      fileUpload.value = '';
+      capturedImage.hidden = true;
+      video.hidden = true;
+      canvas.hidden = true;
+      placeholderText.hidden = false;
+      snapBtn.disabled = true;
+      retakeBtn.hidden = true;
+      startBtn.disabled = false;
+      startBtn.textContent = 'Start camera';
+      setStatus('Capture a new document photo or upload one.', '');
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((item) => item.classList.remove('active'));
+        tab.classList.add('active');
+        currentDocType = tab.getAttribute('data-doc');
+        if (currentDocType === 'passport') {
+          docNumberLabel.textContent = 'Passport Number';
+          docNumberInput.placeholder = 'Enter passport number';
+        } else {
+          docNumberLabel.textContent = 'National ID Number';
+          docNumberInput.placeholder = 'Enter national ID number';
+        }
+      });
+    });
+
+    startBtn.addEventListener('click', startCamera);
+    snapBtn.addEventListener('click', capturePhoto);
+    retakeBtn.addEventListener('click', resetCapture);
+
+    fileUpload.addEventListener('change', (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        capturedDataUrl = loadEvent.target.result;
+        capturedImage.src = capturedDataUrl;
+        capturedImage.hidden = false;
+        video.hidden = true;
+        canvas.hidden = true;
+        placeholderText.hidden = true;
+        retakeBtn.hidden = false;
+        snapBtn.disabled = true;
+        startBtn.disabled = false;
+        startBtn.textContent = 'Start camera';
+        stopCamera();
+        setStatus('Document image uploaded. Submit when ready.', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('submitVerificationBtn').addEventListener('click', () => {
+      completion.classList.remove('show');
+      const fullName = fullNameInput.value.trim();
+      const docNumber = docNumberInput.value.trim();
+      const docCountry = docCountryInput.value.trim();
+
+      if (!fullName || !docNumber || !docCountry) {
+        setStatus('Please fill in full name, document number, and country of issue.', 'error');
+        return;
+      }
+
+      if (!capturedDataUrl) {
+        setStatus('Please capture or upload your document image before submitting.', 'error');
+        return;
+      }
+
+      stopCamera();
+      progressComplete.classList.add('active', 'complete');
+      completion.innerHTML = `<strong>Enrollment complete (demo).</strong> Your ${currentDocType === 'passport' ? 'passport' : 'national identity'} details were validated on this page and marked as submitted.`;
+      completion.classList.add('show');
+      setStatus('Document verification submitted in this demo flow. Backend/API integration is still required for real checks.', 'success');
+      sessionStorage.removeItem('enrollmentContext');
+
+      const demoPayload = {
+        documentType: currentDocType,
+        fullName,
+        documentNumber: docNumber,
+        countryOfIssue: docCountry,
+        expiryDate: docExpiryInput.value || null,
+        enrollmentProgram: enrollmentContext && enrollmentContext.program ? enrollmentContext.program : null
+      };
+      console.log('Document verification submission (demo):', demoPayload);
+    });
+
+    window.addEventListener('beforeunload', stopCamera);
+    window.addEventListener('pagehide', stopCamera);
+    renderContext();
+  </script>
+</body>
+</html>
