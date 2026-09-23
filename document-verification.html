@@ -194,6 +194,7 @@
           showStatus(status, 'Please complete all required fields before continuing.', 'error');
           return;
         }
+        sessionStorage.setItem('documentVerificationComplete', 'true');
         showStatus(status, successMessage, 'success');
       });
     }

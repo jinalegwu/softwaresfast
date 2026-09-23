@@ -166,6 +166,7 @@
 
       sessionStorage.setItem('enrollmentComplete', 'true');
       sessionStorage.removeItem('faceIdComplete');
+      sessionStorage.removeItem('documentVerificationComplete');
       const firstName = encodeURIComponent(document.getElementById('firstName').value.trim());
       window.location.href = `face-id-setup.html?firstName=${firstName}`;
     });
