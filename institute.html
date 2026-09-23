@@ -112,6 +112,7 @@
   </style>
 </head>
 <body>
+  <div id="pageContent">
   <nav class="nav">
     <div class="container nav-inner">
       <a class="brand" href="index.html">SOFTWARESFAST INSTITUTE</a>
@@ -177,17 +178,6 @@
       <div class="stat"><h3>Career</h3><p>Portfolio Focused</p></div>
     </div>
   </header>
-
-  <div class="program-modal" id="programCoursesModalOverlay" hidden>
-    <div class="program-modal-backdrop" data-close-modal="true"></div>
-    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" tabindex="-1">
-      <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
-      <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
-      <h2 id="programModalTitle">Diploma Program Courses</h2>
-      <p id="programModalDescription">Select a diploma program to review the core subjects covered in the training.</p>
-      <ul class="program-course-list" id="programCourseList" aria-labelledby="programModalTitle"></ul>
-    </div>
-  </div>
 
   <section id="programs" class="section container">
     <h2>Programs You Can Join</h2>
@@ -273,6 +263,18 @@
   <footer class="footer container">
     <p>© 2026 Softwaresfast Institute. Learn, Build, Launch.</p>
   </footer>
+  </div>
+
+  <div class="program-modal" id="programCoursesModalOverlay" hidden>
+    <div class="program-modal-backdrop" data-close-modal="true"></div>
+    <div class="program-modal-panel" id="programCoursesModal" role="dialog" aria-modal="true" aria-labelledby="programModalTitle" aria-describedby="programModalDescription" tabindex="-1">
+      <button type="button" class="program-modal-close" id="programModalClose" aria-label="Close diploma course list">×</button>
+      <span class="badge" style="margin-bottom: 0.9rem;">Diploma course outline</span>
+      <h2 id="programModalTitle">Diploma Program Courses</h2>
+      <p id="programModalDescription">Select a diploma program to review the core subjects covered in the training.</p>
+      <ul class="program-course-list" id="programCourseList" aria-labelledby="programModalTitle"></ul>
+    </div>
+  </div>
 
   <script>
     (function () {
@@ -321,9 +323,11 @@
       const programModalDescription = document.getElementById('programModalDescription');
       const programCourseList = document.getElementById('programCourseList');
       const programModalClose = document.getElementById('programModalClose');
-      const pageContentElements = Array.from(document.body.children)
-        .filter((element) => element !== programModal && element.tagName !== 'SCRIPT');
-      const pageContentStates = new Map();
+      const pageContent = document.getElementById('pageContent');
+      const pageContentState = {
+        ariaHidden: pageContent.getAttribute('aria-hidden'),
+        inert: pageContent.inert
+      };
       let lastFocusedProgramTrigger = null;
 
       function populateProgramCourses(programKey) {
@@ -346,18 +350,12 @@
         document.body.classList.remove('modal-open');
         document.removeEventListener('keydown', handleProgramModalKeydown);
         programTriggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
-        pageContentElements.forEach((element) => {
-          const previousState = pageContentStates.get(element);
-          if (previousState) {
-            if (previousState.ariaHidden === null) {
-              element.removeAttribute('aria-hidden');
-            } else {
-              element.setAttribute('aria-hidden', previousState.ariaHidden);
-            }
-            element.inert = previousState.inert;
-          }
-        });
-        pageContentStates.clear();
+        if (pageContentState.ariaHidden === null) {
+          pageContent.removeAttribute('aria-hidden');
+        } else {
+          pageContent.setAttribute('aria-hidden', pageContentState.ariaHidden);
+        }
+        pageContent.inert = pageContentState.inert;
         if (lastFocusedProgramTrigger) {
           lastFocusedProgramTrigger.focus();
           lastFocusedProgramTrigger = null;
@@ -404,15 +402,11 @@
         }
         programModal.hidden = false;
         document.body.classList.add('modal-open');
+        pageContentState.ariaHidden = pageContent.getAttribute('aria-hidden');
+        pageContentState.inert = pageContent.inert;
+        pageContent.setAttribute('aria-hidden', 'true');
+        pageContent.inert = true;
         programModalPanel.focus();
-        pageContentElements.forEach((element) => {
-          pageContentStates.set(element, {
-            ariaHidden: element.getAttribute('aria-hidden'),
-            inert: element.inert
-          });
-          element.setAttribute('aria-hidden', 'true');
-          element.inert = true;
-        });
       }
 
       programTriggers.forEach((trigger) => {
