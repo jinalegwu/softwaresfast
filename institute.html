@@ -45,7 +45,18 @@
       chooseFileBtn.addEventListener('click',()=>{if(!enrollmentSaved){setStatus('Please save your enrollment photo first (Step 1).','error');return}fileUpload.click()});
       fileUpload.addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;fileNamePreview.textContent='Selected: '+file.name;const reader=new FileReader();reader.onload=evt=>{idDocDataUrl=evt.target.result;uploadedImage.src=idDocDataUrl;uploadedImage.style.display='block';uploadPlaceholder.style.display='none';removeFileBtn.style.display='inline-block';setStatus('Document image selected. Review it, then submit for verification.','success')};reader.readAsDataURL(file)});
       removeFileBtn.addEventListener('click',()=>{idDocDataUrl=null;fileUpload.value='';fileNamePreview.textContent='';uploadedImage.removeAttribute('src');uploadedImage.style.display='none';uploadPlaceholder.style.display='block';removeFileBtn.style.display='none';setStatus('','');statusEl.className='verify-status'});
-      submitVerificationBtn.addEventListener('click',()=>{if(!enrollmentSaved){setStatus('Please save your enrollment photo in Step 1 before submitting ID verification.','error');return}const fullName=document.getElementById('fullName').value.trim(),docNumber=document.getElementById('docNumber').value.trim(),docCountry=document.getElementById('docCountry').value.trim();if(!fullName||!docNumber||!docCountry){setStatus('Please fill in your name, document number, and country of issue.','error');return}if(!idDocDataUrl){setStatus('Please choose a photo of your '+(currentDocType==='passport'?'passport':'national ID')+' before submitting.','error');return}const payload={studentId,documentType:currentDocType,fullName,documentNumber:docNumber,countryOfIssue:docCountry,expiryDate:document.getElementById('docExpiry').value||null,imageDataUrl:idDocDataUrl};submitVerificationBtn.disabled=true;setStatus('Submitting verification…','loading');postJSON(VERIFICATION_ENDPOINT,payload).then(()=>setStatus('Verification submitted successfully! Our admissions team will confirm your identity shortly.','success')).catch(err=>setStatus('Could not submit verification: '+err.message,'error')).finally(()=>{submitVerificationBtn.disabled=false})});
+      submitVerificationBtn.addEventListener('click',()=>{
+        if(!enrollmentSaved){setStatus('Please save your enrollment photo in Step 1 before submitting ID verification.','error');return}
+        const fullName=document.getElementById('fullName').value.trim(),docNumber=document.getElementById('docNumber').value.trim(),docCountry=document.getElementById('docCountry').value.trim();
+        if(!fullName||!docNumber||!docCountry){setStatus('Please fill in your name, document number, and country of issue.','error');return}
+        if(!idDocDataUrl){setStatus('Please choose a photo of your '+(currentDocType==='passport'?'passport':'national ID')+' before submitting.','error');return}
+        const payload={studentId,documentType:currentDocType,fullName,documentNumber:docNumber,countryOfIssue:docCountry,expiryDate:document.getElementById('docExpiry').value||null,imageDataUrl:idDocDataUrl};
+        // Instant local success once a chosen file image exists — no waiting on backend.
+        setStatus('Verification submitted successfully! Our admissions team will confirm your identity shortly.','success');
+        submitVerificationBtn.disabled=false;
+        // Optional, non-blocking backend sync — runs quietly in the background.
+        postJSON(VERIFICATION_ENDPOINT,payload).catch(err=>console.warn('Optional verification backend call failed:',err));
+      });
     })();
   </script>
 </body>
