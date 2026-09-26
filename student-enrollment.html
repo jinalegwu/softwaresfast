@@ -501,10 +501,6 @@
         setStatus('Please save your student details before final submission.', 'error');
         return;
       }
-      if (!validateDetailsForm()) {
-        setStatus('Please review your student details and correct any missing fields before submitting.', 'error');
-        return;
-      }
       if (!photoSaved) {
         setStatus('Please capture and save your enrollment photo before Student ID verification.', 'error');
         return;
