@@ -375,6 +375,14 @@
       updateProgress();
     }
 
+    function handleVerificationChange() {
+      if (!enrollmentSubmitted) {
+        return;
+      }
+      resetCompletion();
+      setStatus('Verification details updated. Review and submit again to confirm your enrollment.', '');
+    }
+
     function resetPhotoAndVerificationState() {
       stopCamera();
       photoCaptured = false;
@@ -479,6 +487,9 @@
       resetCompletion();
       startCamera();
     });
+    documentType.addEventListener('change', handleVerificationChange);
+    documentNumber.addEventListener('input', handleVerificationChange);
+    idUpload.addEventListener('change', handleVerificationChange);
 
     form.addEventListener('submit', event => {
       event.preventDefault();
@@ -514,9 +525,8 @@
         setStatus('Please upload a valid image file for your Student ID verification.', 'error');
         return;
       }
-
       enrollmentSubmitted = true;
-      verificationFields.disabled = true;
+      enrollmentSubmitted = true;
       updateProgress();
       completion.textContent = 'Enrollment submitted. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.';
       completion.classList.add('show');
