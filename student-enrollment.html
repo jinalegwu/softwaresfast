@@ -270,9 +270,9 @@
           </div>
         </div>
 
-        <div class="verification-tabs" role="group" aria-label="Identity document type">
-          <button type="button" class="verification-tab active" data-doc-type="national_id" aria-pressed="true">National ID</button>
-          <button type="button" class="verification-tab" data-doc-type="passport" aria-pressed="false">International Passport</button>
+        <div class="verification-tabs" role="radiogroup" aria-label="Identity document type">
+          <button type="button" class="verification-tab active" data-doc-type="national_id" role="radio" aria-checked="true">National ID</button>
+          <button type="button" class="verification-tab" data-doc-type="passport" role="radio" aria-checked="false">International Passport</button>
         </div>
 
         <div class="verification-upload">
@@ -312,7 +312,7 @@
       idType.value = value;
       verificationTabs.forEach((tab) => {
         tab.classList.toggle('active', tab.dataset.docType === value);
-        tab.setAttribute('aria-pressed', String(tab.dataset.docType === value));
+        tab.setAttribute('aria-checked', String(tab.dataset.docType === value));
       });
     }
 
