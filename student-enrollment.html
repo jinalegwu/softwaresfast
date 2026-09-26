@@ -46,7 +46,7 @@
     h1 { margin: .45rem 0 .7rem; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; }
     .intro p { margin: 0; color: var(--muted); }
 
-    .progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin: 0 auto 2rem; max-width: 760px; }
+    .progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; margin: 0 auto 2rem; max-width: 860px; }
     .progress-step { background: rgba(255,255,255,.7); color: var(--muted); padding: .8rem; border: 1px solid var(--border); border-radius: 10px; text-align: center; font-size: .9rem; font-weight: 700; }
     .progress-step.active { color: #fff; background: var(--primary); border-color: var(--primary); }
     .progress-step.complete { color: var(--success); border-color: #a9d8bd; background: #effaf2; }
@@ -88,30 +88,20 @@
     .status.success { color: var(--success); font-weight: 700; }
     .status.error { color: var(--danger); font-weight: 700; }
 
-    .document-verification {
-      margin-top: 1.25rem;
-      padding-top: 1.1rem;
-      border-top: 1px solid var(--border);
+    .verification-card { margin-top: 1.5rem; }
+    .verification-card.locked {
+      background: linear-gradient(180deg, #ffffff 0%, #f6faf7 100%);
     }
     .verification-grid { display: grid; gap: .9rem; }
-    .verification-tabs {
-      display: flex;
-      gap: .55rem;
-      flex-wrap: wrap;
-      margin-bottom: .35rem;
+    .verification-fields {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      min-width: 0;
     }
-    .verification-tab {
-      border: 1px solid var(--border);
-      background: #f6faf7;
-      color: var(--primary);
-      padding: .55rem .8rem;
-      font-size: .8rem;
-      border-radius: 999px;
-    }
-    .verification-tab.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
+    .verification-fields[disabled] {
+      opacity: .6;
+      pointer-events: none;
     }
     .verification-upload {
       padding: 1rem;
@@ -132,6 +122,21 @@
       font-size: .75rem;
       line-height: 1.5;
       margin-top: .5rem;
+    }
+    .lock-note {
+      margin: 0 0 1rem;
+      padding: .85rem 1rem;
+      border-radius: 12px;
+      background: #fcf9ed;
+      border: 1px solid #efdfad;
+      color: #6f5e28;
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+    .lock-note.unlocked {
+      background: #effaf2;
+      border-color: #a9d8bd;
+      color: #115d35;
     }
 
     .privacy-note { margin-top: 1.25rem; padding: .9rem 1rem; border-left: 4px solid var(--gold); background: #fcf9ed; color: #5f5430; font-size: .85rem; line-height: 1.5; }
@@ -159,13 +164,14 @@
     <section class="intro" aria-labelledby="page-title">
       <div class="eyebrow">Institute portal</div>
       <h1 id="page-title">Student Enrollment</h1>
-      <p>Complete your student profile and set up a face verification photo for secure check-in.</p>
+      <p>Complete your student profile, capture and save your enrollment photo, then unlock Student ID verification before final submission.</p>
     </section>
 
     <div class="progress" aria-label="Enrollment progress">
-      <div class="progress-step active" id="progressProfile">1. Student details</div>
-      <div class="progress-step" id="progressFace">2. Face ID setup</div>
-      <div class="progress-step" id="progressComplete">3. Enrollment complete</div>
+      <div class="progress-step active" id="progressDetails">1. Student details</div>
+      <div class="progress-step" id="progressPhoto">2. Save enrollment photo</div>
+      <div class="progress-step" id="progressVerification">3. Student ID verification</div>
+      <div class="progress-step" id="progressComplete">4. Submit</div>
     </div>
 
     <div class="enrollment-grid">
@@ -208,52 +214,68 @@
             <input id="consent" name="consent" type="checkbox" required>
             <span>I consent to the use of my enrollment photo for institute identity verification and attendance check-in.</span>
           </label>
-          <button class="primary submit" type="submit">Continue to Face ID setup</button>
+          <button class="primary submit" type="submit">Save student details</button>
         </form>
       </section>
 
       <aside class="card face-card" aria-labelledby="face-title">
         <h2 id="face-title">Face ID setup</h2>
-        <p class="card-description">Take a clear, well-lit photo facing the camera.</p>
+        <p class="card-description">After saving your student details, take a clear photo and save it to unlock Student ID verification.</p>
         <div class="face-stage" id="faceStage">
           <div class="face-placeholder">
             <div class="face-icon" aria-hidden="true">◉</div>
             <strong>No enrollment photo yet</strong>
-            <p>Allow camera access to begin.</p>
+            <p>Save your details first, then allow camera access to begin.</p>
           </div>
           <video id="camera" autoplay playsinline aria-label="Camera preview"></video>
           <canvas id="photoCanvas" aria-label="Captured enrollment photo"></canvas>
           <div class="face-guide" aria-hidden="true"></div>
         </div>
         <div class="face-actions">
-          <button class="primary" type="button" id="startCamera">Start camera</button>
+          <button class="primary" type="button" id="startCamera" disabled>Start camera</button>
           <button class="secondary" type="button" id="capturePhoto" disabled>Capture photo</button>
+          <button class="secondary" type="button" id="savePhoto" disabled>Save photo</button>
           <button class="secondary" type="button" id="retakePhoto" hidden>Retake photo</button>
         </div>
-        <p class="status" id="cameraStatus" role="status">Your camera is off.</p>
-
-        <div class="document-verification" aria-labelledby="documentVerificationTitle">
-          <h2 id="documentVerificationTitle" style="margin:0 0 .75rem; font-size:1.08rem;">Student ID verification</h2>
-          <div class="verification-grid">
-            <div class="verification-tabs" role="tablist" aria-label="Identity document type">
-              <button type="button" class="verification-tab active" data-doc-type="national_id">National ID</button>
-              <button type="button" class="verification-tab" data-doc-type="passport">International Passport</button>
-            </div>
-
-            <div class="verification-upload">
-              <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-              <input id="studentIdUpload" type="file" accept="image/*" capture="environment" />
-              <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
-            </div>
-          </div>
-        </div>
+        <p class="status" id="cameraStatus" role="status">Save your student details to unlock the camera step.</p>
 
         <div class="privacy-note">
           <strong>Privacy:</strong> This demo keeps the captured photo only in this browser session. A production Face ID system needs secure server-side enrollment, explicit consent, access control, and encrypted storage.
         </div>
-        <div class="completion" id="completionMessage" role="status"></div>
       </aside>
     </div>
+
+    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle">
+      <h2 id="documentVerificationTitle">Student ID verification</h2>
+      <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
+      <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
+      <fieldset class="verification-fields" id="verificationFields" disabled>
+        <div class="verification-grid">
+          <div class="form-row">
+            <div class="field">
+              <label for="documentType">ID document type</label>
+              <select id="documentType" required>
+                <option value="">Select an ID type</option>
+                <option value="national_id">National ID</option>
+                <option value="passport">International Passport</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="documentNumber">ID number</label>
+              <input id="documentNumber" type="text" placeholder="Enter your ID number" required>
+            </div>
+          </div>
+
+          <div class="verification-upload">
+            <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
+            <input id="studentIdUpload" type="file" accept="image/*" capture="environment" required />
+            <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification, then submit your enrollment.</div>
+          </div>
+        </div>
+        <button class="primary submit" type="button" id="finalSubmit">Submit enrollment</button>
+      </fieldset>
+      <div class="completion" id="completionMessage" role="status"></div>
+    </section>
   </main>
 
   <script>
@@ -263,30 +285,86 @@
     const canvas = document.getElementById('photoCanvas');
     const startButton = document.getElementById('startCamera');
     const captureButton = document.getElementById('capturePhoto');
+    const saveButton = document.getElementById('savePhoto');
     const retakeButton = document.getElementById('retakePhoto');
     const status = document.getElementById('cameraStatus');
     const completion = document.getElementById('completionMessage');
-    const progressProfile = document.getElementById('progressProfile');
-    const progressFace = document.getElementById('progressFace');
+    const verificationCard = document.getElementById('verificationCard');
+    const verificationFields = document.getElementById('verificationFields');
+    const verificationLockNote = document.getElementById('verificationLockNote');
+    const finalSubmit = document.getElementById('finalSubmit');
+    const progressDetails = document.getElementById('progressDetails');
+    const progressPhoto = document.getElementById('progressPhoto');
+    const progressVerification = document.getElementById('progressVerification');
     const progressComplete = document.getElementById('progressComplete');
     const idUpload = document.getElementById('studentIdUpload');
-    const verificationTabs = document.querySelectorAll('.verification-tab');
+    const documentType = document.getElementById('documentType');
+    const documentNumber = document.getElementById('documentNumber');
     let stream = null;
+    let detailsSaved = false;
     let photoCaptured = false;
+    let photoSaved = false;
+    let enrollmentSubmitted = false;
 
     function setStatus(message, type = '') {
       status.textContent = message;
       status.className = `status ${type}`;
     }
 
-    verificationTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        verificationTabs.forEach((item) => item.classList.remove('active'));
-        tab.classList.add('active');
+    function updateProgress() {
+      [progressDetails, progressPhoto, progressVerification, progressComplete].forEach((step) => {
+        step.classList.remove('active', 'complete');
       });
-    });
+
+      if (!detailsSaved) {
+        progressDetails.classList.add('active');
+        return;
+      }
+
+      progressDetails.classList.add('complete');
+
+      if (!photoSaved) {
+        progressPhoto.classList.add('active');
+        return;
+      }
+
+      progressPhoto.classList.add('complete');
+
+      if (!enrollmentSubmitted) {
+        progressVerification.classList.add('active');
+        return;
+      }
+
+      progressVerification.classList.add('complete');
+      progressComplete.classList.add('active', 'complete');
+    }
+
+    function lockVerificationSection() {
+      verificationFields.disabled = true;
+      verificationCard.classList.add('locked');
+      verificationLockNote.classList.remove('unlocked');
+      verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
+    }
+
+    function unlockVerificationSection() {
+      verificationFields.disabled = false;
+      verificationCard.classList.remove('locked');
+      verificationLockNote.classList.add('unlocked');
+      verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
+    }
+
+    function resetCompletion() {
+      enrollmentSubmitted = false;
+      completion.classList.remove('show');
+      completion.textContent = '';
+      updateProgress();
+    }
 
     async function startCamera() {
+      if (!detailsSaved) {
+        setStatus('Save your student details before starting the camera.', 'error');
+        return;
+      }
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setStatus('Camera access is not supported by this browser.', 'error');
         return;
@@ -299,11 +377,12 @@
         startButton.textContent = 'Camera on';
         startButton.disabled = true;
         captureButton.disabled = false;
+        saveButton.disabled = true;
         retakeButton.hidden = true;
         photoCaptured = false;
-        progressProfile.classList.add('complete');
-        progressProfile.classList.remove('active');
-        progressFace.classList.add('active');
+        photoSaved = false;
+        lockVerificationSection();
+        updateProgress();
         setStatus('Camera is ready. Center your face in the guide, then capture your photo.', 'success');
       } catch (error) {
         setStatus('We could not access your camera. Please allow camera permission and try again.', 'error');
@@ -327,51 +406,96 @@
       canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       photoCaptured = true;
+      photoSaved = false;
       stopCamera();
       stage.classList.remove('camera-on');
       stage.classList.add('captured');
       captureButton.disabled = true;
+      saveButton.disabled = false;
       retakeButton.hidden = false;
       startButton.hidden = true;
-      setStatus('Enrollment photo captured. Review it, then submit your enrollment.', 'success');
+      lockVerificationSection();
+      updateProgress();
+      setStatus('Enrollment photo captured. Review it and save the photo to unlock Student ID verification.', 'success');
+    }
+
+    function savePhoto() {
+      if (!photoCaptured) {
+        setStatus('Capture your enrollment photo before saving it.', 'error');
+        return;
+      }
+      photoSaved = true;
+      saveButton.disabled = true;
+      unlockVerificationSection();
+      updateProgress();
+      setStatus('Enrollment photo saved. Student ID verification is now unlocked.', 'success');
     }
 
     startButton.addEventListener('click', startCamera);
     captureButton.addEventListener('click', capturePhoto);
+    saveButton.addEventListener('click', savePhoto);
     retakeButton.addEventListener('click', () => {
       startButton.hidden = false;
       startButton.disabled = false;
       startButton.textContent = 'Start camera';
+      photoCaptured = false;
+      photoSaved = false;
+      saveButton.disabled = true;
+      lockVerificationSection();
+      resetCompletion();
       startCamera();
     });
 
     form.addEventListener('submit', event => {
       event.preventDefault();
-      completion.classList.remove('show');
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
-      if (!photoCaptured) {
-        progressProfile.classList.add('complete');
-        progressProfile.classList.remove('active');
-        progressFace.classList.add('active');
-        setStatus('Please capture your enrollment photo before submitting.', 'error');
-        document.getElementById('faceTitle')?.focus();
-        return;
-      }
-      if (!idUpload.value) {
-        setStatus('Please upload a valid National ID or International Passport image for verification.', 'error');
-        return;
-      }
-      progressFace.classList.remove('active');
-      progressFace.classList.add('complete');
-      progressComplete.classList.add('active', 'complete');
-      completion.innerHTML = `<strong>Enrollment ready.</strong> Thank you, ${document.getElementById('firstName').value}. Your student details, photo, and ID verification have been validated in this demo flow.`;
-      completion.classList.add('show');
-      setStatus('Enrollment completed locally. Connect this form to a secure backend to save records.', 'success');
+      detailsSaved = true;
+      startButton.disabled = false;
+      resetCompletion();
+      setStatus('Student details saved. Start the camera, capture your photo, and save it to continue.', 'success');
     });
 
+    finalSubmit.addEventListener('click', () => {
+      completion.classList.remove('show');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        detailsSaved = false;
+        updateProgress();
+        setStatus('Please complete and save your student details first.', 'error');
+        return;
+      }
+      if (!detailsSaved) {
+        setStatus('Please save your student details before final submission.', 'error');
+        return;
+      }
+      if (!photoSaved) {
+        setStatus('Please capture and save your enrollment photo before Student ID verification.', 'error');
+        return;
+      }
+      if (!documentType.value) {
+        documentType.reportValidity();
+        return;
+      }
+      if (!documentNumber.value.trim()) {
+        documentNumber.reportValidity();
+        return;
+      }
+      if (!idUpload.files.length) {
+        idUpload.reportValidity();
+        return;
+      }
+
+      enrollmentSubmitted = true;
+      updateProgress();
+      completion.innerHTML = `<strong>Enrollment submitted.</strong> Thank you, ${document.getElementById('firstName').value}. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.`;
+      completion.classList.add('show');
+      setStatus('Submission successful. Your enrollment flow is complete.', 'success');
+    });
+
+    updateProgress();
     window.addEventListener('beforeunload', stopCamera);
   </script>
 </body>
