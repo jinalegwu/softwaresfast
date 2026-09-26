@@ -223,7 +223,6 @@
               <span>I consent to the use of my enrollment photo for institute identity verification and attendance check-in.</span>
             </label>
             <input type="hidden" id="documentType" name="documentType" value="national_id">
-            <input type="file" id="enrollmentPhotoFile" name="enrollmentPhotoFile" form="enrollmentForm" hidden aria-hidden="true">
           </form>
         </section>
 
@@ -296,7 +295,6 @@
     const verificationStatus = document.getElementById('verificationStatus');
     const idUpload = document.getElementById('studentIdUpload');
     const documentType = document.getElementById('documentType');
-    const enrollmentPhotoFile = document.getElementById('enrollmentPhotoFile');
     const submitEnrollmentButton = document.getElementById('submitEnrollment');
     const verificationTabs = document.querySelectorAll('.verification-tab');
     let stream = null;
@@ -304,6 +302,7 @@
     let photoSaved = false;
     let verificationLocked = true;
     let selectedDocType = 'national_id';
+    let savedEnrollmentPhotoFile = null;
 
     function setStatus(message, type = '') {
       status.textContent = message;
@@ -404,22 +403,14 @@
       video.srcObject = null;
     }
 
-    function clearEnrollmentPhotoFile() {
-      enrollmentPhotoFile.files = new DataTransfer().files;
-    }
-
-    function setEnrollmentPhotoFile(canvasForUpload) {
+    function createEnrollmentPhotoFile(canvasForUpload) {
       return new Promise((resolve) => {
         canvasForUpload.toBlob((blob) => {
           if (!blob) {
-            resolve(false);
+            resolve(null);
             return;
           }
-          const uploadFile = new File([blob], 'enrollment-photo.jpg', { type: 'image/jpeg' });
-          const fileList = new DataTransfer();
-          fileList.items.add(uploadFile);
-          enrollmentPhotoFile.files = fileList.files;
-          resolve(true);
+          resolve(new File([blob], 'enrollment-photo.jpg', { type: 'image/jpeg' }));
         }, 'image/jpeg', 0.82);
       });
     }
@@ -434,7 +425,7 @@
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       photoCaptured = true;
       photoSaved = false;
-      clearEnrollmentPhotoFile();
+      savedEnrollmentPhotoFile = null;
       idUpload.value = '';
       setVerificationLocked(true);
       stopCamera();
@@ -459,11 +450,12 @@
       serializedCanvas.width = Math.round(canvas.width * scale);
       serializedCanvas.height = Math.round(canvas.height * scale);
       serializedCanvas.getContext('2d').drawImage(canvas, 0, 0, serializedCanvas.width, serializedCanvas.height);
-      const photoFileReady = await setEnrollmentPhotoFile(serializedCanvas);
-      if (!photoFileReady) {
+      const photoFile = await createEnrollmentPhotoFile(serializedCanvas);
+      if (!photoFile) {
         setStatus('We could not save your photo file. Please retake and try again.', 'error');
         return;
       }
+      savedEnrollmentPhotoFile = photoFile;
       photoSaved = true;
       stopCamera();
       savePhotoButton.disabled = true;
@@ -480,7 +472,7 @@
       startButton.textContent = 'Start camera';
       savePhotoButton.textContent = 'Save photo';
       photoSaved = false;
-      clearEnrollmentPhotoFile();
+      savedEnrollmentPhotoFile = null;
       setVerificationLocked(true);
       startCamera();
     });
@@ -503,10 +495,16 @@
         setStatus('Please save your captured enrollment photo to unlock Student ID verification.', 'error');
         return;
       }
+      if (!savedEnrollmentPhotoFile) {
+        setStatus('Please save a valid enrollment photo file before submitting.', 'error');
+        return;
+      }
       if (!idUpload.value) {
         setStatus('Please upload a valid National ID or International Passport image for verification.', 'error');
         return;
       }
+      const enrollmentSubmission = new FormData(form);
+      enrollmentSubmission.set('enrollmentPhotoFile', savedEnrollmentPhotoFile);
       progressFace.classList.remove('active');
       progressFace.classList.add('complete');
       progressComplete.classList.add('active', 'complete');
