@@ -256,7 +256,7 @@
         <h2 id="documentVerificationTitle" style="margin:0 0 .35rem;">Student ID verification</h2>
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
-          <div class="verification-tabs" role="tablist" aria-label="Identity document type">
+          <div class="verification-tabs" aria-label="Identity document type">
             <button type="button" class="verification-tab active" data-doc-type="national_id">National ID</button>
             <button type="button" class="verification-tab" data-doc-type="passport">International Passport</button>
           </div>
@@ -334,6 +334,7 @@
       if (!verificationLocked) {
         return;
       }
+      setStatus('Save your enrollment photo first to unlock Student ID verification.', 'error');
       idUpload.value = '';
     });
 
