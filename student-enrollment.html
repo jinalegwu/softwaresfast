@@ -311,6 +311,18 @@
       status.className = `status ${type}`;
     }
 
+    function validateDetailsForm() {
+      const controls = Array.from(form.elements).filter((element) => typeof element.checkValidity === 'function');
+      const invalidControl = controls.find((element) => !element.checkValidity());
+
+      if (invalidControl) {
+        invalidControl.reportValidity();
+        return false;
+      }
+
+      return true;
+    }
+
     function updateProgress() {
       [progressDetails, progressPhoto, progressVerification, progressComplete].forEach((step) => {
         step.classList.remove('active', 'complete');
@@ -470,8 +482,7 @@
 
     form.addEventListener('submit', event => {
       event.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
+      if (!validateDetailsForm()) {
         return;
       }
       detailsSaved = true;
@@ -486,8 +497,7 @@
         setStatus('Please save your student details before final submission.', 'error');
         return;
       }
-      if (!form.checkValidity()) {
-        form.reportValidity();
+      if (!validateDetailsForm()) {
         setStatus('Please review your student details and correct any missing fields before submitting.', 'error');
         return;
       }
@@ -514,7 +524,8 @@
 
       enrollmentSubmitted = true;
       updateProgress();
-      completion.textContent = `Enrollment submitted. Thank you, ${document.getElementById('firstName').value}. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.`;
+      const firstName = document.getElementById('firstName').value.trim() || 'Student';
+      completion.textContent = `Enrollment submitted. Thank you, ${firstName}. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.`;
       completion.classList.add('show');
       setStatus('Submission successful. Your enrollment flow is complete.', 'success');
     });
