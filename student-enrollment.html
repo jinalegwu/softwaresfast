@@ -223,6 +223,7 @@
               <span>I consent to the use of my enrollment photo for institute identity verification and attendance check-in.</span>
             </label>
             <input type="hidden" id="documentType" name="documentType" value="national_id">
+            <input type="hidden" id="enrollmentPhotoData" name="enrollmentPhotoData" value="">
           </form>
         </section>
 
@@ -295,6 +296,7 @@
     const verificationStatus = document.getElementById('verificationStatus');
     const idUpload = document.getElementById('studentIdUpload');
     const documentType = document.getElementById('documentType');
+    const enrollmentPhotoData = document.getElementById('enrollmentPhotoData');
     const submitEnrollmentButton = document.getElementById('submitEnrollment');
     const verificationTabs = document.querySelectorAll('.verification-tab');
     let stream = null;
@@ -316,6 +318,7 @@
       submitEnrollmentButton.disabled = locked;
       verificationTabs.forEach((tab) => {
         tab.disabled = locked;
+        tab.setAttribute('aria-disabled', String(locked));
         tab.classList.remove('active');
         tab.setAttribute('aria-checked', 'false');
         tab.tabIndex = -1;
@@ -411,6 +414,7 @@
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       photoCaptured = true;
       photoSaved = false;
+      enrollmentPhotoData.value = '';
       idUpload.value = '';
       setVerificationLocked(true);
       stopCamera();
@@ -430,6 +434,7 @@
         return;
       }
       photoSaved = true;
+      enrollmentPhotoData.value = canvas.toDataURL('image/jpeg', 0.9);
       stopCamera();
       savePhotoButton.disabled = true;
       savePhotoButton.textContent = 'Photo saved';
