@@ -486,6 +486,10 @@
         idUpload.reportValidity();
         return;
       }
+      if (!idUpload.files[0].type || !idUpload.files[0].type.startsWith('image/')) {
+        setStatus('Please upload a valid image file for your Student ID verification.', 'error');
+        return;
+      }
 
       enrollmentSubmitted = true;
       updateProgress();
