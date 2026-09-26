@@ -249,31 +249,33 @@
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
-      <fieldset class="verification-fields" id="verificationFields" disabled>
-        <div class="verification-grid">
-          <div class="form-row">
-            <div class="field">
-              <label for="documentType">ID document type</label>
-              <select id="documentType" required>
-                <option value="">Select an ID type</option>
-                <option value="national_id">National ID</option>
-                <option value="passport">International Passport</option>
-              </select>
+      <form id="verificationForm" novalidate>
+        <fieldset class="verification-fields" id="verificationFields" disabled>
+          <div class="verification-grid">
+            <div class="form-row">
+              <div class="field">
+                <label for="documentType">ID document type</label>
+                <select id="documentType" required>
+                  <option value="">Select an ID type</option>
+                  <option value="national_id">National ID</option>
+                  <option value="passport">International Passport</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="documentNumber">ID number</label>
+                <input id="documentNumber" type="text" placeholder="Enter your ID number" required>
+              </div>
             </div>
-            <div class="field">
-              <label for="documentNumber">ID number</label>
-              <input id="documentNumber" type="text" placeholder="Enter your ID number" required>
-            </div>
-          </div>
 
-          <div class="verification-upload">
-            <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-            <input id="studentIdUpload" type="file" accept="image/*" capture="environment" required />
-            <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification, then submit your enrollment.</div>
+            <div class="verification-upload">
+              <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
+              <input id="studentIdUpload" type="file" accept="image/*" capture="environment" required />
+              <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification, then submit your enrollment.</div>
+            </div>
           </div>
-        </div>
-        <button class="primary submit" type="button" id="finalSubmit">Submit enrollment</button>
-      </fieldset>
+          <button class="primary submit" type="submit" id="finalSubmit">Submit enrollment</button>
+        </fieldset>
+      </form>
       <div class="completion" id="completionMessage" role="status"></div>
     </section>
   </main>
@@ -290,6 +292,7 @@
     const status = document.getElementById('cameraStatus');
     const completion = document.getElementById('completionMessage');
     const verificationCard = document.getElementById('verificationCard');
+    const verificationForm = document.getElementById('verificationForm');
     const verificationFields = document.getElementById('verificationFields');
     const verificationLockNote = document.getElementById('verificationLockNote');
     const finalSubmit = document.getElementById('finalSubmit');
@@ -491,7 +494,8 @@
       setStatus('Student details saved. Start the camera, capture your photo, and save it to continue.', 'success');
     });
 
-    finalSubmit.addEventListener('click', () => {
+    verificationForm.addEventListener('submit', (event) => {
+      event.preventDefault();
       completion.classList.remove('show');
       if (!detailsSaved) {
         setStatus('Please save your student details before final submission.', 'error');
