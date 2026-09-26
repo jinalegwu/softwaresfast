@@ -223,7 +223,7 @@
               <span>I consent to the use of my enrollment photo for institute identity verification and attendance check-in.</span>
             </label>
             <input type="hidden" id="documentType" name="documentType" value="national_id">
-            <input type="hidden" id="enrollmentPhotoData" name="enrollmentPhotoData" value="">
+            <input type="file" id="enrollmentPhotoFile" name="enrollmentPhotoFile" form="enrollmentForm" hidden aria-hidden="true">
           </form>
         </section>
 
@@ -296,7 +296,7 @@
     const verificationStatus = document.getElementById('verificationStatus');
     const idUpload = document.getElementById('studentIdUpload');
     const documentType = document.getElementById('documentType');
-    const enrollmentPhotoData = document.getElementById('enrollmentPhotoData');
+    const enrollmentPhotoFile = document.getElementById('enrollmentPhotoFile');
     const submitEnrollmentButton = document.getElementById('submitEnrollment');
     const verificationTabs = document.querySelectorAll('.verification-tab');
     let stream = null;
@@ -404,6 +404,26 @@
       video.srcObject = null;
     }
 
+    function clearEnrollmentPhotoFile() {
+      enrollmentPhotoFile.files = new DataTransfer().files;
+    }
+
+    function setEnrollmentPhotoFile(canvasForUpload) {
+      return new Promise((resolve) => {
+        canvasForUpload.toBlob((blob) => {
+          if (!blob) {
+            resolve(false);
+            return;
+          }
+          const uploadFile = new File([blob], 'enrollment-photo.jpg', { type: 'image/jpeg' });
+          const fileList = new DataTransfer();
+          fileList.items.add(uploadFile);
+          enrollmentPhotoFile.files = fileList.files;
+          resolve(true);
+        }, 'image/jpeg', 0.82);
+      });
+    }
+
     function capturePhoto() {
       if (!video.videoWidth || !video.videoHeight) {
         setStatus('The camera is still loading. Please try again in a moment.', 'error');
@@ -414,7 +434,7 @@
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       photoCaptured = true;
       photoSaved = false;
-      enrollmentPhotoData.value = '';
+      clearEnrollmentPhotoFile();
       idUpload.value = '';
       setVerificationLocked(true);
       stopCamera();
@@ -428,7 +448,7 @@
       setStatus('Enrollment photo captured. Save it to unlock Student ID verification.', 'success');
     }
 
-    function savePhoto() {
+    async function savePhoto() {
       if (!photoCaptured) {
         setStatus('Capture a photo before saving.', 'error');
         return;
@@ -439,13 +459,16 @@
       serializedCanvas.width = Math.round(canvas.width * scale);
       serializedCanvas.height = Math.round(canvas.height * scale);
       serializedCanvas.getContext('2d').drawImage(canvas, 0, 0, serializedCanvas.width, serializedCanvas.height);
+      const photoFileReady = await setEnrollmentPhotoFile(serializedCanvas);
+      if (!photoFileReady) {
+        setStatus('We could not save your photo file. Please retake and try again.', 'error');
+        return;
+      }
       photoSaved = true;
-      enrollmentPhotoData.value = serializedCanvas.toDataURL('image/jpeg', 0.82);
       stopCamera();
       savePhotoButton.disabled = true;
       savePhotoButton.textContent = 'Photo saved';
       setVerificationLocked(false);
-      (Array.from(verificationTabs).find((tab) => tab.dataset.docType === selectedDocType) || verificationTabs[0]).focus();
       setStatus('Enrollment photo saved. Student ID verification is now unlocked below.', 'success');
     }
 
@@ -457,7 +480,7 @@
       startButton.textContent = 'Start camera';
       savePhotoButton.textContent = 'Save photo';
       photoSaved = false;
-      enrollmentPhotoData.value = '';
+      clearEnrollmentPhotoFile();
       setVerificationLocked(true);
       startCamera();
     });
