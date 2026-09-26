@@ -245,7 +245,7 @@
       </aside>
     </div>
 
-    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle" aria-disabled="true">
+    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle">
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote" aria-live="polite">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
@@ -269,7 +269,7 @@
 
             <div class="verification-upload">
               <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-              <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*,.pdf,application/pdf" capture="environment" required />
+              <input id="studentIdUpload" name="studentIdUpload" type="file" accept=".png,.jpg,.jpeg,.webp,.heic,.heif,.pdf,image/png,image/jpeg,image/webp,image/heic,image/heif,application/pdf" capture="environment" required />
               <div class="verification-help">Upload a clear image or PDF of your National Identity Card or International Passport for verification, then submit your enrollment.</div>
             </div>
           </div>
@@ -357,7 +357,6 @@
     function lockVerificationSection() {
       verificationFields.disabled = true;
       verificationCard.classList.add('locked');
-      verificationCard.setAttribute('aria-disabled', 'true');
       verificationLockNote.classList.remove('unlocked');
       verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
     }
@@ -365,7 +364,6 @@
     function unlockVerificationSection() {
       verificationFields.disabled = false;
       verificationCard.classList.remove('locked');
-      verificationCard.setAttribute('aria-disabled', 'false');
       verificationLockNote.classList.add('unlocked');
       verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
     }
@@ -539,10 +537,11 @@
         setStatus('Please upload your Student ID image before submitting.', 'error');
         return;
       }
-      const hasValidMimeType = uploadedFile.type
-        ? uploadedFile.type.startsWith('image/') || uploadedFile.type === 'application/pdf'
-        : /\.(png|jpe?g|webp|gif|bmp|pdf)$/i.test(uploadedFile.name || '');
-      if (!hasValidMimeType) {
+      const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif', 'application/pdf'];
+      const hasValidUploadType = uploadedFile.type
+        ? allowedMimeTypes.includes(uploadedFile.type)
+        : /\.(png|jpe?g|webp|heic|heif|pdf)$/i.test(uploadedFile.name || '');
+      if (!hasValidUploadType) {
         setStatus('Please upload a valid image or PDF file for your Student ID verification.', 'error');
         return;
       }
