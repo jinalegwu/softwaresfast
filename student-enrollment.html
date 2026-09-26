@@ -473,6 +473,7 @@
       savePhotoButton.textContent = 'Save photo';
       photoSaved = false;
       savedEnrollmentPhotoFile = null;
+      idUpload.value = '';
       setVerificationLocked(true);
       startCamera();
     });
@@ -505,6 +506,10 @@
       }
       const enrollmentSubmission = new FormData(form);
       enrollmentSubmission.set('enrollmentPhotoFile', savedEnrollmentPhotoFile);
+      if (!enrollmentSubmission.get('enrollmentPhotoFile')) {
+        setStatus('Photo payload is missing. Please save your photo again.', 'error');
+        return;
+      }
       progressFace.classList.remove('active');
       progressFace.classList.add('complete');
       progressComplete.classList.add('active', 'complete');
