@@ -512,6 +512,7 @@
       detailsSaved = true;
       resetPhotoAndVerificationState();
       setStatus('Student details saved. Start the camera, capture your photo, and save it to continue.', 'success');
+      startButton.focus();
     });
 
     verificationForm.addEventListener('submit', (event) => {
@@ -538,9 +539,8 @@
         return;
       }
       const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif', 'application/pdf'];
-      const hasValidUploadType = uploadedFile.type
-        ? allowedMimeTypes.includes(uploadedFile.type)
-        : /\.(png|jpe?g|webp|heic|heif|pdf)$/i.test(uploadedFile.name || '');
+      const hasAllowedExtension = /\.(png|jpe?g|webp|heic|heif|pdf)$/i.test(uploadedFile.name || '');
+      const hasValidUploadType = allowedMimeTypes.includes(uploadedFile.type) || hasAllowedExtension;
       if (!hasValidUploadType) {
         setStatus('Please upload a valid image or PDF file for your Student ID verification.', 'error');
         return;
