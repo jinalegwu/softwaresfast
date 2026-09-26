@@ -433,12 +433,19 @@
         setStatus('Capture a photo before saving.', 'error');
         return;
       }
+      const maxWidth = 640;
+      const scale = Math.min(1, maxWidth / canvas.width);
+      const serializedCanvas = document.createElement('canvas');
+      serializedCanvas.width = Math.round(canvas.width * scale);
+      serializedCanvas.height = Math.round(canvas.height * scale);
+      serializedCanvas.getContext('2d').drawImage(canvas, 0, 0, serializedCanvas.width, serializedCanvas.height);
       photoSaved = true;
-      enrollmentPhotoData.value = canvas.toDataURL('image/jpeg', 0.9);
+      enrollmentPhotoData.value = serializedCanvas.toDataURL('image/jpeg', 0.82);
       stopCamera();
       savePhotoButton.disabled = true;
       savePhotoButton.textContent = 'Photo saved';
       setVerificationLocked(false);
+      (Array.from(verificationTabs).find((tab) => tab.dataset.docType === selectedDocType) || verificationTabs[0]).focus();
       setStatus('Enrollment photo saved. Student ID verification is now unlocked below.', 'success');
     }
 
@@ -449,6 +456,9 @@
       startButton.disabled = false;
       startButton.textContent = 'Start camera';
       savePhotoButton.textContent = 'Save photo';
+      photoSaved = false;
+      enrollmentPhotoData.value = '';
+      setVerificationLocked(true);
       startCamera();
     });
     form.addEventListener('submit', event => {
