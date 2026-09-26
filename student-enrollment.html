@@ -269,7 +269,7 @@
 
             <div class="verification-upload">
               <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-              <input id="studentIdUpload" name="studentIdUpload" type="file" accept=".png,.jpg,.jpeg,.webp,.heic,.heif,.pdf,image/png,image/jpeg,image/webp,image/heic,image/heif,application/pdf" capture="environment" required />
+              <input id="studentIdUpload" name="studentIdUpload" type="file" accept=".png,.jpg,.jpeg,.webp,.heic,.heif,.pdf,image/png,image/jpeg,image/jpg,image/webp,image/heic,image/heif,application/pdf" required />
               <div class="verification-help">Upload a clear image or PDF of your National Identity Card or International Passport for verification, then submit your enrollment.</div>
             </div>
           </div>
@@ -537,7 +537,7 @@
         setStatus('Please upload your Student ID image before submitting.', 'error');
         return;
       }
-      const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif', 'application/pdf'];
+      const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/heic', 'image/heif', 'application/pdf'];
       const hasValidUploadType = uploadedFile.type
         ? allowedMimeTypes.includes(uploadedFile.type)
         : /\.(png|jpe?g|webp|heic|heif|pdf)$/i.test(uploadedFile.name || '');
