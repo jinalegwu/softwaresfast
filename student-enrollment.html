@@ -90,25 +90,6 @@
 
     .verification-card { margin-top: 1.5rem; }
     .verification-grid { display: grid; gap: .9rem; }
-    .verification-tabs {
-      display: flex;
-      gap: .55rem;
-      flex-wrap: wrap;
-      margin-bottom: .35rem;
-    }
-    .verification-tab {
-      border: 1px solid var(--border);
-      background: #f6faf7;
-      color: var(--primary);
-      padding: .55rem .8rem;
-      font-size: .8rem;
-      border-radius: 999px;
-    }
-    .verification-tab.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
     .verification-upload {
       padding: 1rem;
       border: 1px dashed #b7ccbb;
@@ -270,11 +251,6 @@
           </div>
         </div>
 
-        <div class="verification-tabs" aria-hidden="true">
-          <button type="button" class="verification-tab active" data-doc-type="national_id" tabindex="-1">National ID</button>
-          <button type="button" class="verification-tab" data-doc-type="passport" tabindex="-1">International Passport</button>
-        </div>
-
         <div class="verification-upload">
           <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
           <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*,.pdf,application/pdf" form="enrollmentForm" aria-describedby="studentIdUploadHelp" required>
@@ -298,8 +274,6 @@
     const progressFace = document.getElementById('progressFace');
     const progressComplete = document.getElementById('progressComplete');
     const idUpload = document.getElementById('studentIdUpload');
-    const idType = document.getElementById('idType');
-    const verificationTabs = document.querySelectorAll('.verification-tab');
     let stream = null;
     let photoCaptured = false;
 
@@ -307,25 +281,6 @@
       status.textContent = message;
       status.className = `status ${type}`;
     }
-
-    function setDocumentType(value) {
-      idType.value = value;
-      verificationTabs.forEach((tab) => {
-        tab.classList.toggle('active', tab.dataset.docType === value);
-      });
-    }
-
-    verificationTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        setDocumentType(tab.dataset.docType);
-      });
-    });
-
-    idType.addEventListener('change', () => {
-      setDocumentType(idType.value);
-    });
-
-    setDocumentType(idType.value);
 
     async function startCamera() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
