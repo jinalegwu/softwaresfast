@@ -427,6 +427,7 @@
       photoSaved = true;
       saveButton.disabled = true;
       unlockVerificationSection();
+      resetCompletion();
       updateProgress();
       setStatus('Enrollment photo saved. Student ID verification is now unlocked.', 'success');
     }
@@ -462,8 +463,6 @@
       completion.classList.remove('show');
       if (!form.checkValidity()) {
         form.reportValidity();
-        detailsSaved = false;
-        updateProgress();
         setStatus('Please complete and save your student details first.', 'error');
         return;
       }
