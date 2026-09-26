@@ -508,8 +508,13 @@
       }
       const enrollmentSubmission = new FormData(form);
       enrollmentSubmission.set('enrollmentPhotoFile', savedEnrollmentPhotoFile);
+      enrollmentSubmission.set('studentIdDocument', idUpload.files[0]);
       if (!enrollmentSubmission.get('enrollmentPhotoFile')) {
         setStatus('Photo payload is missing. Please save your photo again.', 'error');
+        return;
+      }
+      if (!enrollmentSubmission.get('studentIdDocument')) {
+        setStatus('ID document payload is missing. Please upload your ID image again.', 'error');
         return;
       }
       progressFace.classList.remove('active');
