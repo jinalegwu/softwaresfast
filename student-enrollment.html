@@ -245,7 +245,7 @@
       </aside>
     </div>
 
-    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle">
+    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle" aria-disabled="true">
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
@@ -342,6 +342,7 @@
     function lockVerificationSection() {
       verificationFields.disabled = true;
       verificationCard.classList.add('locked');
+      verificationCard.setAttribute('aria-disabled', 'true');
       verificationLockNote.classList.remove('unlocked');
       verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
     }
@@ -349,6 +350,7 @@
     function unlockVerificationSection() {
       verificationFields.disabled = false;
       verificationCard.classList.remove('locked');
+      verificationCard.setAttribute('aria-disabled', 'false');
       verificationLockNote.classList.add('unlocked');
       verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
     }
@@ -358,6 +360,25 @@
       completion.classList.remove('show');
       completion.textContent = '';
       updateProgress();
+    }
+
+    function resetPhotoAndVerificationState() {
+      stopCamera();
+      photoCaptured = false;
+      photoSaved = false;
+      startButton.hidden = false;
+      startButton.disabled = false;
+      startButton.textContent = 'Start camera';
+      captureButton.disabled = true;
+      saveButton.disabled = true;
+      retakeButton.hidden = true;
+      stage.classList.remove('camera-on', 'captured');
+      canvas.width = 0;
+      canvas.height = 0;
+      documentType.value = '';
+      documentNumber.value = '';
+      idUpload.value = '';
+      lockVerificationSection();
     }
 
     async function startCamera() {
@@ -454,7 +475,7 @@
         return;
       }
       detailsSaved = true;
-      startButton.disabled = false;
+      resetPhotoAndVerificationState();
       resetCompletion();
       setStatus('Student details saved. Start the camera, capture your photo, and save it to continue.', 'success');
     });
