@@ -249,7 +249,7 @@
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
-      <form id="verificationForm" novalidate aria-describedby="verificationLockNote">
+      <form id="verificationForm" novalidate aria-describedby="verificationLockNote" aria-disabled="true">
         <fieldset class="verification-fields" id="verificationFields" disabled aria-describedby="verificationLockNote">
           <div class="verification-grid">
             <div class="form-row">
@@ -357,6 +357,7 @@
     function lockVerificationSection() {
       verificationFields.disabled = true;
       verificationCard.classList.add('locked');
+      verificationForm.setAttribute('aria-disabled', 'true');
       verificationLockNote.classList.remove('unlocked');
       verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
     }
@@ -364,6 +365,7 @@
     function unlockVerificationSection() {
       verificationFields.disabled = false;
       verificationCard.classList.remove('locked');
+      verificationForm.setAttribute('aria-disabled', 'false');
       verificationLockNote.classList.add('unlocked');
       verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
     }
@@ -387,6 +389,10 @@
       retakeButton.hidden = true;
       retakeButton.disabled = false;
       stage.classList.remove('camera-on', 'captured');
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+      }
       canvas.width = 0;
       canvas.height = 0;
       documentType.value = '';
@@ -514,6 +520,7 @@
       }
 
       enrollmentSubmitted = true;
+      verificationFields.disabled = true;
       updateProgress();
       completion.textContent = 'Enrollment submitted. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.';
       completion.classList.add('show');
