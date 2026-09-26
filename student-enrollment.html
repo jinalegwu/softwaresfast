@@ -503,7 +503,12 @@
       if (!verificationForm.reportValidity()) {
         return;
       }
-      if (idUpload.files[0].type && !idUpload.files[0].type.startsWith('image/')) {
+      const uploadedFile = idUpload.files && idUpload.files.length ? idUpload.files[0] : null;
+      if (!uploadedFile) {
+        setStatus('Please upload your Student ID image before submitting.', 'error');
+        return;
+      }
+      if (uploadedFile.type && !uploadedFile.type.startsWith('image/')) {
         setStatus('Please upload a valid image file for your Student ID verification.', 'error');
         return;
       }
