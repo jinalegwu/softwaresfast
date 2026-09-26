@@ -403,6 +403,7 @@
       canvas.height = 0;
       verificationForm.reset();
       lockVerificationSection();
+      resetCompletion();
     }
 
     async function startCamera() {
@@ -484,7 +485,6 @@
     saveButton.addEventListener('click', savePhoto);
     retakeButton.addEventListener('click', () => {
       resetPhotoAndVerificationState();
-      resetCompletion();
       startCamera();
     });
     documentType.addEventListener('change', handleVerificationChange);
@@ -498,7 +498,6 @@
       }
       detailsSaved = true;
       resetPhotoAndVerificationState();
-      resetCompletion();
       setStatus('Student details saved. Start the camera, capture your photo, and save it to continue.', 'success');
     });
 
@@ -525,7 +524,6 @@
         setStatus('Please upload a valid image file for your Student ID verification.', 'error');
         return;
       }
-      enrollmentSubmitted = true;
       enrollmentSubmitted = true;
       updateProgress();
       completion.textContent = 'Enrollment submitted. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.';
