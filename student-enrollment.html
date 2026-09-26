@@ -474,7 +474,6 @@
       enrollmentFlow.hidden = true;
       completion.textContent = `Enrollment submitted. Thank you, ${document.getElementById('firstName').value}. We have received your details, saved photo, and ID verification. We will get back to you soon.`;
       completion.classList.add('show');
-      setStatus('Enrollment completed locally.', 'success');
     });
 
     window.addEventListener('beforeunload', stopCamera);
