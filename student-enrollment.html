@@ -165,7 +165,7 @@
     </div>
 
     <div class="enrollment-grid">
-      <form id="enrollmentForm" novalidate>
+      <form id="enrollmentForm" enctype="multipart/form-data" novalidate>
         <section class="card" aria-labelledby="details-title">
           <h2 id="details-title">Student Enrollment</h2>
           <p class="card-description">Use the information that will appear on your institute record.</p>
@@ -270,7 +270,7 @@
           </div>
         </div>
 
-        <div class="verification-tabs" role="tablist" aria-label="Identity document type">
+        <div class="verification-tabs" aria-label="Identity document type">
           <button type="button" class="verification-tab active" data-doc-type="national_id">National ID</button>
           <button type="button" class="verification-tab" data-doc-type="passport">International Passport</button>
         </div>
