@@ -253,7 +253,7 @@
         </aside>
       </div>
 
-      <section class="card document-verification locked" id="documentVerificationSection" aria-labelledby="documentVerificationTitle" aria-disabled="true">
+      <section class="card document-verification locked" id="documentVerificationSection" aria-labelledby="documentVerificationTitle" aria-disabled="true" inert>
         <h2 id="documentVerificationTitle" style="margin:0 0 .35rem;">Student ID verification</h2>
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
@@ -313,6 +313,7 @@
       verificationLocked = locked;
       verificationSection.classList.toggle('locked', locked);
       verificationSection.setAttribute('aria-disabled', String(locked));
+      verificationSection.toggleAttribute('inert', locked);
       idUpload.disabled = locked;
       submitEnrollmentButton.disabled = locked;
       verificationTabs.forEach((tab) => {
@@ -516,6 +517,8 @@
       enrollmentFlow.hidden = true;
       completion.textContent = `Enrollment submitted. Thank you, ${document.getElementById('firstName').value}. We have received your details, saved photo, and ID verification. We will get back to you soon.`;
       completion.classList.add('show');
+      completion.tabIndex = -1;
+      completion.focus();
     });
 
     window.addEventListener('beforeunload', stopCamera);
