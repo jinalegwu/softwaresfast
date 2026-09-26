@@ -518,8 +518,7 @@
 
       enrollmentSubmitted = true;
       updateProgress();
-      const firstName = document.getElementById('firstName').value.trim() || 'Student';
-      completion.textContent = `Enrollment submitted. Thank you, ${firstName}. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.`;
+      completion.textContent = 'Enrollment submitted. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.';
       completion.classList.add('show');
       setStatus('Submission successful. Your enrollment flow is complete.', 'success');
     });
