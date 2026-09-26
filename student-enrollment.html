@@ -271,13 +271,13 @@
         </div>
 
         <div class="verification-tabs" role="radiogroup" aria-label="Identity document type">
-          <button type="button" class="verification-tab active" data-doc-type="national_id" role="radio" aria-checked="true">National ID</button>
-          <button type="button" class="verification-tab" data-doc-type="passport" role="radio" aria-checked="false">International Passport</button>
+          <button type="button" class="verification-tab active" data-doc-type="national_id" role="radio" aria-checked="true" tabindex="0">National ID</button>
+          <button type="button" class="verification-tab" data-doc-type="passport" role="radio" aria-checked="false" tabindex="-1">International Passport</button>
         </div>
 
         <div class="verification-upload">
           <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-          <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*" capture="environment" form="enrollmentForm" aria-describedby="studentIdUploadHelp" required>
+          <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*,.pdf,application/pdf" capture="environment" form="enrollmentForm" aria-describedby="studentIdUploadHelp" required>
           <div class="verification-help" id="studentIdUploadHelp">Upload a clear image of your National Identity Card or International Passport for verification.</div>
         </div>
       </div>
@@ -311,14 +311,47 @@
     function setDocumentType(value) {
       idType.value = value;
       verificationTabs.forEach((tab) => {
-        tab.classList.toggle('active', tab.dataset.docType === value);
-        tab.setAttribute('aria-checked', String(tab.dataset.docType === value));
+        const isActive = tab.dataset.docType === value;
+        tab.classList.toggle('active', isActive);
+        tab.setAttribute('aria-checked', String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
       });
     }
 
     verificationTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
         setDocumentType(tab.dataset.docType);
+      });
+
+      tab.addEventListener('keydown', (event) => {
+        const currentIndex = [...verificationTabs].indexOf(tab);
+
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+          const nextTab = verificationTabs[(currentIndex + 1) % verificationTabs.length];
+          setDocumentType(nextTab.dataset.docType);
+          nextTab.focus();
+          event.preventDefault();
+        }
+
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          const nextTab = verificationTabs[(currentIndex - 1 + verificationTabs.length) % verificationTabs.length];
+          setDocumentType(nextTab.dataset.docType);
+          nextTab.focus();
+          event.preventDefault();
+        }
+
+        if (event.key === 'Home') {
+          setDocumentType(verificationTabs[0].dataset.docType);
+          verificationTabs[0].focus();
+          event.preventDefault();
+        }
+
+        if (event.key === 'End') {
+          const lastTab = verificationTabs[verificationTabs.length - 1];
+          setDocumentType(lastTab.dataset.docType);
+          lastTab.focus();
+          event.preventDefault();
+        }
       });
     });
 
