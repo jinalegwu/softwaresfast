@@ -270,15 +270,15 @@
           </div>
         </div>
 
-        <div class="verification-tabs" aria-label="Identity document type">
-          <button type="button" class="verification-tab active" data-doc-type="national_id">National ID</button>
-          <button type="button" class="verification-tab" data-doc-type="passport">International Passport</button>
+        <div class="verification-tabs" role="group" aria-label="Identity document type">
+          <button type="button" class="verification-tab active" data-doc-type="national_id" aria-pressed="true">National ID</button>
+          <button type="button" class="verification-tab" data-doc-type="passport" aria-pressed="false">International Passport</button>
         </div>
 
         <div class="verification-upload">
           <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-          <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*" capture="environment" form="enrollmentForm" required>
-          <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
+          <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*" capture="environment" form="enrollmentForm" aria-describedby="studentIdUploadHelp" required>
+          <div class="verification-help" id="studentIdUploadHelp">Upload a clear image of your National Identity Card or International Passport for verification.</div>
         </div>
       </div>
     </section>
@@ -312,6 +312,7 @@
       idType.value = value;
       verificationTabs.forEach((tab) => {
         tab.classList.toggle('active', tab.dataset.docType === value);
+        tab.setAttribute('aria-pressed', String(tab.dataset.docType === value));
       });
     }
 
