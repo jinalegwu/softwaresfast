@@ -256,9 +256,9 @@
         <h2 id="documentVerificationTitle" style="margin:0 0 .35rem;">Student ID verification</h2>
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
-          <div class="verification-tabs" role="tablist" aria-label="Identity document type">
-            <button type="button" role="tab" aria-selected="true" tabindex="0" class="verification-tab active" data-doc-type="national_id" disabled>National ID</button>
-            <button type="button" role="tab" aria-selected="false" tabindex="-1" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
+          <div class="verification-tabs" aria-label="Identity document type">
+            <button type="button" aria-pressed="true" class="verification-tab active" data-doc-type="national_id" disabled>National ID</button>
+            <button type="button" aria-pressed="false" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
           </div>
 
           <div class="verification-upload">
@@ -326,27 +326,11 @@
         }
         verificationTabs.forEach((item) => {
           item.classList.remove('active');
-          item.setAttribute('aria-selected', 'false');
-          item.tabIndex = -1;
+          item.setAttribute('aria-pressed', 'false');
         });
         tab.classList.add('active');
-        tab.setAttribute('aria-selected', 'true');
-        tab.tabIndex = 0;
+        tab.setAttribute('aria-pressed', 'true');
       });
-    });
-    idUpload.addEventListener('click', (event) => {
-      if (!verificationLocked) {
-        return;
-      }
-      event.preventDefault();
-      setStatus('Save your enrollment photo first to unlock Student ID verification.', 'error');
-    });
-    idUpload.addEventListener('change', () => {
-      if (!verificationLocked) {
-        return;
-      }
-      setStatus('Save your enrollment photo first to unlock Student ID verification.', 'error');
-      idUpload.value = '';
     });
 
     async function startCamera() {
