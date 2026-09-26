@@ -254,7 +254,7 @@
         </aside>
       </div>
 
-      <section class="card document-verification locked" id="documentVerificationSection" aria-labelledby="documentVerificationTitle" aria-disabled="true" inert>
+      <section class="card document-verification locked" id="documentVerificationSection" aria-labelledby="documentVerificationTitle" aria-disabled="true">
         <h2 id="documentVerificationTitle" style="margin:0 0 .35rem;">Student ID verification</h2>
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
@@ -314,7 +314,6 @@
       verificationLocked = locked;
       verificationSection.classList.toggle('locked', locked);
       verificationSection.setAttribute('aria-disabled', String(locked));
-      verificationSection.toggleAttribute('inert', locked);
       idUpload.disabled = locked;
       submitEnrollmentButton.disabled = locked;
       verificationTabs.forEach((tab) => {
@@ -507,8 +506,10 @@
         return;
       }
       const enrollmentSubmission = new FormData(form);
-      enrollmentSubmission.set('enrollmentPhotoFile', savedEnrollmentPhotoFile);
-      enrollmentSubmission.set('studentIdDocument', idUpload.files[0]);
+      enrollmentSubmission.delete('enrollmentPhotoFile');
+      enrollmentSubmission.append('enrollmentPhotoFile', savedEnrollmentPhotoFile);
+      enrollmentSubmission.delete('studentIdDocument');
+      enrollmentSubmission.append('studentIdDocument', idUpload.files[0]);
       if (!enrollmentSubmission.get('enrollmentPhotoFile')) {
         setStatus('Photo payload is missing. Please save your photo again.', 'error');
         return;
