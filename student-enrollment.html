@@ -383,6 +383,17 @@
       setStatus('Verification details updated. Review and submit again to confirm your enrollment.', '');
     }
 
+    function handleDetailsChange() {
+      if (!detailsSaved) {
+        return;
+      }
+      detailsSaved = false;
+      resetPhotoAndVerificationState();
+      startButton.disabled = true;
+      updateProgress();
+      setStatus('Student details changed. Save your details again to continue.', '');
+    }
+
     function resetPhotoAndVerificationState() {
       stopCamera();
       photoCaptured = false;
@@ -490,6 +501,8 @@
     documentType.addEventListener('change', handleVerificationChange);
     documentNumber.addEventListener('input', handleVerificationChange);
     idUpload.addEventListener('change', handleVerificationChange);
+    form.addEventListener('input', handleDetailsChange);
+    form.addEventListener('change', handleDetailsChange);
 
     form.addEventListener('submit', event => {
       event.preventDefault();
@@ -512,6 +525,10 @@
         setStatus('Please capture and save your enrollment photo before Student ID verification.', 'error');
         return;
       }
+      if (verificationFields.disabled) {
+        setStatus('Student ID verification is still locked. Save your enrollment photo to continue.', 'error');
+        return;
+      }
       if (!verificationForm.reportValidity()) {
         return;
       }
@@ -526,7 +543,7 @@
       }
       enrollmentSubmitted = true;
       updateProgress();
-      completion.textContent = 'Enrollment submitted. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.';
+      completion.textContent = 'Enrollment submitted. We\'ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.';
       completion.classList.add('show');
       setStatus('Submission successful. Your enrollment flow is complete.', 'success');
     });
