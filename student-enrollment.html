@@ -461,13 +461,13 @@
 
     finalSubmit.addEventListener('click', () => {
       completion.classList.remove('show');
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        setStatus('Please complete and save your student details first.', 'error');
-        return;
-      }
       if (!detailsSaved) {
         setStatus('Please save your student details before final submission.', 'error');
+        return;
+      }
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        setStatus('Please review your student details and correct any missing fields before submitting.', 'error');
         return;
       }
       if (!photoSaved) {
@@ -489,7 +489,7 @@
 
       enrollmentSubmitted = true;
       updateProgress();
-      completion.innerHTML = `<strong>Enrollment submitted.</strong> Thank you, ${document.getElementById('firstName').value}. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.`;
+      completion.textContent = `Enrollment submitted. Thank you, ${document.getElementById('firstName').value}. We’ll get back to you soon after reviewing your student details, saved enrollment photo, and ID document.`;
       completion.classList.add('show');
       setStatus('Submission successful. Your enrollment flow is complete.', 'success');
     });
