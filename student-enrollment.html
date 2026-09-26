@@ -267,7 +267,7 @@
             <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
             <p class="verification-locked-note" id="verificationStatus" role="status" tabindex="0">Locked: save your enrollment photo first to enable this step.</p>
           </div>
-          <button class="primary submit" type="button" id="submitEnrollment">Submit enrollment</button>
+          <button class="primary submit" type="button" id="submitEnrollment" disabled>Submit enrollment</button>
         </div>
       </section>
     </div>
@@ -309,6 +309,7 @@
       verificationSection.classList.toggle('locked', locked);
       verificationSection.setAttribute('aria-disabled', String(locked));
       idUpload.disabled = locked;
+      submitEnrollmentButton.disabled = locked;
       verificationTabs.forEach((tab) => {
         tab.disabled = locked;
       });
