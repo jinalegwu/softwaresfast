@@ -258,15 +258,15 @@
         <div class="verification-grid">
           <div class="verification-tabs" role="radiogroup" aria-labelledby="documentTypeLabel">
             <span id="documentTypeLabel" style="position:absolute;left:-9999px;">Identity document type</span>
-            <button type="button" role="radio" aria-checked="false" class="verification-tab" data-doc-type="national_id" disabled>National ID</button>
-            <button type="button" role="radio" aria-checked="false" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" class="verification-tab" data-doc-type="national_id" disabled>National ID</button>
+            <button type="button" role="radio" aria-checked="false" tabindex="-1" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
           </div>
 
           <div class="verification-upload">
             <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
             <input id="studentIdUpload" type="file" accept="image/*" capture="environment" disabled />
             <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
-            <p class="verification-locked-note" id="verificationStatus" role="status" tabindex="0">Locked: save your enrollment photo first to enable this step.</p>
+            <p class="verification-locked-note" id="verificationStatus" role="status">Locked: save your enrollment photo first to enable this step.</p>
           </div>
           <button class="primary submit" type="submit" form="enrollmentForm" id="submitEnrollment" disabled>Submit enrollment</button>
         </div>
@@ -316,11 +316,13 @@
         tab.disabled = locked;
         tab.classList.remove('active');
         tab.setAttribute('aria-checked', 'false');
+        tab.tabIndex = -1;
       });
       if (!locked) {
         const selectedTab = Array.from(verificationTabs).find((tab) => tab.dataset.docType === selectedDocType) || verificationTabs[0];
         selectedTab.classList.add('active');
         selectedTab.setAttribute('aria-checked', 'true');
+        selectedTab.tabIndex = 0;
       });
       verificationStatus.textContent = locked
         ? 'Locked: save your enrollment photo first to enable this step.'
@@ -336,10 +338,12 @@
         verificationTabs.forEach((item) => {
           item.classList.remove('active');
           item.setAttribute('aria-checked', 'false');
+          item.tabIndex = -1;
         });
         selectedDocType = tab.dataset.docType;
         tab.classList.add('active');
         tab.setAttribute('aria-checked', 'true');
+        tab.tabIndex = 0;
       });
       tab.addEventListener('keydown', (event) => {
         if (verificationLocked) {
