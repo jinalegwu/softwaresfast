@@ -222,6 +222,7 @@
               <input id="consent" name="consent" type="checkbox" required>
               <span>I consent to the use of my enrollment photo for institute identity verification and attendance check-in.</span>
             </label>
+            <input type="hidden" id="documentType" name="documentType" value="national_id">
           </form>
         </section>
 
@@ -293,6 +294,7 @@
     const verificationSection = document.getElementById('documentVerificationSection');
     const verificationStatus = document.getElementById('verificationStatus');
     const idUpload = document.getElementById('studentIdUpload');
+    const documentType = document.getElementById('documentType');
     const submitEnrollmentButton = document.getElementById('submitEnrollment');
     const verificationTabs = document.querySelectorAll('.verification-tab');
     let stream = null;
@@ -341,6 +343,7 @@
           item.tabIndex = -1;
         });
         selectedDocType = tab.dataset.docType;
+        documentType.value = selectedDocType;
         tab.classList.add('active');
         tab.setAttribute('aria-checked', 'true');
         tab.tabIndex = 0;
@@ -441,8 +444,6 @@
       startButton.disabled = false;
       startButton.textContent = 'Start camera';
       savePhotoButton.textContent = 'Save photo';
-      photoSaved = false;
-      setVerificationLocked(true);
       startCamera();
     });
     form.addEventListener('submit', event => {
