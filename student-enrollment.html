@@ -255,7 +255,7 @@
             <div class="form-row">
               <div class="field">
                 <label for="documentType">ID document type</label>
-                <select id="documentType" required>
+                <select id="documentType" name="documentType" required>
                   <option value="">Select an ID type</option>
                   <option value="national_id">National ID</option>
                   <option value="passport">International Passport</option>
@@ -263,13 +263,13 @@
               </div>
               <div class="field">
                 <label for="documentNumber">ID number</label>
-                <input id="documentNumber" type="text" placeholder="Enter your ID number" required>
+                <input id="documentNumber" name="documentNumber" type="text" placeholder="Enter your ID number" required>
               </div>
             </div>
 
             <div class="verification-upload">
               <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-              <input id="studentIdUpload" type="file" accept="image/*" capture="environment" required />
+              <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*" capture="environment" required />
               <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification, then submit your enrollment.</div>
             </div>
           </div>
