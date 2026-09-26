@@ -417,7 +417,7 @@
         progressProfile.classList.remove('active');
         progressFace.classList.add('active');
         setStatus('Please capture your enrollment photo before submitting.', 'error');
-        document.getElementById('face-title')?.focus();
+        startButton.focus();
         return;
       }
       if (!photoSaved) {
