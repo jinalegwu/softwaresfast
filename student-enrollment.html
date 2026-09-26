@@ -408,6 +408,7 @@
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       photoCaptured = true;
       photoSaved = false;
+      idUpload.value = '';
       setVerificationLocked(true);
       stopCamera();
       stage.classList.remove('camera-on');
@@ -441,7 +442,6 @@
       startButton.textContent = 'Start camera';
       savePhotoButton.textContent = 'Save photo';
       photoSaved = false;
-      idUpload.value = '';
       setVerificationLocked(true);
       startCamera();
     });
