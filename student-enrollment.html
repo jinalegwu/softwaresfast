@@ -256,9 +256,9 @@
         <h2 id="documentVerificationTitle" style="margin:0 0 .35rem;">Student ID verification</h2>
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
-          <div class="verification-tabs" aria-label="Identity document type">
-            <button type="button" class="verification-tab active" data-doc-type="national_id" disabled>National ID</button>
-            <button type="button" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
+          <div class="verification-tabs" role="tablist" aria-label="Identity document type">
+            <button type="button" role="tab" aria-selected="true" tabindex="0" class="verification-tab active" data-doc-type="national_id" disabled>National ID</button>
+            <button type="button" role="tab" aria-selected="false" tabindex="-1" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
           </div>
 
           <div class="verification-upload">
@@ -267,7 +267,7 @@
             <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
             <p class="verification-locked-note" id="verificationStatus" role="status" tabindex="0">Locked: save your enrollment photo first to enable this step.</p>
           </div>
-          <button class="primary submit" type="button" id="submitEnrollment" disabled>Submit enrollment</button>
+          <button class="primary submit" type="submit" form="enrollmentForm" id="submitEnrollment" disabled>Submit enrollment</button>
         </div>
       </section>
     </div>
@@ -324,8 +324,14 @@
           setStatus('Save your enrollment photo first to unlock Student ID verification.', 'error');
           return;
         }
-        verificationTabs.forEach((item) => item.classList.remove('active'));
+        verificationTabs.forEach((item) => {
+          item.classList.remove('active');
+          item.setAttribute('aria-selected', 'false');
+          item.tabIndex = -1;
+        });
         tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        tab.tabIndex = 0;
       });
     });
     idUpload.addEventListener('click', (event) => {
@@ -424,8 +430,6 @@
       setVerificationLocked(true);
       startCamera();
     });
-    submitEnrollmentButton.addEventListener('click', () => form.requestSubmit());
-
     form.addEventListener('submit', event => {
       event.preventDefault();
       completion.classList.remove('show');
