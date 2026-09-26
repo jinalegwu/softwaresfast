@@ -249,7 +249,7 @@
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
-      <form id="verificationForm" novalidate hidden aria-hidden="true">
+      <form id="verificationForm" novalidate>
         <fieldset class="verification-fields" id="verificationFields" disabled>
           <div class="verification-grid">
             <div class="form-row">
@@ -358,8 +358,6 @@
       verificationFields.disabled = true;
       verificationCard.classList.add('locked');
       verificationCard.setAttribute('aria-disabled', 'true');
-      verificationForm.hidden = true;
-      verificationForm.setAttribute('aria-hidden', 'true');
       verificationLockNote.classList.remove('unlocked');
       verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
     }
@@ -368,8 +366,6 @@
       verificationFields.disabled = false;
       verificationCard.classList.remove('locked');
       verificationCard.setAttribute('aria-disabled', 'false');
-      verificationForm.hidden = false;
-      verificationForm.setAttribute('aria-hidden', 'false');
       verificationLockNote.classList.add('unlocked');
       verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
     }
@@ -515,7 +511,7 @@
         idUpload.reportValidity();
         return;
       }
-      if (!idUpload.files[0].type || !idUpload.files[0].type.startsWith('image/')) {
+      if (idUpload.files[0].type && !idUpload.files[0].type.startsWith('image/')) {
         setStatus('Please upload a valid image file for your Student ID verification.', 'error');
         return;
       }
