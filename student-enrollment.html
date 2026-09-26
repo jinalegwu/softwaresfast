@@ -249,7 +249,7 @@
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
-      <form id="verificationForm" novalidate>
+      <form id="verificationForm" novalidate hidden aria-hidden="true">
         <fieldset class="verification-fields" id="verificationFields" disabled>
           <div class="verification-grid">
             <div class="form-row">
@@ -358,6 +358,8 @@
       verificationFields.disabled = true;
       verificationCard.classList.add('locked');
       verificationCard.setAttribute('aria-disabled', 'true');
+      verificationForm.hidden = true;
+      verificationForm.setAttribute('aria-hidden', 'true');
       verificationLockNote.classList.remove('unlocked');
       verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
     }
@@ -366,6 +368,8 @@
       verificationFields.disabled = false;
       verificationCard.classList.remove('locked');
       verificationCard.setAttribute('aria-disabled', 'false');
+      verificationForm.hidden = false;
+      verificationForm.setAttribute('aria-hidden', 'false');
       verificationLockNote.classList.add('unlocked');
       verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
     }
@@ -472,13 +476,7 @@
     captureButton.addEventListener('click', capturePhoto);
     saveButton.addEventListener('click', savePhoto);
     retakeButton.addEventListener('click', () => {
-      startButton.hidden = false;
-      startButton.disabled = false;
-      startButton.textContent = 'Start camera';
-      photoCaptured = false;
-      photoSaved = false;
-      saveButton.disabled = true;
-      lockVerificationSection();
+      resetPhotoAndVerificationState();
       resetCompletion();
       startCamera();
     });
