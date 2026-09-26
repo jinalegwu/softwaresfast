@@ -71,8 +71,12 @@
     .footer { text-align: center; color: rgba(223, 247, 234, 0.75); font-size: 0.9rem; padding: 2rem 0 2.4rem; }
 
     /* Shared panel style for enrollment & verification boxes */
-    .panel-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.75rem; box-shadow: var(--shadow); max-width: 880px; margin: 0 auto; }
+    .panel-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.75rem; box-shadow: var(--shadow); max-width: 880px; margin: 0 auto; position: relative; transition: opacity 0.25s ease; }
     .panel-box + .panel-box { margin-top: 2rem; }
+    .panel-box.locked { opacity: 0.55; pointer-events: none; user-select: none; }
+    .lock-banner { display: none; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(212, 175, 55, 0.12); border: 1px solid rgba(212, 175, 55, 0.4); color: var(--gold-300); border-radius: 10px; padding: 0.7rem 1rem; font-size: 0.85rem; font-weight: 600; text-align: center; margin-bottom: 1.25rem; }
+    .lock-banner.visible { display: flex; }
+    .step-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--gold-500); color: #22372a; font-weight: 800; font-size: 0.8rem; margin-right: 0.5rem; }
 
     /* Enrollment photo capture (upper box) */
     .enrollment-capture-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; max-width: 520px; margin: 0 auto; }
@@ -101,6 +105,7 @@
     .verify-status.info { display: block; background: rgba(212, 175, 55, 0.12); border: 1px solid rgba(212, 175, 55, 0.4); color: var(--gold-300); }
     .verify-status.success { display: block; background: rgba(26, 111, 81, 0.25); border: 1px solid var(--gold-500); color: var(--mint-100); }
     .verify-status.error { display: block; background: rgba(180, 60, 60, 0.18); border: 1px solid rgba(220, 100, 100, 0.5); color: #ffd9d9; }
+    .verify-status.loading { display: block; background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.3); color: var(--gold-300); }
     .verify-note { font-size: 0.78rem; color: var(--text-300); text-align: center; margin-top: 1rem; }
     @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } .path { grid-template-columns: 1fr 1fr; } .stats { grid-template-columns: 1fr 1fr; } .hero-media { grid-template-columns: 1fr; } .verify-grid { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { .grid-3, .path, .stats, .hero-video-stack { grid-template-columns: 1fr; } .hero { padding-top: 3.2rem; } .nav-inner { gap: 0.7rem; } .brand { font-size: 0.95rem; } }
@@ -184,11 +189,11 @@
 
   <section id="enrollment-verification" class="section container">
     <h2>Student Enrollment & Identity Verification</h2>
-    <p class="section-lead">Complete your enrollment in two quick steps: capture your enrollment photo below, then verify your identity document (National ID or International Passport) in the Student ID Verification box.</p>
+    <p class="section-lead">Complete your enrollment in two quick steps: capture and save your enrollment photo first, then verify your identity document (National ID or International Passport) in the Student ID Verification box below.</p>
 
     <!-- STEP 1: Student Enrollment - live camera capture -->
     <div class="panel-box" id="enrollmentPanel">
-      <h3 style="text-align:center; color: var(--gold-300); margin-bottom: 1.25rem; font-size: 1.15rem;">Student Enrollment — Capture Your Photo</h3>
+      <h3 style="text-align:center; color: var(--gold-300); margin-bottom: 1.25rem; font-size: 1.15rem;"><span class="step-badge">1</span>Student Enrollment — Capture Your Photo</h3>
       <div class="enrollment-capture-grid">
         <div class="capture-box">
           <label style="margin-top:0; display:block; text-align:left;">Capture Enrollment Photo</label>
@@ -211,9 +216,10 @@
       <div class="verify-status" id="enrollmentStatus"></div>
     </div>
 
-    <!-- STEP 2: Student ID Verification - form + file upload -->
-    <div class="panel-box" id="idVerificationPanel">
-      <h3 style="text-align:center; color: var(--gold-300); margin-bottom: 1.25rem; font-size: 1.15rem;">Student ID Verification</h3>
+    <!-- STEP 2: Student ID Verification - form + file upload (locked until enrollment photo is saved) -->
+    <div class="panel-box locked" id="idVerificationPanel">
+      <div class="lock-banner visible" id="idLockBanner">🔒 Please save your enrollment photo above before verifying your ID document.</div>
+      <h3 style="text-align:center; color: var(--gold-300); margin-bottom: 1.25rem; font-size: 1.15rem;"><span class="step-badge">2</span>Student ID Verification</h3>
 
       <div class="verify-tabs" role="tablist" aria-label="Document type">
         <button type="button" class="verify-tab active" data-doc="national_id">National Identity Card</button>
@@ -276,6 +282,32 @@
 
   <script>
     (function () {
+      /* =========================================================
+         Backend API configuration
+         Replace these with your real backend endpoint URLs.
+         Both endpoints are expected to accept JSON POST bodies
+         and return JSON: { success: boolean, message?: string, studentId?: string }
+      ========================================================= */
+      const API_BASE_URL = window.SOFTWARESFAST_API_BASE || '/api';
+      const ENROLLMENT_ENDPOINT = API_BASE_URL + '/enrollment/photo';
+      const VERIFICATION_ENDPOINT = API_BASE_URL + '/verification/submit';
+
+      // Simple helper to POST JSON to a backend endpoint.
+      async function postJSON(url, payload) {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        let data = null;
+        try { data = await response.json(); } catch (e) { /* non-JSON response */ }
+        if (!response.ok) {
+          const message = (data && data.message) || ('Request failed with status ' + response.status);
+          throw new Error(message);
+        }
+        return data;
+      }
+
       /* ---------- Document type tabs (ID Verification box) ---------- */
       const tabs = document.querySelectorAll('.verify-tab');
       const docNumberLabel = document.getElementById('docNumberLabel');
@@ -306,12 +338,29 @@
       const snapBtn = document.getElementById('snapPhotoBtn');
       const retakeBtn = document.getElementById('retakeBtn');
       const enrollmentStatusEl = document.getElementById('enrollmentStatus');
+      const submitEnrollmentBtn = document.getElementById('submitEnrollmentBtn');
+      const idVerificationPanel = document.getElementById('idVerificationPanel');
+      const idLockBanner = document.getElementById('idLockBanner');
       let stream = null;
       let enrollmentPhotoDataUrl = null;
+      let enrollmentSaved = false; // Rule: must be true before ID verification can be submitted
+      let studentId = null; // Returned by backend after enrollment save, linked to verification submission
 
       function setEnrollmentStatus(message, type) {
         enrollmentStatusEl.textContent = message;
         enrollmentStatusEl.className = 'verify-status ' + (type || 'info');
+      }
+
+      function unlockIdVerificationPanel() {
+        enrollmentSaved = true;
+        idVerificationPanel.classList.remove('locked');
+        idLockBanner.classList.remove('visible');
+      }
+
+      function lockIdVerificationPanel() {
+        enrollmentSaved = false;
+        idVerificationPanel.classList.add('locked');
+        idLockBanner.classList.add('visible');
       }
 
       async function startCamera() {
@@ -354,6 +403,9 @@
         startBtn.textContent = 'Start Camera';
         startBtn.disabled = false;
         setEnrollmentStatus('Enrollment photo captured. Review it, then save.', 'success');
+
+        // Retaking / recapturing invalidates a prior save, re-locking Step 2.
+        lockIdVerificationPanel();
       }
 
       function retake() {
@@ -363,19 +415,38 @@
         placeholderText.style.display = 'block';
         setEnrollmentStatus('', '');
         enrollmentStatusEl.className = 'verify-status';
+        lockIdVerificationPanel();
       }
 
       startBtn.addEventListener('click', startCamera);
       snapBtn.addEventListener('click', capturePhoto);
       retakeBtn.addEventListener('click', retake);
 
-      document.getElementById('submitEnrollmentBtn').addEventListener('click', () => {
+      submitEnrollmentBtn.addEventListener('click', async () => {
         if (!enrollmentPhotoDataUrl) {
           setEnrollmentStatus('Please capture your enrollment photo before saving.', 'error');
           return;
         }
-        console.log('Enrollment photo saved:', enrollmentPhotoDataUrl.slice(0, 50) + '...');
-        setEnrollmentStatus('Enrollment photo saved successfully!', 'success');
+
+        submitEnrollmentBtn.disabled = true;
+        setEnrollmentStatus('Saving enrollment photo…', 'loading');
+
+        try {
+          // ---- Backend-ready endpoint call ----
+          const result = await postJSON(ENROLLMENT_ENDPOINT, {
+            imageDataUrl: enrollmentPhotoDataUrl,
+            capturedAt: new Date().toISOString()
+          });
+
+          studentId = (result && result.studentId) || studentId;
+          unlockIdVerificationPanel();
+          setEnrollmentStatus('Enrollment photo saved successfully! You can now proceed to Student ID Verification.', 'success');
+        } catch (err) {
+          lockIdVerificationPanel();
+          setEnrollmentStatus('Could not save enrollment photo: ' + err.message, 'error');
+        } finally {
+          submitEnrollmentBtn.disabled = false;
+        }
       });
 
       /* ---------- Step 2: Student ID Verification (choose file) ---------- */
@@ -386,6 +457,7 @@
       const uploadedImage = document.getElementById('uploadedImage');
       const uploadPlaceholder = document.getElementById('uploadPlaceholder');
       const statusEl = document.getElementById('verifyStatus');
+      const submitVerificationBtn = document.getElementById('submitVerificationBtn');
       let idDocDataUrl = null;
 
       function setStatus(message, type) {
@@ -394,6 +466,10 @@
       }
 
       chooseFileBtn.addEventListener('click', () => {
+        if (!enrollmentSaved) {
+          setStatus('Please save your enrollment photo first (Step 1).', 'error');
+          return;
+        }
         fileUpload.click(); // opens phone file manager/gallery or desktop file explorer
       });
 
@@ -424,7 +500,13 @@
         statusEl.className = 'verify-status';
       });
 
-      document.getElementById('submitVerificationBtn').addEventListener('click', () => {
+      submitVerificationBtn.addEventListener('click', async () => {
+        // Rule: enrollment photo must be saved before ID verification can be submitted.
+        if (!enrollmentSaved) {
+          setStatus('Please save your enrollment photo in Step 1 before submitting ID verification.', 'error');
+          return;
+        }
+
         const fullName = document.getElementById('fullName').value.trim();
         const docNumber = document.getElementById('docNumber').value.trim();
         const docCountry = document.getElementById('docCountry').value.trim();
@@ -439,6 +521,7 @@
         }
 
         const payload = {
+          studentId: studentId,
           documentType: currentDocType,
           fullName: fullName,
           documentNumber: docNumber,
@@ -446,9 +529,19 @@
           expiryDate: document.getElementById('docExpiry').value || null,
           imageDataUrl: idDocDataUrl
         };
-        console.log('Verification submission payload:', payload);
 
-        setStatus('Verification submitted successfully! Our admissions team will confirm your identity shortly.', 'success');
+        submitVerificationBtn.disabled = true;
+        setStatus('Submitting verification…', 'loading');
+
+        try {
+          // ---- Backend-ready endpoint call ----
+          await postJSON(VERIFICATION_ENDPOINT, payload);
+          setStatus('Verification submitted successfully! Our admissions team will confirm your identity shortly.', 'success');
+        } catch (err) {
+          setStatus('Could not submit verification: ' + err.message, 'error');
+        } finally {
+          submitVerificationBtn.disabled = false;
+        }
       });
     })();
   </script>
