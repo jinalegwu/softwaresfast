@@ -88,31 +88,8 @@
     .status.success { color: var(--success); font-weight: 700; }
     .status.error { color: var(--danger); font-weight: 700; }
 
-    .document-verification {
-      margin-top: 1.25rem;
-      padding-top: 1.1rem;
-      border-top: 1px solid var(--border);
-    }
+    .verification-card { margin-top: 1.5rem; }
     .verification-grid { display: grid; gap: .9rem; }
-    .verification-tabs {
-      display: flex;
-      gap: .55rem;
-      flex-wrap: wrap;
-      margin-bottom: .35rem;
-    }
-    .verification-tab {
-      border: 1px solid var(--border);
-      background: #f6faf7;
-      color: var(--primary);
-      padding: .55rem .8rem;
-      font-size: .8rem;
-      border-radius: 999px;
-    }
-    .verification-tab.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
     .verification-upload {
       padding: 1rem;
       border: 1px dashed #b7ccbb;
@@ -169,10 +146,10 @@
     </div>
 
     <div class="enrollment-grid">
-      <section class="card" aria-labelledby="details-title">
-        <h2 id="details-title">Student details</h2>
-        <p class="card-description">Use the information that will appear on your institute record.</p>
-        <form id="enrollmentForm" novalidate>
+      <form id="enrollmentForm" enctype="multipart/form-data" novalidate>
+        <section class="card" aria-labelledby="details-title">
+          <h2 id="details-title">Student Enrollment</h2>
+          <p class="card-description">Use the information that will appear on your institute record.</p>
           <div class="form-row">
             <div class="field">
               <label for="firstName">First name</label>
@@ -209,11 +186,11 @@
             <span>I consent to the use of my enrollment photo for institute identity verification and attendance check-in.</span>
           </label>
           <button class="primary submit" type="submit">Continue to Face ID setup</button>
-        </form>
-      </section>
+        </section>
+      </form>
 
       <aside class="card face-card" aria-labelledby="face-title">
-        <h2 id="face-title">Face ID setup</h2>
+        <h2 id="face-title" tabindex="-1">Face ID setup</h2>
         <p class="card-description">Take a clear, well-lit photo facing the camera.</p>
         <div class="face-stage" id="faceStage">
           <div class="face-placeholder">
@@ -231,29 +208,56 @@
           <button class="secondary" type="button" id="retakePhoto" hidden>Retake photo</button>
         </div>
         <p class="status" id="cameraStatus" role="status">Your camera is off.</p>
-
-        <div class="document-verification" aria-labelledby="documentVerificationTitle">
-          <h2 id="documentVerificationTitle" style="margin:0 0 .75rem; font-size:1.08rem;">Student ID verification</h2>
-          <div class="verification-grid">
-            <div class="verification-tabs" role="tablist" aria-label="Identity document type">
-              <button type="button" class="verification-tab active" data-doc-type="national_id">National ID</button>
-              <button type="button" class="verification-tab" data-doc-type="passport">International Passport</button>
-            </div>
-
-            <div class="verification-upload">
-              <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-              <input id="studentIdUpload" type="file" accept="image/*" capture="environment" />
-              <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
-            </div>
-          </div>
-        </div>
-
         <div class="privacy-note">
           <strong>Privacy:</strong> This demo keeps the captured photo only in this browser session. A production Face ID system needs secure server-side enrollment, explicit consent, access control, and encrypted storage.
         </div>
         <div class="completion" id="completionMessage" role="status"></div>
       </aside>
     </div>
+
+    <section class="card verification-card" aria-labelledby="documentVerificationTitle">
+      <h2 id="documentVerificationTitle">Student ID verification</h2>
+      <p class="card-description">Provide your student information and upload a valid identification document.</p>
+      <div class="verification-grid">
+        <div class="form-row">
+          <div class="field">
+            <label for="studentIdNumber">Student ID number</label>
+            <input id="studentIdNumber" name="studentIdNumber" form="enrollmentForm" placeholder="e.g. SFT-2026-00123" required>
+          </div>
+          <div class="field">
+            <label for="studentDob">Date of birth</label>
+            <input id="studentDob" name="studentDob" type="date" form="enrollmentForm" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="studentProgram">Program enrolled</label>
+            <select id="studentProgram" name="studentProgram" form="enrollmentForm" required>
+              <option value="">Select a program</option>
+              <option>Web Development</option>
+              <option>Mobile App Development</option>
+              <option>UI/UX Design</option>
+              <option>Cloud & DevOps</option>
+              <option>Quality Assurance</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="idType">ID type</label>
+            <select id="idType" name="idType" form="enrollmentForm" required>
+              <option value="national_id">National ID</option>
+              <option value="passport">International Passport</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="verification-upload">
+          <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
+          <input id="studentIdUpload" name="studentIdUpload" type="file" accept="image/*,.pdf,application/pdf" form="enrollmentForm" aria-describedby="studentIdUploadHelp" required>
+          <div class="verification-help" id="studentIdUploadHelp">Upload a clear image of your National Identity Card or International Passport for verification.</div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -270,7 +274,6 @@
     const progressFace = document.getElementById('progressFace');
     const progressComplete = document.getElementById('progressComplete');
     const idUpload = document.getElementById('studentIdUpload');
-    const verificationTabs = document.querySelectorAll('.verification-tab');
     let stream = null;
     let photoCaptured = false;
 
@@ -278,13 +281,6 @@
       status.textContent = message;
       status.className = `status ${type}`;
     }
-
-    verificationTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        verificationTabs.forEach((item) => item.classList.remove('active'));
-        tab.classList.add('active');
-      });
-    });
 
     async function startCamera() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -357,7 +353,7 @@
         progressProfile.classList.remove('active');
         progressFace.classList.add('active');
         setStatus('Please capture your enrollment photo before submitting.', 'error');
-        document.getElementById('faceTitle')?.focus();
+        document.getElementById('face-title')?.focus();
         return;
       }
       if (!idUpload.value) {
