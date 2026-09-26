@@ -256,9 +256,10 @@
         <h2 id="documentVerificationTitle" style="margin:0 0 .35rem;">Student ID verification</h2>
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
-          <div class="verification-tabs" aria-label="Identity document type">
-            <button type="button" aria-pressed="true" class="verification-tab active" data-doc-type="national_id" disabled>National ID</button>
-            <button type="button" aria-pressed="false" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
+          <div class="verification-tabs" role="radiogroup" aria-labelledby="documentTypeLabel">
+            <span id="documentTypeLabel" style="position:absolute;left:-9999px;">Identity document type</span>
+            <button type="button" role="radio" aria-checked="false" class="verification-tab" data-doc-type="national_id" disabled>National ID</button>
+            <button type="button" role="radio" aria-checked="false" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
           </div>
 
           <div class="verification-upload">
@@ -298,6 +299,7 @@
     let photoCaptured = false;
     let photoSaved = false;
     let verificationLocked = true;
+    let selectedDocType = 'national_id';
 
     function setStatus(message, type = '') {
       status.textContent = message;
@@ -312,6 +314,13 @@
       submitEnrollmentButton.disabled = locked;
       verificationTabs.forEach((tab) => {
         tab.disabled = locked;
+        tab.classList.remove('active');
+        tab.setAttribute('aria-checked', 'false');
+      });
+      if (!locked) {
+        const selectedTab = Array.from(verificationTabs).find((tab) => tab.dataset.docType === selectedDocType) || verificationTabs[0];
+        selectedTab.classList.add('active');
+        selectedTab.setAttribute('aria-checked', 'true');
       });
       verificationStatus.textContent = locked
         ? 'Locked: save your enrollment photo first to enable this step.'
@@ -326,10 +335,11 @@
         }
         verificationTabs.forEach((item) => {
           item.classList.remove('active');
-          item.setAttribute('aria-pressed', 'false');
+          item.setAttribute('aria-checked', 'false');
         });
+        selectedDocType = tab.dataset.docType;
         tab.classList.add('active');
-        tab.setAttribute('aria-pressed', 'true');
+        tab.setAttribute('aria-checked', 'true');
       });
     });
 
