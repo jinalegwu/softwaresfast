@@ -423,7 +423,12 @@
       }
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      const captureContext = canvas.getContext('2d');
+      if (!captureContext) {
+        setStatus('We could not process your photo. Please retry capture.', 'error');
+        return;
+      }
+      captureContext.drawImage(video, 0, 0, canvas.width, canvas.height);
       photoCaptured = true;
       photoSaved = false;
       savedEnrollmentPhotoFile = null;
@@ -450,7 +455,12 @@
       const serializedCanvas = document.createElement('canvas');
       serializedCanvas.width = Math.round(canvas.width * scale);
       serializedCanvas.height = Math.round(canvas.height * scale);
-      serializedCanvas.getContext('2d').drawImage(canvas, 0, 0, serializedCanvas.width, serializedCanvas.height);
+      const serializedContext = serializedCanvas.getContext('2d');
+      if (!serializedContext) {
+        setStatus('We could not save your photo file. Please retake and try again.', 'error');
+        return;
+      }
+      serializedContext.drawImage(canvas, 0, 0, serializedCanvas.width, serializedCanvas.height);
       const photoFile = await createEnrollmentPhotoFile(serializedCanvas);
       if (!photoFile) {
         setStatus('We could not save your photo file. Please retake and try again.', 'error');
@@ -501,7 +511,8 @@
         setStatus('Please save a valid enrollment photo file before submitting.', 'error');
         return;
       }
-      if (!idUpload.value) {
+      const selectedIdFile = idUpload.files && idUpload.files[0];
+      if (!selectedIdFile) {
         setStatus('Please upload a valid National ID or International Passport image for verification.', 'error');
         return;
       }
@@ -509,7 +520,7 @@
       enrollmentSubmission.delete('enrollmentPhotoFile');
       enrollmentSubmission.append('enrollmentPhotoFile', savedEnrollmentPhotoFile);
       enrollmentSubmission.delete('studentIdDocument');
-      enrollmentSubmission.append('studentIdDocument', idUpload.files[0]);
+      enrollmentSubmission.append('studentIdDocument', selectedIdFile);
       if (!enrollmentSubmission.get('enrollmentPhotoFile')) {
         setStatus('Photo payload is missing. Please save your photo again.', 'error');
         return;
