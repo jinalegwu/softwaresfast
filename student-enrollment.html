@@ -245,12 +245,12 @@
       </aside>
     </div>
 
-    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle" aria-disabled="true">
+    <section class="card verification-card locked" id="verificationCard" aria-labelledby="documentVerificationTitle">
       <h2 id="documentVerificationTitle">Student ID verification</h2>
       <p class="card-description">This section stays locked until your enrollment photo has been captured and saved.</p>
       <p class="lock-note" id="verificationLockNote">Locked: capture your enrollment photo and save it before entering your Student ID details.</p>
-      <form id="verificationForm" novalidate>
-        <fieldset class="verification-fields" id="verificationFields" disabled>
+      <form id="verificationForm" novalidate aria-describedby="verificationLockNote">
+        <fieldset class="verification-fields" id="verificationFields" disabled aria-describedby="verificationLockNote">
           <div class="verification-grid">
             <div class="form-row">
               <div class="field">
@@ -357,7 +357,6 @@
     function lockVerificationSection() {
       verificationFields.disabled = true;
       verificationCard.classList.add('locked');
-      verificationCard.setAttribute('aria-disabled', 'true');
       verificationLockNote.classList.remove('unlocked');
       verificationLockNote.textContent = 'Locked: capture your enrollment photo and save it before entering your Student ID details.';
     }
@@ -365,7 +364,6 @@
     function unlockVerificationSection() {
       verificationFields.disabled = false;
       verificationCard.classList.remove('locked');
-      verificationCard.setAttribute('aria-disabled', 'false');
       verificationLockNote.classList.add('unlocked');
       verificationLockNote.textContent = 'Unlocked: your enrollment photo has been saved. Add your Student ID details and upload the ID image to finish.';
     }
@@ -387,6 +385,7 @@
       captureButton.disabled = true;
       saveButton.disabled = true;
       retakeButton.hidden = true;
+      retakeButton.disabled = false;
       stage.classList.remove('camera-on', 'captured');
       canvas.width = 0;
       canvas.height = 0;
@@ -449,6 +448,7 @@
       captureButton.disabled = true;
       saveButton.disabled = false;
       retakeButton.hidden = false;
+      retakeButton.disabled = false;
       startButton.hidden = true;
       lockVerificationSection();
       updateProgress();
@@ -462,6 +462,7 @@
       }
       photoSaved = true;
       saveButton.disabled = true;
+      retakeButton.hidden = true;
       unlockVerificationSection();
       resetCompletion();
       updateProgress();
@@ -499,16 +500,7 @@
         setStatus('Please capture and save your enrollment photo before Student ID verification.', 'error');
         return;
       }
-      if (!documentType.value) {
-        documentType.reportValidity();
-        return;
-      }
-      if (!documentNumber.value.trim()) {
-        documentNumber.reportValidity();
-        return;
-      }
-      if (!idUpload.files.length) {
-        idUpload.reportValidity();
+      if (!verificationForm.reportValidity()) {
         return;
       }
       if (idUpload.files[0].type && !idUpload.files[0].type.startsWith('image/')) {
