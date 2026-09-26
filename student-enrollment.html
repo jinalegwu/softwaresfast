@@ -257,17 +257,17 @@
         <p class="card-description">After saving your enrollment photo, choose your document type, upload your ID image, then submit enrollment.</p>
         <div class="verification-grid">
           <div class="verification-tabs" role="tablist" aria-label="Identity document type">
-            <button type="button" class="verification-tab active" data-doc-type="national_id" disabled>National ID</button>
-            <button type="button" class="verification-tab" data-doc-type="passport" disabled>International Passport</button>
+            <button type="button" class="verification-tab active" data-doc-type="national_id">National ID</button>
+            <button type="button" class="verification-tab" data-doc-type="passport">International Passport</button>
           </div>
 
           <div class="verification-upload">
             <label for="studentIdUpload" style="margin-bottom:0; display:block; font-weight:700;">Upload ID document</label>
-            <input id="studentIdUpload" type="file" accept="image/*" capture="environment" disabled />
+            <input id="studentIdUpload" type="file" accept="image/*" capture="environment" />
             <div class="verification-help">Upload a clear image of your National Identity Card or International Passport for verification.</div>
             <p class="verification-locked-note" id="verificationStatus">Locked: save your enrollment photo first to enable this step.</p>
           </div>
-          <button class="primary submit" type="button" id="submitEnrollment" disabled>Submit enrollment</button>
+          <button class="primary submit" type="button" id="submitEnrollment">Submit enrollment</button>
         </div>
       </section>
     </div>
@@ -297,6 +297,7 @@
     let stream = null;
     let photoCaptured = false;
     let photoSaved = false;
+    let verificationLocked = true;
 
     function setStatus(message, type = '') {
       status.textContent = message;
@@ -304,13 +305,9 @@
     }
 
     function setVerificationLocked(locked) {
+      verificationLocked = locked;
       verificationSection.classList.toggle('locked', locked);
       verificationSection.setAttribute('aria-disabled', String(locked));
-      idUpload.disabled = locked;
-      submitEnrollmentButton.disabled = locked;
-      verificationTabs.forEach((tab) => {
-        tab.disabled = locked;
-      });
       verificationStatus.textContent = locked
         ? 'Locked: save your enrollment photo first to enable this step.'
         : 'Unlocked: select your document type, upload your ID image, then submit enrollment.';
@@ -318,9 +315,26 @@
 
     verificationTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
+        if (verificationLocked) {
+          setStatus('Save your enrollment photo first to unlock Student ID verification.', 'error');
+          return;
+        }
         verificationTabs.forEach((item) => item.classList.remove('active'));
         tab.classList.add('active');
       });
+    });
+    idUpload.addEventListener('click', (event) => {
+      if (!verificationLocked) {
+        return;
+      }
+      event.preventDefault();
+      setStatus('Save your enrollment photo first to unlock Student ID verification.', 'error');
+    });
+    idUpload.addEventListener('change', () => {
+      if (!verificationLocked) {
+        return;
+      }
+      idUpload.value = '';
     });
 
     async function startCamera() {
@@ -432,7 +446,7 @@
       progressFace.classList.add('complete');
       progressComplete.classList.add('active', 'complete');
       enrollmentFlow.hidden = true;
-      completion.innerHTML = `<strong>Enrollment submitted.</strong> Thank you, ${document.getElementById('firstName').value}. We have received your details, saved photo, and ID verification. We will get back to you soon.`;
+      completion.textContent = `Enrollment submitted. Thank you, ${document.getElementById('firstName').value}. We have received your details, saved photo, and ID verification. We will get back to you soon.`;
       completion.classList.add('show');
       setStatus('Enrollment completed locally.', 'success');
     });
