@@ -71,6 +71,8 @@
       border-radius: 10px; background: rgba(255,255,255,0.03); color: var(--text);
       font: inherit;
     }
+    select option { color: #14231b; background: #fff; }
+    input[type="date"] { color-scheme: dark; }
     input::placeholder { color: rgba(223,247,234,0.63); }
     input:focus, select:focus { outline: 3px solid rgba(212,175,55,0.2); border-color: rgba(212,175,55,0.45); }
     .button-row { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 1rem; }
@@ -136,7 +138,7 @@
       <section class="panel" aria-labelledby="attendance-title">
         <div class="eyebrow">Student check-in</div>
         <h1 id="attendance-title">Attendance</h1>
-        <p class="subtitle">Mark student presence for today’s session.</p>
+        <p class="subtitle">Mark student presence for a session.</p>
 
         <form id="attendanceForm" novalidate>
           <div class="field">
@@ -148,22 +150,22 @@
             <label for="sessionSelect">Program / session</label>
             <select id="sessionSelect" name="sessionSelect" required>
               <option value="">Select a session</option>
-              <option>Web Development Fundamentals</option>
-              <option>UI/UX Design Lab</option>
-              <option>Backend API Development</option>
-              <option>Cloud & DevOps</option>
-              <option>Full-Stack Product Lab</option>
+              <option value="Web Development Fundamentals">Web Development Fundamentals</option>
+              <option value="UI/UX Design Lab">UI/UX Design Lab</option>
+              <option value="Backend API Development">Backend API Development</option>
+              <option value="Cloud & DevOps">Cloud &amp; DevOps</option>
+              <option value="Full-Stack Product Lab">Full-Stack Product Lab</option>
             </select>
           </div>
 
           <div class="field">
-            <label for="todayDate">Date</label>
-            <input id="todayDate" name="todayDate" type="text" readonly />
+            <label for="attendanceDate">Date</label>
+            <input id="attendanceDate" name="attendanceDate" type="date" required />
           </div>
 
           <div class="button-row">
             <button class="btn primary" type="submit" data-action="checkin">Check in</button>
-            <button class="btn secondary" type="button" id="checkoutButton" data-action="checkout">Check out</button>
+            <button class="btn secondary" type="submit" data-action="checkout">Check out</button>
           </div>
 
           <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -177,20 +179,21 @@
 
       <aside class="panel" aria-labelledby="log-title">
         <div class="eyebrow">Local record</div>
-        <h2 id="log-title">Today’s attendance log</h2>
+        <h2 id="log-title">Attendance log</h2>
 
         <table class="log-table" aria-label="Attendance records">
           <thead>
             <tr>
               <th>Student</th>
               <th>Session</th>
+              <th>Date</th>
               <th>Time</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="attendanceTableBody">
-            <tr>
-              <td colspan="4" style="color: var(--muted);">No attendance entries yet.</td>
+            <tr id="emptyRow">
+              <td colspan="5" style="color: var(--muted);">No attendance entries yet.</td>
             </tr>
           </tbody>
         </table>
@@ -207,67 +210,69 @@
     const form = document.getElementById('attendanceForm');
     const tableBody = document.getElementById('attendanceTableBody');
     const status = document.getElementById('status');
-    const todayInput = document.getElementById('todayDate');
-    const checkoutButton = document.getElementById('checkoutButton');
+    const dateInput = document.getElementById('attendanceDate');
+    const studentInput = document.getElementById('studentRecord');
+    const sessionSelect = document.getElementById('sessionSelect');
 
-    const today = new Date();
-    todayInput.value = today.toLocaleDateString(undefined, {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-
-    function renderEntry(student, session, time, action) {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${student}</td>
-        <td>${session}</td>
-        <td>${time}</td>
-        <td>${action}</td>
-      `;
-      tableBody.innerHTML = '';
-      tableBody.appendChild(row);
+    function toInputDate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
     }
+
+    // Default to today, but the user can change it.
+    dateInput.value = toInputDate(new Date());
 
     function setStatus(message, type = '') {
       status.textContent = message;
       status.className = `status ${type}`;
     }
 
+    function addEntry(student, session, date, time, action) {
+      const empty = document.getElementById('emptyRow');
+      if (empty) empty.remove();
+      const row = document.createElement('tr');
+      [student, session, date, time, action].forEach((value) => {
+        const td = document.createElement('td');
+        td.textContent = value;
+        row.appendChild(td);
+      });
+      tableBody.insertBefore(row, tableBody.firstChild);
+    }
+
     form.addEventListener('submit', (event) => {
       event.preventDefault();
 
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        setStatus('Please complete the required student and session fields.', 'error');
+      const student = studentInput.value.trim();
+      const session = sessionSelect.value;
+      const date = dateInput.value;
+      const action = event.submitter ? event.submitter.dataset.action : 'checkin';
+
+      if (!student) {
+        setStatus('Please enter your student ID or email.', 'error');
+        studentInput.focus();
+        return;
+      }
+      if (!session) {
+        setStatus('Please select a session.', 'error');
+        sessionSelect.focus();
+        return;
+      }
+      if (!date) {
+        setStatus('Please choose a date.', 'error');
+        dateInput.focus();
         return;
       }
 
-      const student = document.getElementById('studentRecord').value.trim();
-      const session = document.getElementById('sessionSelect').value;
-      const action = event.submitter.dataset.action;
-
-      if (!student || !session) {
-        setStatus('Please provide a valid student ID/email and session.', 'error');
-        return;
-      }
-
-      const now = new Date();
-      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      renderEntry(student, session, time, action === 'checkin' ? 'Check in' : 'Check out');
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const label = action === 'checkin' ? 'Check in' : 'Check out';
+      addEntry(student, session, date, time, label);
 
       setStatus(
-        action === 'checkin'
-          ? `Check-in successful for ${student}.`
-          : `Check-out successful for ${student}.`,
+        `${label} successful for ${student} — ${session} on ${date}.`,
         'success'
       );
-    });
-
-    checkoutButton.addEventListener('click', () => {
-      form.dispatchEvent(new Event('submit'));
     });
   </script>
 </body>
