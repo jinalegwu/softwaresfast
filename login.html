@@ -16,70 +16,40 @@
       --muted: #6b4f3a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      min-height: 100vh;
-      background: var(--brown-100);
-      color: var(--text);
-    }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; background: var(--brown-100); color: var(--text); }
     a { text-decoration: none; color: inherit; }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem;
-      padding: 1rem 5%; background: var(--brown-900); color: #fff;
-    }
+    .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; padding: 1rem 5%; background: var(--brown-900); color: #fff; }
     .brand { font-weight: 800; letter-spacing: .06em; color: var(--brown-300); }
     .nav-links { display: flex; gap: .75rem; flex-wrap: wrap; }
     .nav-links a { color: #fff; padding: .45rem .9rem; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; }
     .nav-links a:hover { background: var(--brown-500); }
-
-    .hero {
-      position: relative; overflow: hidden;
-      min-height: calc(100vh - 70px);
-      display: grid; place-items: center; padding: 2rem 1rem;
-      background: var(--brown-300);
-    }
-    .hero-video {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; z-index: 0; opacity: .45;
-    }
-    .hero::after {
-      content: ""; position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(135deg, rgba(217,185,155,.75), rgba(184,138,95,.55));
-    }
+    .hero { position: relative; overflow: hidden; min-height: calc(100vh - 70px); display: grid; place-items: center; padding: 2rem 1rem; background: var(--brown-300); }
+    .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: .45; }
+    .hero::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(217,185,155,.75), rgba(184,138,95,.55)); }
     .hero-content { position: relative; z-index: 2; width: min(520px, 100%); text-align: center; }
     .eyebrow { font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 800; color: var(--brown-700); }
     h1 { font-size: clamp(2rem, 4vw, 2.6rem); margin: .3rem 0 .4rem; color: var(--brown-900); }
     .subtitle { color: var(--muted); margin-bottom: 1.2rem; }
-    .login-card {
-      text-align: left; background: rgba(255,255,255,.92);
-      border: 1px solid var(--brown-500); border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(74,50,34,.25); padding: clamp(1.2rem, 2.5vw, 2rem);
-    }
+    .login-card { text-align: left; background: rgba(255,255,255,.92); border: 1px solid var(--brown-500); border-radius: 18px; box-shadow: 0 20px 40px rgba(74,50,34,.25); padding: clamp(1.2rem, 2.5vw, 2rem); }
+    .tabs { display: flex; gap: .5rem; margin-bottom: 1.2rem; }
+    .tab { flex: 1; padding: .6rem; border: 1px solid var(--brown-500); background: #fff; color: var(--brown-700); border-radius: 10px; font: inherit; font-weight: 800; cursor: pointer; }
+    .tab.active { background: var(--brown-700); color: #fff; }
     .field { margin-bottom: 1rem; }
     label { display: block; margin-bottom: .4rem; font-weight: 700; font-size: .95rem; }
-    input {
-      width: 100%; padding: .85rem 1rem; border-radius: 10px;
-      border: 1px solid var(--brown-500); background: #fff; color: var(--text); font: inherit;
-    }
+    input { width: 100%; padding: .85rem 1rem; border-radius: 10px; border: 1px solid var(--brown-500); background: #fff; color: var(--text); font: inherit; }
     input:focus { outline: 3px solid rgba(184,138,95,.35); }
     .password-wrap { position: relative; }
-    .password-wrap button {
-      position: absolute; right: .7rem; top: 50%; transform: translateY(-50%);
-      border: none; background: transparent; color: var(--brown-700); font-weight: 700; cursor: pointer;
-    }
-    .row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin: .8rem 0 1.2rem; font-size: .92rem; color: var(--muted); }
-    .checkbox { display: inline-flex; align-items: center; gap: .5rem; margin: 0; font-weight: 400; }
-    .checkbox input { width: auto; accent-color: var(--brown-700); }
-    .row a, .links a { color: var(--brown-700); font-weight: 700; }
-    .btn {
-      width: 100%; border: none; border-radius: 10px; padding: .9rem 1rem;
-      font: inherit; font-weight: 800; cursor: pointer; background: var(--brown-700); color: #fff;
-    }
+    .password-wrap button { position: absolute; right: .7rem; top: 50%; transform: translateY(-50%); border: none; background: transparent; color: var(--brown-700); font-weight: 700; cursor: pointer; }
+    .hint { font-size: .8rem; color: var(--muted); margin-top: .3rem; }
+    .btn { width: 100%; border: none; border-radius: 10px; padding: .9rem 1rem; font: inherit; font-weight: 800; cursor: pointer; background: var(--brown-700); color: #fff; margin-top: .4rem; }
     .btn:hover { background: var(--brown-900); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
     .status { min-height: 1.4rem; margin-top: .9rem; font-size: .92rem; color: var(--muted); }
     .status.success { color: #1c6b3a; font-weight: 700; }
     .status.error { color: #b42318; font-weight: 700; }
     .links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; font-size: .92rem; }
+    .links a { color: var(--brown-700); font-weight: 700; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -101,32 +71,35 @@
     <div class="hero-content">
       <div class="eyebrow">Student portal</div>
       <h1 id="login-title">Student Login</h1>
-      <p class="subtitle">Login with your student ID or email to continue.</p>
+      <p class="subtitle" id="subtitle">Sign in with your student email and password.</p>
 
       <section class="login-card" aria-labelledby="login-title">
-        <form id="loginForm" novalidate>
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" id="tabLogin" role="tab">Sign in</button>
+          <button type="button" class="tab" id="tabRegister" role="tab">Create account</button>
+        </div>
+
+        <form id="authForm" novalidate>
+          <div class="field hidden" id="nameField">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Your full name" />
+          </div>
+
           <div class="field">
-            <label for="studentId">Student ID or email</label>
-            <input id="studentId" name="studentId" type="text" placeholder="e.g. SF-1001 or student@school.com" required />
+            <label for="email">Student email</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="student@school.com" required />
           </div>
 
           <div class="field">
             <label for="password">Password</label>
             <div class="password-wrap">
-              <input id="password" name="password" type="password" placeholder="Enter your password" required />
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
               <button type="button" id="togglePassword" aria-label="Show password">Show</button>
             </div>
+            <p class="hint hidden" id="passwordHint">At least 8 characters.</p>
           </div>
 
-          <div class="row">
-            <label class="checkbox" for="rememberMe">
-              <input id="rememberMe" type="checkbox" />
-              <span>Remember me</span>
-            </label>
-            <a href="student-enrollment.html">Need to enroll?</a>
-          </div>
-
-          <button class="btn" type="submit">Sign in</button>
+          <button class="btn" type="submit" id="submitBtn">Sign in</button>
           <p id="status" class="status" role="status" aria-live="polite"></p>
 
           <div class="links">
@@ -139,33 +112,96 @@
   </main>
 
   <script>
-    const form = document.getElementById('loginForm');
-    const status = document.getElementById('status');
-    const passwordField = document.getElementById('password');
+    const form = document.getElementById('authForm');
+    const statusEl = document.getElementById('status');
+    const nameField = document.getElementById('nameField');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
+    const submitBtn = document.getElementById('submitBtn');
+    const passwordHint = document.getElementById('passwordHint');
+    const subtitle = document.getElementById('subtitle');
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegister = document.getElementById('tabRegister');
+    let mode = 'login';
 
     function setStatus(message, type = '') {
-      status.textContent = message;
-      status.className = `status ${type}`;
+      statusEl.textContent = message;
+      statusEl.className = `status ${type}`;
     }
 
+    function setMode(next) {
+      mode = next;
+      const isRegister = mode === 'register';
+      tabLogin.classList.toggle('active', !isRegister);
+      tabRegister.classList.toggle('active', isRegister);
+      nameField.classList.toggle('hidden', !isRegister);
+      passwordHint.classList.toggle('hidden', !isRegister);
+      submitBtn.textContent = isRegister ? 'Create account' : 'Sign in';
+      passwordInput.autocomplete = isRegister ? 'new-password' : 'current-password';
+      subtitle.textContent = isRegister
+        ? 'Create your student account to get started.'
+        : 'Sign in with your student email and password.';
+      setStatus('');
+    }
+
+    tabLogin.addEventListener('click', () => setMode('login'));
+    tabRegister.addEventListener('click', () => setMode('register'));
+
     togglePassword.addEventListener('click', () => {
-      const show = passwordField.type === 'password';
-      passwordField.type = show ? 'text' : 'password';
+      const show = passwordInput.type === 'password';
+      passwordInput.type = show ? 'text' : 'password';
       togglePassword.textContent = show ? 'Hide' : 'Show';
       togglePassword.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
     });
 
-    form.addEventListener('submit', (event) => {
+    async function api(url, body) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+      return data;
+    }
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const studentId = document.getElementById('studentId').value.trim();
-      const password = passwordField.value.trim();
-      if (!studentId || !password) {
-        setStatus('Please enter both your student ID/email and password.', 'error');
-        return;
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const name = nameInput.value.trim();
+
+      if (!email || !password) return setStatus('Please enter your email and password.', 'error');
+      if (mode === 'register') {
+        if (!name) return setStatus('Please enter your full name.', 'error');
+        if (password.length < 8) return setStatus('Password must be at least 8 characters.', 'error');
       }
-      setStatus(`Demo sign-in successful for ${studentId}. Connect this form to secure server-side authentication for production use.`, 'success');
+
+      submitBtn.disabled = true;
+      setStatus(mode === 'register' ? 'Creating your account…' : 'Signing in…');
+      try {
+        const data = await api(
+          mode === 'register' ? '/api/auth/register' : '/api/auth/login',
+          mode === 'register' ? { name, email, password } : { email, password }
+        );
+        setStatus(`Welcome, ${data.student.name}! Redirecting…`, 'success');
+        setTimeout(() => { window.location.href = 'attendance.html'; }, 900);
+      } catch (err) {
+        setStatus(err.message, 'error');
+        submitBtn.disabled = false;
+      }
     });
+
+    // If already signed in, skip the form.
+    fetch('/api/auth/me', { credentials: 'same-origin' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && data.student) setStatus(`You're signed in as ${data.student.email}.`, 'success');
+      })
+      .catch(() => {});
   </script>
 </body>
 </html>

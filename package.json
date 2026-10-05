@@ -1,23 +1,22 @@
 {
   "name": "softwaresfast",
-  "version": "1.0.0",
-  "description": "Professional software development company website - Building software applications for real clients within timeline, budget, and scope",
-  "main": "index.html",
+  "version": "1.1.0",
+  "description": "Softwaresfast Institute website with student authentication backend",
+  "main": "server.js",
   "scripts": {
-    "start": "npx http-server",
-    "build": "echo Static site - no build needed"
+    "start": "node server.js"
   },
-  "keywords": [
-    "software development",
-    "web development",
-    "mobile apps",
-    "cloud solutions",
-    "custom software"
-  ],
-  "author": "Softwaresfast",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jinalegwu/softwaresfast.git"
-  }
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "license": "MIT"
 }
