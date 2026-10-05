@@ -138,6 +138,18 @@
     .completion { display: none; margin-top: 1.25rem; padding: 1rem; border-radius: 10px; background: #effaf2; border: 1px solid #a9d8bd; color: #115d35; }
     .completion.show { display: block; }
 
+    .login-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 760px) {
       .page { padding: 2rem 0; }
       .enrollment-grid { grid-template-columns: 1fr; }
@@ -160,6 +172,7 @@
       <div class="eyebrow">Institute portal</div>
       <h1 id="page-title">Student Enrollment</h1>
       <p>Complete your student profile and set up a face verification photo for secure check-in.</p>
+      <a class="login-link" href="login.html">Already enrolled? Student Login</a>
     </section>
 
     <div class="progress" aria-label="Enrollment progress">
@@ -249,7 +262,7 @@
         </div>
 
         <div class="privacy-note">
-          <strong>Privacy:</strong> This demo keeps the captured photo only in this browser session. A production Face ID system needs secure server-side enrollment, explicit consent, access control, and encrypted storage.
+          <strong>Privacy:</strong> This demo keeps the captured photo only in this browser session. A production Face ID system needs secure server-side enrollment, explicit consent, access control, and data protection safeguards.
         </div>
         <div class="completion" id="completionMessage" role="status"></div>
       </aside>
@@ -367,7 +380,7 @@
       progressFace.classList.remove('active');
       progressFace.classList.add('complete');
       progressComplete.classList.add('active', 'complete');
-      completion.innerHTML = `<strong>Enrollment ready.</strong> Thank you, ${document.getElementById('firstName').value}. Your student details, photo, and ID verification have been validated in this demo flow.`;
+      completion.innerHTML = `<strong>Enrollment ready.</strong> Thank you, ${document.getElementById('firstName').value}. Your student details, photo, and ID verification have been validated in this demo.`;
       completion.classList.add('show');
       setStatus('Enrollment completed locally. Connect this form to a secure backend to save records.', 'success');
     });
