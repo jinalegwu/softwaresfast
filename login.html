@@ -49,6 +49,7 @@
     .status.error { color: #b42318; font-weight: 700; }
     .links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; font-size: .92rem; }
     .links a { color: var(--brown-700); font-weight: 700; }
+    .demo-note { margin-top: .9rem; font-size: .78rem; color: var(--muted); }
     .hidden { display: none; }
   </style>
 </head>
@@ -101,6 +102,7 @@
 
           <button class="btn" type="submit" id="submitBtn">Sign in</button>
           <p id="status" class="status" role="status" aria-live="polite"></p>
+          <p id="demoNote" class="demo-note hidden">Demo mode: the secure server isn't reachable, so accounts are stored only in this browser.</p>
 
           <div class="links">
             <a href="student-enrollment.html">Enroll a student</a>
@@ -114,6 +116,7 @@
   <script>
     const form = document.getElementById('authForm');
     const statusEl = document.getElementById('status');
+    const demoNote = document.getElementById('demoNote');
     const nameField = document.getElementById('nameField');
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
@@ -126,12 +129,14 @@
     const tabRegister = document.getElementById('tabRegister');
     let mode = 'login';
 
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     function setStatus(message, type = '') {
       statusEl.textContent = message;
       statusEl.className = `status ${type}`;
     }
 
-    function setMode(next) {
+    function setMode(next, keepStatus = false) {
       mode = next;
       const isRegister = mode === 'register';
       tabLogin.classList.toggle('active', !isRegister);
@@ -143,7 +148,7 @@
       subtitle.textContent = isRegister
         ? 'Create your student account to get started.'
         : 'Sign in with your student email and password.';
-      setStatus('');
+      if (!keepStatus) setStatus('');
     }
 
     tabLogin.addEventListener('click', () => setMode('login'));
@@ -156,16 +161,67 @@
       togglePassword.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
     });
 
+    // ---------- Server API (used when the Node backend is running) ----------
+    class BackendUnavailable extends Error {}
+
     async function api(url, body) {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify(body),
-      });
+      let res;
+      try {
+        res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(body),
+        });
+      } catch {
+        throw new BackendUnavailable('Network error');
+      }
+      const type = res.headers.get('content-type') || '';
+      // Static hosts (e.g. GitHub Pages) answer /api/* with an HTML 404/405, not JSON.
+      if (!type.includes('application/json')) throw new BackendUnavailable('No API');
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
       return data;
+    }
+
+    // ---------- Browser-only demo fallback ----------
+    const STORE_KEY = 'sf_demo_students';
+    const loadStudents = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch { return []; } };
+    const saveStudents = (list) => localStorage.setItem(STORE_KEY, JSON.stringify(list));
+
+    async function hashPassword(password, salt) {
+      const bytes = new TextEncoder().encode(`${salt}:${password}`);
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function localRegister({ name, email, password }) {
+      const students = loadStudents();
+      const key = email.toLowerCase();
+      if (students.some((s) => s.email === key)) throw new Error('An account with this email already exists.');
+      const salt = crypto.getRandomValues(new Uint32Array(4)).join('-');
+      students.push({ name, email: key, salt, hash: await hashPassword(password, salt) });
+      saveStudents(students);
+      return { student: { name, email: key } };
+    }
+
+    async function localLogin({ email, password }) {
+      const student = loadStudents().find((s) => s.email === email.toLowerCase());
+      if (!student || (await hashPassword(password, student.salt)) !== student.hash) {
+        throw new Error('Invalid email or password.');
+      }
+      return { student: { name: student.name, email: student.email } };
+    }
+
+    async function run(kind, payload) {
+      const url = kind === 'register' ? '/api/auth/register' : '/api/auth/login';
+      try {
+        return await api(url, payload);
+      } catch (err) {
+        if (!(err instanceof BackendUnavailable)) throw err;
+        demoNote.classList.remove('hidden');
+        return kind === 'register' ? localRegister(payload) : localLogin(payload);
+      }
     }
 
     form.addEventListener('submit', async (event) => {
@@ -175,6 +231,7 @@
       const name = nameInput.value.trim();
 
       if (!email || !password) return setStatus('Please enter your email and password.', 'error');
+      if (!EMAIL_RE.test(email)) return setStatus('Please enter a valid email address.', 'error');
       if (mode === 'register') {
         if (!name) return setStatus('Please enter your full name.', 'error');
         if (password.length < 8) return setStatus('Password must be at least 8 characters.', 'error');
@@ -183,25 +240,24 @@
       submitBtn.disabled = true;
       setStatus(mode === 'register' ? 'Creating your account…' : 'Signing in…');
       try {
-        const data = await api(
-          mode === 'register' ? '/api/auth/register' : '/api/auth/login',
-          mode === 'register' ? { name, email, password } : { email, password }
-        );
-        setStatus(`Welcome, ${data.student.name}! Redirecting…`, 'success');
-        setTimeout(() => { window.location.href = 'attendance.html'; }, 900);
+        if (mode === 'register') {
+          await run('register', { name, email, password });
+          passwordInput.value = '';
+          nameInput.value = '';
+          setMode('login', true);
+          setStatus('Account created successfully. You can now sign in.', 'success');
+          submitBtn.disabled = false;
+          passwordInput.focus();
+        } else {
+          const data = await run('login', { email, password });
+          setStatus(`Welcome, ${data.student.name}! Redirecting…`, 'success');
+          setTimeout(() => { window.location.href = 'attendance.html'; }, 900);
+        }
       } catch (err) {
-        setStatus(err.message, 'error');
+        setStatus(err.message || 'Something went wrong. Please try again.', 'error');
         submitBtn.disabled = false;
       }
     });
-
-    // If already signed in, skip the form.
-    fetch('/api/auth/me', { credentials: 'same-origin' })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data && data.student) setStatus(`You're signed in as ${data.student.email}.`, 'success');
-      })
-      .catch(() => {});
   </script>
 </body>
 </html>
